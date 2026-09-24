@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow: clip;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Translate Orbit Summit 2026 — Liferay DXP</title>
+
+  <!-- Lexicon kit — in this order -->
+  <script>(function(){
+    var S=['light','light-hc','dark','dark-hc'];
+    function apply(){try{
+      var r=document.documentElement;
+      var s=localStorage.getItem('vanilla-skin')||'light';
+      S.forEach(function(c){r.classList.remove(c);});
+      r.classList.add(S.indexOf(s)>-1?s:'light');
+      if(localStorage.getItem('vanilla-cms-style')==='1'){
+        r.style.setProperty('--rounded-sm','4px');
+        r.style.setProperty('--rounded-md','8px');
+        r.style.setProperty('--rounded-lg','16px');
+      }else{
+        r.style.removeProperty('--rounded-sm');
+        r.style.removeProperty('--rounded-md');
+        r.style.removeProperty('--rounded-lg');
+      }
+    }catch(e){}}
+    apply();
+    window.addEventListener('pageshow',apply);
+  })()</script>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="tokens-high-contrast.css">
+  <link rel="stylesheet" href="tokens-dark.css">
+  <link rel="stylesheet" href="components.css">
+  <script src="icons.js"></script>
+
+  <!-- ── Previewed customer site theme ────────────────────────────────────
+       Deliberate exception to the kit's tokens-only / no-page-CSS rules: this
+       block styles the *page being translated* (customer content inside the
+       preview), not the Liferay UI, so it carries the site's own brand values
+       — modelled on the DEVCON 2026 event site (events.liferay.com). Scoped
+       to .site so nothing leaks into the editor, and unaffected by skins. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+  <style>
+    .site {
+      --site-navy: #000D30;
+      --site-navy-d: #00072B;
+      --site-magenta: #E500BD;
+      --site-blue: #0162FF;
+      --site-white: #FFFFFF;
+      --site-display: "Source Code Pro", "Courier New", monospace;
+      --site-text: "Source Sans 3", "Source Sans Pro", Helvetica, Arial, sans-serif;
+      min-height: 100%;
+      background: var(--site-navy);
+      color: var(--site-white);
+      font-family: var(--site-text);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .site h2, .site h3 { font-family: inherit; color: inherit; margin: 0; }
+
+    .site-header { display: flex; align-items: center; padding: 16px 48px; background: var(--site-navy-d); }
+    .site-logo { font-family: var(--site-display); font-size: 18px; font-weight: 700; letter-spacing: 0.08em; }
+    .site-logo span { color: var(--site-magenta); }
+
+    .site-hero {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 40px; align-items: center;
+      padding: 72px 48px;
+      background:
+        radial-gradient(circle at 85% 15%, rgba(229, 0, 189, 0.35), transparent 45%),
+        radial-gradient(circle at 5% 95%, rgba(1, 98, 255, 0.45), transparent 50%),
+        var(--site-navy);
+    }
+    .site-hero__copy { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .site-eyebrow { font-family: var(--site-display); font-size: 14px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--site-magenta); }
+    .site-h1 { font-family: var(--site-display) !important; font-size: 44px; font-weight: 700; line-height: 1.15; }
+    .site-lead { font-size: 18px; line-height: 1.5; opacity: 0.85; margin: 0; }
+    .site-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+
+    .site-btn { display: inline-flex; align-items: center; padding: 8px 28px; border-radius: 10px; background: var(--site-magenta); color: var(--site-white); font-size: 14px; font-weight: 700; line-height: 1.3; }
+    .site-btn--light { background: var(--site-white); color: var(--site-magenta); border-radius: 8px; }
+
+    .site-visual {
+      position: relative; aspect-ratio: 4 / 3; border-radius: 25px; overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background:
+        radial-gradient(circle at 50% 55%, var(--site-magenta) 0 8%, rgba(229, 0, 189, 0.25) 9% 28%, transparent 29%),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 32px),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 32px),
+        linear-gradient(135deg, var(--site-blue) 0%, var(--site-navy) 70%);
+    }
+    .site-visual::before { content: ""; position: absolute; inset: 20% 14%; border: 2px solid rgba(255, 255, 255, 0.6); border-radius: 50%; transform: rotate(-18deg) scaleY(0.42); }
+
+    .site-section { display: flex; flex-direction: column; gap: 32px; padding: 64px 48px; }
+    .site-section--dark { background: var(--site-navy-d); }
+    .site-h2 { font-size: 34px; font-weight: 700; line-height: 1.3; }
+    .site-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 30px; }
+    .site-card { display: flex; flex-direction: column; gap: 8px; padding: 20px; border: 1px solid var(--site-white); border-radius: 25px; background: rgba(255, 255, 255, 0.05); }
+    .site-card__title { font-size: 16px; font-weight: 700; color: var(--site-magenta); }
+    .site-card__text { font-size: 16px; margin: 0; opacity: 0.85; }
+
+    .site-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; padding: 40px; border-radius: 25px; background: linear-gradient(100deg, var(--site-blue), var(--site-magenta)); }
+    .site-cta__copy { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+    .site-code { margin-top: 8px; padding: 4px 14px; border: 1px dashed var(--site-white); border-radius: 8px; font-family: var(--site-display); font-size: 18px; font-weight: 700; letter-spacing: 0.08em; }
+
+    .site-footer { padding: 24px 48px; background: var(--site-navy-d); font-size: 12px; opacity: 0.7; }
+  </style>
+</head>
+<body style="display: flex; flex-direction: column; height: 100vh; overflow: clip;">
+
+<!-- ════════════════════════════════════════════════════════════════
+     EDIT BELOW.
+     Components: see ../components.html for live variants (all components, one page).
+     Icons: <svg class="lexicon-icon"><use href="#name"></use></svg>
+            (513 names — grep ../icons.svg for `<symbol id=`)
+     Tokens only: var(--color-…), var(--spacing-…), var(--font-size-…).
+     ════════════════════════════════════════════════════════════════ -->
+
+<!-- Header — Control Menu (Lexicon Satellites 3310:13346).
+     56px tall: 12px block padding around the 32px (sm) buttons.
+     Figma puts 8px between the button cluster and the title. -->
+<!-- padding-inline pins 16px sides at every width (the kit drops to 12px under 768px). -->
+<header class="control-menu" style="padding-block: var(--spacing-4); padding-inline: var(--spacing-5); flex-shrink: 0; position: relative; z-index: 100;">
+  <div class="control-menu__left" style="gap: var(--spacing-3);">
+    <div class="control-menu__btns">
+      <button class="control-menu__btn" type="button" id="back-btn" aria-label="Back" data-tooltip="Back" data-tooltip-align="start">
+        <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-left"></use></svg>
+      </button>
+    </div>
+    <!-- Title: wraps onto two lines when space runs out (no ellipsis). -->
+    <div id="hdr-left-wrap" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-2) var(--spacing-3); min-width: 0;">
+    <h1 class="control-menu__title" id="editor-title" title="Translate Orbit Summit 2026" style="white-space: normal; overflow: visible; min-width: 0;">
+      Translate <span id="editor-page-name" style="font-weight: var(--font-weight-semi); color: var(--color-secondary);">Orbit Summit 2026</span>
+    </h1>
+
+    </div>
+  </div>
+
+  <div class="control-menu__right" style="gap: var(--spacing-3);">
+    <!-- AI — purple #stars (same AI colour as "AI Translated"), then a divider -->
+    <button class="btn btn--borderless btn--sm btn--icon" type="button" id="ai-btn"
+            aria-label="AI Assistant" data-tooltip="AI Assistant" style="color: var(--color-chart-purple-d1);">
+      <svg class="lexicon-icon" aria-hidden="true"><use href="#stars"></use></svg>
+    </button>
+    <span aria-hidden="true" style="flex-shrink: 0; width: 1px; height: var(--spacing-5); background: var(--color-secondary-l2);"></span>
+    <button class="btn btn--borderless btn--sm" type="button" id="cancel-btn" data-compact aria-label="Cancel" data-tooltip="Cancel" data-tooltip-muted style="font-size: var(--font-size-base);"><svg class="lexicon-icon" aria-hidden="true" data-compact-icon hidden><use href="#times"></use></svg><span data-compact-label>Cancel</span></button>
+    <button class="btn btn--secondary btn--sm" type="button" id="draft-btn" data-compact aria-label="Save as Draft" data-tooltip="Save as Draft" data-tooltip-muted style="font-size: var(--font-size-base);"><svg class="lexicon-icon" aria-hidden="true" data-compact-icon hidden><use href="#disk"></use></svg><span data-compact-label>Save as Draft</span></button>
+    <button class="btn btn--primary btn--sm" type="button" id="publish-btn" data-compact aria-label="Publish" data-tooltip="Publish" data-tooltip-muted style="font-size: var(--font-size-base);"><svg class="lexicon-icon" aria-hidden="true" data-compact-icon hidden><use href="#arrow-up-full"></use></svg><span data-compact-label>Publish</span></button>
+
+    <div id="more-actions" style="position: relative;">
+      <button class="btn btn--borderless btn--sm btn--icon" type="button" id="more-actions-trigger"
+              aria-label="More Actions" aria-haspopup="menu" aria-expanded="false" aria-controls="more-actions-menu"
+              data-tooltip="More Actions" data-tooltip-align="end">
+        <svg class="lexicon-icon" aria-hidden="true"><use href="#ellipsis-v"></use></svg>
+      </button>
+      <ul class="dropdown" role="menu" id="more-actions-menu" aria-labelledby="more-actions-trigger" hidden
+          style="position: absolute; top: calc(100% + var(--spacing-2)); right: 0; z-index: 1000;">
+        <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="download-xlf"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#download"></use></svg> Download XLF</button></li>
+        <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="configuration"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#cog"></use></svg> Configuration</button></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- Workspace — resizable split: side panel (left) · page preview (right).
+     The side panel navigates in place: level 1 lists the languages, level 2
+     holds the fields of the chosen language. Default width 30% (min 300px). -->
+<!-- Blank page (?empty=1) — nothing to translate. Replaces the workspace.
+     Clay "empty state" illustration (satellite): there's no content. -->
+<div id="no-content" hidden style="flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: var(--spacing-7);">
+  <div class="empty-state">
+    <div class="empty-state__media"><img src="illustrations/illustration-satellite.svg" alt=""></div>
+    <h2 class="empty-state__title">No Content to Translate</h2>
+    <p class="empty-state__text">This page is empty, so there is nothing to translate yet. Add content to the page and come back to translate it.</p>
+    <button class="btn btn--secondary btn--sm" type="button" id="no-content-edit" style="font-size: var(--font-size-base);">Edit Page</button>
+  </div>
+</div>
+
+<main id="workspace" style="position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: max(300px, 30%) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr);">
+
+  <!-- ── Left: side panel ──────────────────────────────────── -->
+  <section id="fields-pane" aria-label="Translations" style="position: relative; display: flex; flex-direction: column; min-height: 0; background: var(--color-white); border-right: 1px solid var(--color-secondary-l3);">
+
+    <!-- Scope — Experience, shared by both levels (above Filter / Search).
+         Each experience shows its status in the dropdown: Draft / Published. -->
+    <div style="position: relative; z-index: 30; padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
+      <div id="exp-group" style="display: flex; align-items: center; gap: var(--spacing-3); flex-shrink: 1; min-width: 0;">
+        <span id="exp-label" style="font-weight: var(--font-weight-bold);">Experience</span>
+        <!-- Up to 200px; shrinks on narrow screens (down to the picker minimum). -->
+        <div class="picker" id="exp-picker" style="flex: 0 1 200px; min-width: 110px;">
+          <button class="btn btn--secondary btn--sm picker__trigger" type="button" id="exp-trigger"
+                  aria-haspopup="listbox" aria-expanded="false" aria-controls="exp-menu" aria-labelledby="exp-label exp-trigger-text"
+                  style="font-size: var(--font-size-base);">
+            <span class="picker__trigger-text" id="exp-trigger-text">Default</span>
+            <svg class="lexicon-icon" aria-hidden="true"><use href="#caret-double-l"></use></svg>
+          </button>
+          <ul class="dropdown" role="listbox" id="exp-menu" aria-labelledby="exp-label" hidden
+              style="position: absolute; top: calc(100% + var(--spacing-2)); left: 0; z-index: 1000; width: max-content;"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Level 1 — languages: filter + search (or bulk bar while selecting),
+         results bar, Table component with multi-selection -->
+    <div id="panel-languages" style="flex: 1; min-height: 0; display: flex; flex-direction: column;">
+      <div id="lang-tools" style="position: relative; z-index: 20; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
+        <!-- Select all — Management Toolbar checkbox, before the filter -->
+        <label class="checkbox" id="lang-select-all-wrap">
+          <input type="checkbox" class="checkbox__input" id="lang-select-all" aria-label="Select All Translations">
+          <span class="checkbox__box"><svg class="checkbox__icon checkbox__icon--check"><use href="#check-small"></use></svg><svg class="checkbox__icon checkbox__icon--hr"><use href="#hr"></use></svg></span>
+        </label>
+
+        <div id="lang-filter" style="position: relative; display: flex; flex-shrink: 0;">
+          <button class="btn btn--borderless btn--sm" type="button" id="lang-filter-trigger" data-filter-btn aria-label="Filter" data-tooltip="Filter" data-tooltip-muted
+                  aria-haspopup="menu" aria-expanded="false" aria-controls="lang-filter-menu"
+                  style="font-size: var(--font-size-base);">
+            <svg class="lexicon-icon" aria-hidden="true"><use href="#filter"></use></svg>
+            <span class="filter-label">Filter</span>
+            <svg class="lexicon-icon filter-label" aria-hidden="true"><use href="#caret-bottom"></use></svg>
+          </button>
+          <ul class="dropdown" role="menu" id="lang-filter-menu" aria-labelledby="lang-filter-trigger" hidden
+              style="position: absolute; top: calc(100% + var(--spacing-2)); left: 0; z-index: 1000;"></ul>
+        </div>
+
+        <div class="input input--sm" style="flex: 1; min-width: 0;">
+          <label class="sr-only" for="lang-search">Search languages</label>
+          <div class="search">
+            <input type="search" class="input__field search__field" id="lang-search" placeholder="Search" autocomplete="off">
+            <button class="search__clear" type="button" id="lang-search-clear" aria-label="Clear Search" hidden>
+              <svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>
+            </button>
+            <span class="search__submit" aria-hidden="true"><svg class="lexicon-icon"><use href="#search"></use></svg></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selection mode — Frontend Data Set selection bar (Management Toolbar active) -->
+      <div id="lang-bulk" class="management-toolbar management-toolbar--active" hidden style="position: relative; z-index: 20; flex-shrink: 0;">
+        <div class="management-toolbar__bar" style="gap: var(--spacing-3); padding-inline: var(--spacing-5);">
+          <label class="checkbox" id="bulk-check-wrap">
+            <input type="checkbox" class="checkbox__input" id="bulk-check" aria-label="Select All Translations">
+            <span class="checkbox__box"><svg class="checkbox__icon checkbox__icon--check"><use href="#check-small"></use></svg><svg class="checkbox__icon checkbox__icon--hr"><use href="#hr"></use></svg></span>
+          </label>
+          <span class="management-toolbar__count" id="bulk-count"></span>
+          <button class="btn btn--link btn--sm" type="button" id="bulk-clear">Clear</button>
+          <div class="management-toolbar__spacer"></div>
+          <!-- Bulk actions: always icon-only (the panel is too narrow for
+               labels); the tooltip carries the name. -->
+          <button class="btn btn--borderless btn--sm btn--icon" type="button" data-bulk="auto-translate" aria-label="Auto-translate" data-tooltip="Auto-translate">
+            <svg class="lexicon-icon" aria-hidden="true"><use href="#stars"></use></svg>
+          </button>
+          <button class="btn btn--borderless btn--sm btn--icon" type="button" data-bulk="mark-translated" aria-label="Mark as Translated" data-tooltip="Mark as Translated">
+            <svg class="lexicon-icon" aria-hidden="true"><use href="#check-circle"></use></svg>
+          </button>
+          <button class="btn btn--borderless btn--sm btn--icon" type="button" data-bulk="reset" aria-label="Reset Translation" data-tooltip="Reset Translation" data-tooltip-align="end">
+            <svg class="lexicon-icon" aria-hidden="true"><use href="#trash"></use></svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="lang-results" hidden style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-2) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); background: var(--color-white); flex-shrink: 0;">
+        <span id="lang-results-text" aria-live="polite" style="flex-shrink: 0; font-size: var(--font-size-sm); color: var(--color-secondary);"></span>
+        <span id="lang-results-chips" style="display: flex; flex-wrap: wrap; gap: var(--spacing-2); min-width: 0;"></span>
+        <button class="btn btn--link btn--sm" type="button" id="lang-results-clear" style="margin-left: auto; font-weight: var(--font-weight-bold);">Clear</button>
+      </div>
+
+      <div id="lang-body" style="flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column;">
+        <!-- Full-bleed in the panel: no outer border/radius, just the row dividers. -->
+        <table class="table" id="lang-table" aria-label="Translations" style="border: 0; border-radius: 0; border-bottom: 1px solid var(--color-secondary-l3);">
+          <thead>
+            <tr>
+              <th class="table__cell--gutter" style="padding-block: var(--spacing-3);"><span class="sr-only">Select</span></th>
+              <th data-sort-col="name" aria-sort="none" style="padding-block: var(--spacing-3); border-left: 1px solid var(--color-secondary-l3);">
+                <button type="button" data-sort="name" style="display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3); width: 100%; padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: pointer;">Translation<svg class="lexicon-icon" aria-hidden="true"><use href="#order-arrow"></use></svg></button>
+              </th>
+              <th data-sort-col="code" aria-sort="none" style="padding-block: var(--spacing-3); border-left: 1px solid var(--color-secondary-l3);">
+                <button type="button" data-sort="code" style="display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3); width: 100%; padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: pointer;">Code<svg class="lexicon-icon" aria-hidden="true"><use href="#order-arrow"></use></svg></button>
+              </th>
+              <th data-sort-col="status" aria-sort="none" style="padding-block: var(--spacing-3); border-left: 1px solid var(--color-secondary-l3);">
+                <button type="button" data-sort="status" style="display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3); width: 100%; padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: pointer;">Status<svg class="lexicon-icon" aria-hidden="true"><use href="#order-arrow"></use></svg></button>
+              </th>
+              <th class="table__cell--gutter" style="padding-block: var(--spacing-3); border-left: 1px solid var(--color-secondary-l3);"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="lang-list"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Level 2 — translation of the chosen language -->
+    <div id="panel-translate" hidden style="flex: 1; min-height: 0; display: flex; flex-direction: column;">
+
+      <!-- Panel header: back · language + status label · options (right) -->
+      <div style="position: relative; z-index: 25; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
+        <!-- Back to the languages list -->
+        <button class="btn btn--borderless btn--sm btn--icon" type="button" id="to-languages"
+                aria-label="Back to All Translations" data-tooltip="Back to All Translations" data-tooltip-align="start">
+          <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-left"></use></svg>
+        </button>
+
+        <!-- Language being translated + status. When space runs out this
+             wraps onto two lines (no ellipsis): the label drops below. -->
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-2) var(--spacing-4); flex: 1; min-width: 0;">
+          <h2 id="lang-title" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-1) var(--spacing-3); min-width: 0; font-size: var(--font-size-md);">
+            <span class="lang-picker__flag" id="lang-title-flag" aria-hidden="true"></span>
+            <span id="lang-title-text"></span>
+            <span id="lang-title-code" style="font-weight: var(--font-weight-normal); color: var(--color-secondary);"></span>
+          </h2>
+
+          <!-- Status — same label as in the translations table -->
+          <span id="fields-counter" aria-live="polite" style="display: flex; align-items: center; flex-shrink: 0;"></span>
+        </div>
+
+        <!-- Translation actions for the selected language -->
+        <div id="lang-actions" style="position: relative; display: flex; flex-shrink: 0; margin-left: auto;">
+          <button class="btn btn--secondary btn--sm btn--icon" type="button" id="lang-actions-trigger"
+                  aria-label="Translation Options" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-actions-menu"
+                  data-tooltip="Translation Options" data-tooltip-align="end">
+            <svg class="lexicon-icon" aria-hidden="true"><use href="#ellipsis-v"></use></svg>
+          </button>
+          <ul class="dropdown" role="menu" id="lang-actions-menu" aria-labelledby="lang-actions-trigger" hidden
+              style="position: absolute; top: calc(100% + var(--spacing-2)); right: 0; z-index: 1000; width: max-content;">
+            <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="auto-translate">
+              <svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#stars"></use></svg> Auto-translate
+            </button></li>
+            <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="mark-translated">
+              <svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#check-circle"></use></svg> Mark as Translated
+            </button></li>
+            <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="reset">
+              <svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#trash"></use></svg> Reset Translation
+            </button></li>
+            <!-- Small screens only (no inline preview) -->
+            <li class="dropdown__divider" role="separator" data-solo-only hidden></li>
+            <li role="none" data-solo-only hidden><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="preview-tab">
+              <svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#shortcut"></use></svg> Preview in a New Tab
+            </button></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Filter + search (Management Toolbar pattern, scoped to the fields) -->
+      <div id="fields-tools" style="position: relative; z-index: 20; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
+        <!-- Filter — Management Toolbar filter button (not a picker): fixed
+             "Filter" label, the active filter shows in the results bar. -->
+        <div id="status-picker" style="position: relative; display: flex; flex-shrink: 0;">
+          <button class="btn btn--borderless btn--sm" type="button" id="status-trigger" data-filter-btn aria-label="Filter" data-tooltip="Filter" data-tooltip-muted
+                  aria-haspopup="menu" aria-expanded="false" aria-controls="status-menu"
+                  style="font-size: var(--font-size-base);">
+            <svg class="lexicon-icon" aria-hidden="true"><use href="#filter"></use></svg>
+            <span class="filter-label">Filter</span>
+            <svg class="lexicon-icon filter-label" aria-hidden="true"><use href="#caret-bottom"></use></svg>
+          </button>
+          <ul class="dropdown" role="menu" id="status-menu" aria-labelledby="status-trigger" hidden
+              style="position: absolute; top: calc(100% + var(--spacing-2)); left: 0; z-index: 1000;"></ul>
+        </div>
+
+        <div class="input input--sm" style="flex: 1; min-width: 0;">
+          <label class="sr-only" for="fields-search">Search fields</label>
+          <div class="search">
+            <input type="search" class="input__field search__field" id="fields-search" placeholder="Search Fields or Text" autocomplete="off">
+            <button class="search__clear" type="button" id="fields-search-clear" aria-label="Clear Search" hidden>
+              <svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>
+            </button>
+            <span class="search__submit" aria-hidden="true"><svg class="lexicon-icon"><use href="#search"></use></svg></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results bar — as in the CMS: "N Results Found for:" + one removable
+           label per active filter + Clear. Shown while a search/filter is active. -->
+      <div id="fields-results" hidden style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-2) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); background: var(--color-white); flex-shrink: 0;">
+        <span id="fields-results-text" aria-live="polite" style="flex-shrink: 0; font-size: var(--font-size-sm); color: var(--color-secondary);"></span>
+        <span id="fields-results-chips" style="display: flex; flex-wrap: wrap; gap: var(--spacing-2); min-width: 0;"></span>
+        <button class="btn btn--link btn--sm" type="button" id="fields-results-clear" style="margin-left: auto; font-weight: var(--font-weight-bold);">Clear</button>
+      </div>
+
+      <div id="fields-body" style="flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: var(--spacing-7); padding: var(--spacing-5) var(--spacing-5) var(--spacing-8);"></div>
+    </div>
+
+    <!-- Clay horizontal resizer — drag, or ←/→ when focused. -->
+    <div class="resizer" id="split-handle" role="separator" tabindex="0" aria-orientation="vertical" aria-controls="fields-pane"
+         aria-label="Resize Panels" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"
+         style="z-index: 30;"></div>
+  </section>
+
+  <!-- ── Right: preview ────────────────────────────────────── -->
+  <section id="preview-pane" aria-label="Page Preview" style="display: flex; flex-direction: column; min-height: 0;">
+
+    <!-- Preview language bar — which language (and experience) the preview
+         is showing: the default language on arrival, the chosen one inside a
+         translation. -->
+    <div id="preview-bar" aria-live="polite" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-2) var(--spacing-3); padding: var(--spacing-3) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); background: var(--color-light-l1); font-size: var(--font-size-sm); color: var(--color-secondary); flex-shrink: 0;">
+      <svg class="lexicon-icon" aria-hidden="true"><use href="#view"></use></svg>
+      <span>Page Preview:</span>
+      <span style="display: inline-flex; align-items: center; gap: var(--spacing-2); font-weight: var(--font-weight-bold); color: var(--color-dark);">
+        <span class="lang-picker__flag" id="preview-bar-flag" aria-hidden="true"></span>
+        <span id="preview-bar-lang"></span>
+      </span>
+      <span id="preview-bar-default" class="label label--sm label--info" hidden>Default</span>
+      <span aria-hidden="true">·</span>
+      <span>Experience: <strong id="preview-bar-exp" style="color: var(--color-dark);"></strong></span>
+    </div>
+
+    <!-- Canvas -->
+    <div id="preview-canvas" style="flex: 1; min-height: 0; overflow: auto; background: var(--color-white);">
+      <!-- Previewed page — a customer site with its own theme (see #preview-page
+           styles in <head>), deliberately NOT built with Clay/Lexicon. -->
+      <article id="preview-page" class="site">
+
+        <!-- Site header (master page — not translated here) -->
+        <header class="site-header">
+          <span class="site-logo">ORBIT<span>SUMMIT</span></span>
+        </header>
+
+        <!-- Hero Banner -->
+        <section class="site-hero">
+          <div class="site-hero__copy">
+            <span class="site-eyebrow" data-field="hero-eyebrow"></span>
+            <h2 class="site-h1" data-field="hero-title"></h2>
+            <p class="site-lead" data-field="hero-text"></p>
+            <div class="site-actions">
+              <span class="site-btn" data-field="hero-cta"></span>
+              <span class="site-btn site-btn--light" data-field="hero-cta2"></span>
+            </div>
+          </div>
+          <div class="site-visual" role="img" data-field="hero-image"></div>
+        </section>
+
+        <!-- Feature Cards -->
+        <section class="site-section">
+          <h2 class="site-h2" data-field="features-title"></h2>
+          <div class="site-cards">
+            <div class="site-card">
+              <h3 class="site-card__title" data-field="card1-title"></h3>
+              <p class="site-card__text" data-field="card1-text"></p>
+            </div>
+            <div class="site-card">
+              <h3 class="site-card__title" data-field="card2-title"></h3>
+              <p class="site-card__text" data-field="card2-text"></p>
+            </div>
+            <div class="site-card">
+              <h3 class="site-card__title" data-field="card3-title"></h3>
+              <p class="site-card__text" data-field="card3-text"></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="site-section site-section--dark">
+          <div class="site-cta">
+            <div class="site-cta__copy">
+              <h2 class="site-h2" data-field="cta-title"></h2>
+              <p class="site-lead" data-field="cta-text"></p>
+              <span class="site-code" data-field="cta-code"></span>
+            </div>
+            <span class="site-btn site-btn--light" data-field="cta-button"></span>
+          </div>
+        </section>
+
+        <footer class="site-footer">© 2026 Orbit Summit</footer>
+      </article>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- Row actions menu — shared by every language row's ⋮ (positioned by script). -->
+<ul class="dropdown" role="menu" id="row-actions-menu" aria-label="Translation Options" hidden
+    style="position: fixed; z-index: 1000; width: max-content;">
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="auto-translate">
+    <svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#stars"></use></svg> Auto-translate
+  </button></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="mark-translated">
+    <svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#check-circle"></use></svg> Mark as Translated
+  </button></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="reset">
+    <svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#trash"></use></svg> Reset Translation
+  </button></li>
+</ul>
+
+<!-- Tooltip — shared, positioned under the hovered/focused icon button. -->
+<div class="tooltip tooltip--top" role="tooltip" id="tooltip" hidden
+     style="position: fixed; z-index: 1100; pointer-events: none; white-space: nowrap;"></div>
+
+<!-- Publish confirmation — summary of the experiences and languages that go
+     live (body filled by openPublishModal()). -->
+<div class="modal-overlay" id="publish-modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="publish-title">
+    <header class="modal__header">
+      <h2 class="modal__title" id="publish-title">Publish Translations</h2>
+      <button class="btn btn--borderless btn--sm btn--icon modal__close" type="button" aria-label="Close" data-close>
+        <svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>
+      </button>
+    </header>
+    <div class="modal__body" id="publish-body"></div>
+    <footer class="modal__footer">
+      <button class="btn btn--secondary" type="button" data-close>Cancel</button>
+      <button class="btn btn--primary" type="button" id="publish-confirm">Publish</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Toast region — Clay toasts stack bottom-left. -->
+<div id="toast-region" aria-live="polite"
+     style="position: fixed; left: var(--spacing-4); bottom: var(--spacing-4); z-index: 1200; display: flex; flex-direction: column; gap: var(--spacing-3); max-width: 360px;"></div>
+
+<script>
+(function () {
+  /* ── Responsive header ─────────────────────────────────── */
+  // Narrow screens: Save as Draft / Publish become icon buttons (disk ·
+  // arrow-up-full, name in the tooltip) and Cancel is dropped. Title + experience wrap to
+  // two lines instead of truncating; the divider hides once they wrap.
+  var header = document.querySelector('header.control-menu');
+  function fitHeader() {
+    var compact = header.clientWidth < 1080;
+    document.querySelectorAll('[data-compact]').forEach(function (btn) {
+      btn.classList.toggle('btn--icon', compact);
+      // toggleAttribute, not .hidden: <svg> has no `hidden` property, so
+      // assigning it never removes the attribute (icons stayed invisible).
+      btn.querySelector('[data-compact-icon]').toggleAttribute('hidden', !compact);
+      btn.querySelector('[data-compact-label]').hidden = compact;
+      if (compact) btn.removeAttribute('data-tooltip-muted'); else btn.setAttribute('data-tooltip-muted', '');
+    });
+    // Cancel isn't offered in compact mode (‹ Back already leaves the editor).
+    document.getElementById('cancel-btn').hidden = compact;
+  }
+  new ResizeObserver(fitHeader).observe(header);
+
+  /* ── Entry point: Site Builder › Pages › ⋮ › Translate ──── */
+  // The page being translated comes from ?page=… (site-pages.html);
+  // Back and Cancel return there.
+  var pageName = new URLSearchParams(location.search).get('page');
+  if (pageName) {
+    document.getElementById('editor-page-name').textContent = pageName;
+    document.getElementById('editor-title').title = 'Translate ' + pageName;
+    document.title = 'Translate ' + pageName + ' — Liferay DXP';
+  }
+  // Returns to the Pages Miller columns with the translated page highlighted.
+  function exitEditor() { location.href = 'index.html' + (pageName ? '?selected=' + encodeURIComponent(pageName) : ''); }
+  document.getElementById('back-btn').addEventListener('click', exitEditor);
+  document.getElementById('cancel-btn').addEventListener('click', exitEditor);
+
+  // Blank page: show the "No Content to Translate" state instead of the
+  // workspace; saving/exporting make no sense, so those are disabled.
+  var isEmptyPage = new URLSearchParams(location.search).get('empty') === '1';
+
+  // Preview tab (?preview=1&locale=…&exp=…), opened from "Preview in a New
+  // Tab" on small screens: only the page preview, no editor chrome.
+  var PREVIEW_ONLY = new URLSearchParams(location.search).get('preview') === '1';
+  if (PREVIEW_ONLY) document.querySelector('header.control-menu').hidden = true;
+  if (isEmptyPage) {
+    document.getElementById('workspace').hidden = true;
+    document.getElementById('no-content').hidden = false;
+    ['draft-btn', 'publish-btn'].forEach(function (id) { document.getElementById(id).disabled = true; });
+    document.querySelector('#more-actions-menu [data-value="download-xlf"]').disabled = true;
+    document.getElementById('no-content-edit').addEventListener('click', exitEditor);
+  }
+
+  /* ── Data ──────────────────────────────────────────────── */
+  var SOURCE_LOCALE = 'en-US';
+
+  var LANGS = [
+    { code: 'en-US', flag: 'flag-us', name: 'English' },
+    { code: 'es-ES', flag: 'flag-es', name: 'Spanish' },
+    { code: 'fr-FR', flag: 'flag-fr', name: 'French' },
+    { code: 'de-DE', flag: 'flag-de', name: 'German' },
+    { code: 'it-IT', flag: 'flag-it', name: 'Italian' },
+    { code: 'pt-BR', flag: 'flag-br', name: 'Portuguese' }
+  ];
+
+  var EXPERIENCES = [
+    { id: 'default', name: 'Default' },
+    { id: 'returning', name: 'Returning Visitors' }
+  ];
+
+  var GROUPS = [
+    { id: 'hero', name: 'Hero Banner' },
+    { id: 'features', name: 'Feature Cards' },
+    { id: 'cta', name: 'Call to Action' }
+  ];
+
+  // Source content (en-US). `source` is an object when the field is
+  // personalized per experience; otherwise all experiences share it.
+  // `localizable: false` = global value shared by every language: shown
+  // read-only with "(Not Localizable)" in the label, never counted.
+  var FIELDS = [
+    { key: 'hero-eyebrow', group: 'hero', label: 'Eyebrow', source: 'June 16–18, 2026 · Madrid' },
+    { key: 'hero-title', group: 'hero', label: 'Heading', source: {
+      'default': 'Explore what’s next in digital experiences',
+      'returning': 'Welcome back — your 2026 pass is waiting' } },
+    { key: 'hero-text', group: 'hero', label: 'Description', multiline: true, source: {
+      'default': 'Three days of keynotes, hands-on workshops and conversations with the teams building tomorrow’s customer experiences.',
+      'returning': 'Pick up where you left off: finish your registration and save your seat for the sessions you bookmarked.' } },
+    { key: 'hero-cta', group: 'hero', label: 'Primary Button', source: {
+      'default': 'Register now',
+      'returning': 'Complete registration' } },
+    { key: 'hero-cta2', group: 'hero', label: 'Secondary Button', source: 'View agenda' },
+    { key: 'hero-image', group: 'hero', label: 'Image Description', source: 'Illustration of a spaceship lifting off' },
+    { key: 'features-title', group: 'features', label: 'Heading', source: 'Why attend' },
+    { key: 'card1-title', group: 'features', label: 'Card 1 Title', source: 'Inspiring keynotes' },
+    { key: 'card1-text', group: 'features', label: 'Card 1 Description', multiline: true, source: 'Hear how industry leaders are rethinking the way people discover, buy and get support.' },
+    { key: 'card2-title', group: 'features', label: 'Card 2 Title', source: 'Hands-on workshops' },
+    { key: 'card2-text', group: 'features', label: 'Card 2 Description', multiline: true, source: 'Build real solutions alongside the product experts who design them.' },
+    { key: 'card3-title', group: 'features', label: 'Card 3 Title', source: 'A global community' },
+    { key: 'card3-text', group: 'features', label: 'Card 3 Description', multiline: true, source: 'Connect with more than 2,000 practitioners from over 40 countries.' },
+    { key: 'cta-title', group: 'cta', label: 'Heading', source: 'Don’t miss early-bird pricing' },
+    { key: 'cta-text', group: 'cta', label: 'Description', source: 'Save 30% on your pass when you register before April 30.' },
+    { key: 'cta-code', group: 'cta', label: 'Promo Code', localizable: false, source: 'EARLYBIRD30' },
+    { key: 'cta-button', group: 'cta', label: 'Button', source: 'Get your ticket' }
+  ];
+
+  // Existing translations, keyed by field id (`key` or `key@experience`).
+  // Sample states: es-ES complete (both experiences) · fr-FR partial ·
+  // de-DE / it-IT / pt-BR not translated.
+  var T = {
+    'es-ES': {
+      'hero-eyebrow': '16–18 de junio de 2026 · Madrid',
+      'hero-title@default': 'Descubre lo que viene en experiencias digitales',
+      'hero-title@returning': 'Bienvenido de nuevo: tu pase 2026 te está esperando',
+      'hero-text@default': 'Tres días de keynotes, talleres prácticos y conversaciones con los equipos que están creando las experiencias de cliente del mañana.',
+      'hero-text@returning': 'Retoma donde lo dejaste: completa tu registro y reserva tu plaza en las sesiones que guardaste.',
+      'hero-cta@default': 'Regístrate ahora',
+      'hero-cta@returning': 'Completar registro',
+      'hero-cta2': 'Ver agenda',
+      'hero-image': 'Ilustración de una nave espacial despegando',
+      'features-title': 'Por qué asistir',
+      'card1-title': 'Keynotes inspiradoras',
+      'card1-text': 'Descubre cómo los líderes del sector están replanteando la forma en que las personas descubren, compran y reciben soporte.',
+      'card2-title': 'Talleres prácticos',
+      'card2-text': 'Crea soluciones reales junto a los expertos de producto que las diseñan.',
+      'card3-title': 'Una comunidad global',
+      'card3-text': 'Conecta con más de 2.000 profesionales de más de 40 países.',
+      'cta-title': 'No te pierdas el precio early bird',
+      'cta-text': 'Ahorra un 30% en tu pase si te registras antes del 30 de abril.',
+      'cta-button': 'Consigue tu entrada'
+    },
+    'fr-FR': {
+      'hero-eyebrow': '16–18 juin 2026 · Madrid',
+      'hero-title@default': 'Découvrez l’avenir des expériences digitales',
+      'hero-cta@default': 'S’inscrire',
+      'hero-cta2': 'Voir le programme',
+      'features-title': 'Pourquoi participer'
+    },
+    'de-DE': {},
+    'it-IT': {},
+    'pt-BR': {}
+  };
+
+  // Machine-translation output used by Auto-translate (simulated service).
+  var MT = {
+    'fr-FR': {
+      'hero-eyebrow': '16–18 juin 2026 · Madrid',
+      'hero-title@default': 'Découvrez l’avenir des expériences digitales',
+      'hero-title@returning': 'Bon retour — votre pass 2026 vous attend',
+      'hero-text@default': 'Trois jours de keynotes, d’ateliers pratiques et d’échanges avec les équipes qui conçoivent les expériences client de demain.',
+      'hero-text@returning': 'Reprenez là où vous vous étiez arrêté : finalisez votre inscription et réservez votre place aux sessions enregistrées.',
+      'hero-cta@default': 'S’inscrire',
+      'hero-cta@returning': 'Finaliser l’inscription',
+      'hero-cta2': 'Voir le programme',
+      'hero-image': 'Illustration d’un vaisseau spatial au décollage',
+      'features-title': 'Pourquoi participer',
+      'card1-title': 'Des keynotes inspirantes',
+      'card1-text': 'Découvrez comment les leaders du secteur repensent la façon dont les gens découvrent, achètent et obtiennent de l’aide.',
+      'card2-title': 'Des ateliers pratiques',
+      'card2-text': 'Créez de vraies solutions aux côtés des experts produit qui les conçoivent.',
+      'card3-title': 'Une communauté mondiale',
+      'card3-text': 'Échangez avec plus de 2 000 professionnels venus de plus de 40 pays.',
+      'cta-title': 'Ne manquez pas le tarif early bird',
+      'cta-text': 'Économisez 30 % sur votre pass en vous inscrivant avant le 30 avril.',
+      'cta-button': 'Obtenir votre billet'
+    },
+    'de-DE': {
+      'hero-eyebrow': '16.–18. Juni 2026 · Madrid',
+      'hero-title@default': 'Entdecken Sie die Zukunft digitaler Erlebnisse',
+      'hero-title@returning': 'Willkommen zurück – Ihr Pass für 2026 wartet',
+      'hero-text@default': 'Drei Tage mit Keynotes, praxisnahen Workshops und Gesprächen mit den Teams, die die Kundenerlebnisse von morgen gestalten.',
+      'hero-text@returning': 'Machen Sie dort weiter, wo Sie aufgehört haben: Schließen Sie Ihre Registrierung ab und sichern Sie sich Ihren Platz in den gemerkten Sessions.',
+      'hero-cta@default': 'Jetzt registrieren',
+      'hero-cta@returning': 'Registrierung abschließen',
+      'hero-cta2': 'Agenda ansehen',
+      'hero-image': 'Illustration eines startenden Raumschiffs',
+      'features-title': 'Warum teilnehmen',
+      'card1-title': 'Inspirierende Keynotes',
+      'card1-text': 'Erfahren Sie, wie Branchenführende neu denken, wie Menschen entdecken, kaufen und Support erhalten.',
+      'card2-title': 'Praxisnahe Workshops',
+      'card2-text': 'Entwickeln Sie echte Lösungen gemeinsam mit den Produktexperten, die sie entwerfen.',
+      'card3-title': 'Eine globale Community',
+      'card3-text': 'Vernetzen Sie sich mit mehr als 2.000 Fachleuten aus über 40 Ländern.',
+      'cta-title': 'Verpassen Sie nicht den Frühbucherpreis',
+      'cta-text': 'Sparen Sie 30 % auf Ihren Pass, wenn Sie sich vor dem 30. April registrieren.',
+      'cta-button': 'Ticket sichern'
+    },
+    'it-IT': {
+      'hero-eyebrow': '16–18 giugno 2026 · Madrid',
+      'hero-title@default': 'Scopri il futuro delle esperienze digitali',
+      'hero-title@returning': 'Bentornato: il tuo pass 2026 ti aspetta',
+      'hero-text@default': 'Tre giorni di keynote, workshop pratici e confronti con i team che stanno creando le esperienze cliente di domani.',
+      'hero-text@returning': 'Riprendi da dove avevi lasciato: completa la registrazione e prenota il tuo posto nelle sessioni salvate.',
+      'hero-cta@default': 'Registrati ora',
+      'hero-cta@returning': 'Completa la registrazione',
+      'hero-cta2': 'Vedi il programma',
+      'hero-image': 'Illustrazione di un’astronave al decollo',
+      'features-title': 'Perché partecipare',
+      'card1-title': 'Keynote stimolanti',
+      'card1-text': 'Scopri come i leader del settore stanno ripensando il modo in cui le persone scoprono, acquistano e ricevono assistenza.',
+      'card2-title': 'Workshop pratici',
+      'card2-text': 'Crea soluzioni reali insieme agli esperti di prodotto che le progettano.',
+      'card3-title': 'Una community globale',
+      'card3-text': 'Entra in contatto con oltre 2.000 professionisti da più di 40 paesi.',
+      'cta-title': 'Non perdere il prezzo early bird',
+      'cta-text': 'Risparmia il 30% sul tuo pass registrandoti entro il 30 aprile.',
+      'cta-button': 'Ottieni il tuo biglietto'
+    },
+    'pt-BR': {
+      'hero-eyebrow': '16 a 18 de junho de 2026 · Madri',
+      'hero-title@default': 'Descubra o futuro das experiências digitais',
+      'hero-title@returning': 'Que bom ter você de volta — seu passe 2026 está esperando',
+      'hero-text@default': 'Três dias de keynotes, workshops práticos e conversas com as equipes que estão criando as experiências do cliente do futuro.',
+      'hero-text@returning': 'Continue de onde parou: conclua sua inscrição e garanta seu lugar nas sessões que você salvou.',
+      'hero-cta@default': 'Inscreva-se agora',
+      'hero-cta@returning': 'Concluir inscrição',
+      'hero-cta2': 'Ver programação',
+      'hero-image': 'Ilustração de uma nave espacial decolando',
+      'features-title': 'Por que participar',
+      'card1-title': 'Keynotes inspiradoras',
+      'card1-text': 'Veja como líderes do setor estão repensando a forma como as pessoas descobrem, compram e recebem suporte.',
+      'card2-title': 'Workshops práticos',
+      'card2-text': 'Crie soluções reais ao lado dos especialistas de produto que as projetam.',
+      'card3-title': 'Uma comunidade global',
+      'card3-text': 'Conecte-se com mais de 2.000 profissionais de mais de 40 países.',
+      'cta-title': 'Não perca o preço promocional',
+      'cta-text': 'Economize 30% no seu passe ao se inscrever até 30 de abril.',
+      'cta-button': 'Garanta seu ingresso'
+    }
+  };
+  // es-ES auto-translates to the same copy it ships with (useful after a reset).
+  MT['es-ES'] = JSON.parse(JSON.stringify(T['es-ES']));
+
+  // Fields filled by Auto-translate and not yet reviewed: AI[locale][fieldId].
+  var AI = {};
+
+  // Saved progress (Save as Draft / Publish), one entry per page in this
+  // browser. Restored when the page is opened again in the translator.
+  var DRAFT_KEY = 'translation-editor-draft:' + (pageName || 'Orbit Summit 2026');
+  // PUB = what's live (last Publish). The sample translations start out as
+  // published; anything that differs from PUB is an unpublished change.
+  var PUB = JSON.parse(JSON.stringify(T));
+  function saveDraft() {
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ T: T, AI: AI, PUB: PUB })); } catch (e) {}
+  }
+  try {
+    var draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
+    if (draft && draft.T) {
+      Object.keys(draft.T).forEach(function (code) { T[code] = draft.T[code]; });
+      AI = draft.AI || {};
+      if (draft.PUB) PUB = draft.PUB;
+    }
+  } catch (e) {}
+  function isAI(locale, f) { return !!(AI[locale] && AI[locale][fid(f)]); }
+  function aiCount(locale) { return FIELDS.filter(function (f) { return isAI(locale, f); }).length; }
+
+  var state = { view: 'languages', locale: 'en-US', exp: 'default', active: null, hover: null, status: 'all', query: '' };
+  if (PREVIEW_ONLY) {
+    var pq = new URLSearchParams(location.search);
+    try {
+      var snap = JSON.parse(localStorage.getItem('translation-editor-preview') || 'null');
+      if (snap && snap.T) { Object.keys(snap.T).forEach(function (c) { T[c] = snap.T[c]; }); AI = snap.AI || {}; }
+    } catch (e) {}
+    state.view = 'translate';
+    state.locale = pq.get('locale') || 'en-US';
+    state.exp = pq.get('exp') || 'default';
+    document.title = 'Preview: ' + (pageName || 'Orbit Summit 2026') + ' (' + state.locale + ')';
+  }
+
+  var STATUSES = [
+    { id: 'all', name: 'All Fields' },
+    { id: 'untranslated', name: 'Not Translated' },
+    { id: 'translated', name: 'Translated' },
+    { id: 'ai', name: 'AI Translated' }
+  ];
+
+  /* ── Helpers ───────────────────────────────────────────── */
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function isPersonalized(f) { return typeof f.source === 'object'; }
+  function fid(f) { return isPersonalized(f) ? f.key + '@' + state.exp : f.key; }
+
+  /* ── Unpublished changes (drives the experience marks + Publish summary) ── */
+  function val(bag, locale, id) { var v = (bag[locale] || {})[id]; return v && v.trim() ? v.trim() : ''; }
+  function isChanged(locale, id) { return val(T, locale, id) !== val(PUB, locale, id); }
+
+  // { scope: 'shared' | experienceId, locale, count } for every change.
+  function pendingChanges() {
+    var out = [];
+    Object.keys(T).forEach(function (locale) {
+      var shared = 0, per = {};
+      FIELDS.forEach(function (f) {
+        if (f.localizable === false) return;
+        if (typeof f.source === 'object') {
+          EXPERIENCES.forEach(function (x) { if (isChanged(locale, f.key + '@' + x.id)) per[x.id] = (per[x.id] || 0) + 1; });
+        } else if (isChanged(locale, f.key)) shared++;
+      });
+      if (shared) out.push({ scope: 'shared', locale: locale, count: shared });
+      Object.keys(per).forEach(function (x) { out.push({ scope: x, locale: locale, count: per[x] }); });
+    });
+    return out;
+  }
+
+  // An experience is marked when its own content or the shared content
+  // (which every experience shows) has unpublished changes.
+  function expHasChanges(expId) {
+    return pendingChanges().some(function (c) { return c.scope === 'shared' || c.scope === expId; });
+  }
+  function source(f) { return isPersonalized(f) ? f.source[state.exp] : f.source; }
+  function isLocalizable(f) { return f.localizable !== false; }
+  function translation(locale, f) {
+    if (!isLocalizable(f)) return '';
+    var v = (T[locale] || {})[fid(f)];
+    return v && v.trim() ? v : '';
+  }
+  function fieldByKey(key) { return FIELDS.filter(function (f) { return f.key === key; })[0]; }
+  function lang(code) { return LANGS.filter(function (l) { return l.code === code; })[0]; }
+
+  function progress(locale) {
+    var fields = FIELDS.filter(isLocalizable);
+    var done = fields.filter(function (f) { return translation(locale, f); }).length;
+    return { done: done, total: fields.length };
+  }
+
+  // Clay LanguagePicker statuses.
+  function status(locale) {
+    if (locale === SOURCE_LOCALE) return { text: 'Default', tone: 'info' };
+    var p = progress(locale);
+    if (p.done === 0) return { text: 'Not Translated', tone: 'warning' };
+    if (p.done === p.total) return { text: 'Translated', tone: 'success' };
+    return { text: 'Translating ' + p.done + '/' + p.total, tone: 'secondary' };
+  }
+
+  /* ── Tooltips for icon-only buttons ────────────────────── */
+  var tooltip = document.getElementById('tooltip');
+
+  function showTooltip(el) {
+    if (el.getAttribute('aria-expanded') === 'true' || el.hasAttribute('data-tooltip-muted')) return;
+    var align = el.getAttribute('data-tooltip-align');
+    tooltip.textContent = el.getAttribute('data-tooltip');
+    tooltip.classList.toggle('tooltip--align-start', align === 'start');
+    tooltip.classList.toggle('tooltip--align-end', align === 'end');
+    tooltip.hidden = false;
+
+    // Arrow sits 12px from the aligned edge (+4px half-width) → 16px to its centre.
+    var r = el.getBoundingClientRect();
+    var centre = r.left + r.width / 2;
+    var w = tooltip.offsetWidth;
+    var left = align === 'start' ? centre - 16 : align === 'end' ? centre + 16 - w : centre - w / 2;
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = (r.bottom + 8) + 'px';
+  }
+
+  function hideTooltip() { tooltip.hidden = true; }
+
+  // Show on hover, or on focus only when it came from Tab navigation — not
+  // when a script returns focus to the trigger (e.g. after closing a menu),
+  // which otherwise leaves the tooltip stuck until the next blur.
+  var tabbing = false;
+  document.addEventListener('keydown', function (e) {
+    tabbing = e.key === 'Tab';
+    if (e.key === 'Escape') hideTooltip();
+  }, true);
+  document.addEventListener('pointerdown', function () { tabbing = false; hideTooltip(); }, true);
+  document.addEventListener('scroll', hideTooltip, true);
+  window.addEventListener('blur', hideTooltip);
+
+  document.querySelectorAll('[data-tooltip]').forEach(function (el) {
+    el.addEventListener('mouseenter', function () { showTooltip(el); });
+    el.addEventListener('mouseleave', hideTooltip);
+    el.addEventListener('focus', function () { if (tabbing) showTooltip(el); });
+    el.addEventListener('blur', hideTooltip);
+    el.addEventListener('click', hideTooltip);
+  });
+
+  /* ── Dropdown menus (actions, experience, language) ────── */
+  var menus = [];
+
+  function bindMenu(wrap, trigger, menu, onSelect) {
+    function items() {
+      return Array.prototype.slice.call(menu.querySelectorAll('.dropdown__item:not(:disabled)'))
+        .filter(function (el) { return !el.closest('[hidden]'); });
+    }
+    function isOpen() { return !menu.hidden; }
+
+    var api = {
+      open: function (focus) {
+        menus.forEach(function (m) { if (m !== api) m.close(false); });
+        hideTooltip();
+        menu.hidden = false;
+        trigger.setAttribute('aria-expanded', 'true');
+        if (focus) {
+          var list = items();
+          var selected = menu.querySelector('[aria-selected="true"], [aria-checked="true"]');
+          (focus === 'last' ? list[list.length - 1] : selected || list[0]).focus();
+        }
+      },
+      close: function (returnFocus) {
+        if (!isOpen()) return;
+        menu.hidden = true;
+        trigger.setAttribute('aria-expanded', 'false');
+        if (returnFocus) trigger.focus();
+      }
+    };
+
+    trigger.addEventListener('click', function () {
+      isOpen() ? api.close(false) : api.open();
+    });
+
+    trigger.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); api.open('first'); }
+      if (e.key === 'ArrowUp')   { e.preventDefault(); api.open('last'); }
+    });
+
+    menu.addEventListener('keydown', function (e) {
+      var list = items();
+      var i = list.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); list[(i + 1) % list.length].focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); list[(i - 1 + list.length) % list.length].focus(); }
+      else if (e.key === 'Home') { e.preventDefault(); list[0].focus(); }
+      else if (e.key === 'End') { e.preventDefault(); list[list.length - 1].focus(); }
+      else if (e.key === 'Escape') { e.preventDefault(); api.close(true); }
+      else if (e.key === 'Tab') { api.close(false); }
+    });
+
+    menu.addEventListener('click', function (e) {
+      var item = e.target.closest('.dropdown__item');
+      if (!item) return;
+      var value = item.getAttribute('data-value');
+      api.close(true);
+      onSelect(value);
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!wrap.contains(e.target)) api.close(false);
+    });
+
+    menus.push(api);
+    return api;
+  }
+
+  // More actions — hooks for the next screens: 'download-xlf', 'configuration'.
+  bindMenu(
+    document.getElementById('more-actions'),
+    document.getElementById('more-actions-trigger'),
+    document.getElementById('more-actions-menu'),
+    function (action) {
+      document.dispatchEvent(new CustomEvent('translate:action', { detail: action }));
+    }
+  );
+
+  /* ── Experience picker ─────────────────────────────────── */
+  var expMenu = document.getElementById('exp-menu');
+  var expText = document.getElementById('exp-trigger-text');
+
+  function checkIcon(on) {
+    return '<svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"' + (on ? '' : ' style="visibility: hidden;"') + '><use href="#check"></use></svg>';
+  }
+
+  function renderExpMenu() {
+    expMenu.innerHTML = EXPERIENCES.map(function (x) {
+      var on = x.id === state.exp;
+      var dirty = expHasChanges(x.id);
+      return '<li role="none"><button type="button" class="dropdown__item' + (on ? ' is-active' : '') + '" role="option" aria-selected="' + on + '" tabindex="-1" data-value="' + x.id + '">' +
+        checkIcon(on) + '<span class="dropdown__item-text">' + esc(x.name) + '</span>' +
+        // Workflow-style status: Draft (unpublished changes) / Published.
+        '<span class="dropdown__item-meta label label--sm ' + (dirty ? 'label--secondary">Draft' : 'label--success">Published') + '</span>' +
+        '</button></li>';
+    }).join('');
+    expText.textContent = EXPERIENCES.filter(function (x) { return x.id === state.exp; })[0].name;
+  }
+
+  bindMenu(document.getElementById('exp-picker'), document.getElementById('exp-trigger'), expMenu, function (id) {
+    state.exp = id;
+    render();
+  });
+
+  /* ── Languages list (sidebar) + translation-view title ────── */
+  var langList = document.getElementById('lang-list');
+
+  // Kept under this name: every state change calls it to refresh the list
+  // statuses and the toolbar title.
+  function renderLangPicker() {
+    // Lexicon Table: select · translation (flag + name) · code · status · ⋮
+    // (tables allow no second detail line, so the code is its own column)
+    // (same options as inside the translation).
+    if (typeof closeRowMenu === 'function') closeRowMenu(false);
+    // Only translations are listed — the default language (en-US) isn't one.
+    var visible = sortLangs(LANGS.filter(function (l) { return l.code !== SOURCE_LOCALE && langMatches(l); }));
+    renderLangResults(visible.length);
+    document.getElementById('lang-table').hidden = !visible.length;
+    langEmpty.hidden = !!visible.length;
+    langList.innerHTML = visible.map(function (l) {
+      var s = status(l.code);
+      var isDefault = l.code === SOURCE_LOCALE;
+      var on = !!selected[l.code];
+      var status_ = busy[l.code]
+        ? '<span style="display: inline-flex; align-items: center; gap: var(--spacing-2); font-size: var(--font-size-base); color: var(--color-info); white-space: nowrap;"><span class="loading-animation loading-animation-sm" aria-hidden="true" style="color: var(--color-info);"></span>Translating…</span>'
+        : '<span class="label label--sm label--' + s.tone + '">' + s.text + '</span>';
+      var TD = ' style="padding-block: var(--spacing-3);"';
+      return '<tr data-locale="' + l.code + '"' + (on ? ' class="is-selected"' : '') + ' style="cursor: pointer;">' +
+        '<td class="table__cell--gutter"' + TD + '>' + (isDefault ? '' :
+          '<label class="checkbox"><input type="checkbox" class="checkbox__input" data-select="' + l.code + '" aria-label="Select ' + esc(l.name) + '"' + (on ? ' checked' : '') + '>' +
+          '<span class="checkbox__box"><svg class="checkbox__icon checkbox__icon--check"><use href="#check-small"></use></svg><svg class="checkbox__icon checkbox__icon--hr"><use href="#hr"></use></svg></span></label>') +
+        '</td>' +
+        '<td' + TD + '><span class="table__title-wrap">' +
+          '<span class="lang-picker__flag ' + l.flag + '" aria-hidden="true"></span>' +
+          (isDefault
+              ? '<span class="table__title" style="text-decoration: none;">' + esc(l.name) + '</span>'
+              // Inline colour pins the title to dark text (no blue :hover).
+              : '<a href="#" class="table__title" data-open="' + l.code + '" style="color: var(--color-dark);">' + esc(l.name) + '</a>') +
+          '</span></td>' +
+        '<td' + TD + '>' + l.code + '</td>' +
+        '<td' + TD + '>' + status_ + '</td>' +
+        '<td class="table__cell--gutter"' + TD + '>' + (isDefault ? '' :
+          '<button class="btn btn--borderless btn--sm btn--icon" type="button" data-row-actions="' + l.code + '"' +
+            ' aria-label="Options for ' + esc(l.name) + '" aria-haspopup="menu" aria-expanded="false"' + (busy[l.code] ? ' disabled' : '') + '>' +
+            '<svg class="lexicon-icon" aria-hidden="true"><use href="#ellipsis-v"></use></svg></button>') +
+        '</td>' +
+      '</tr>';
+    }).join('');
+    syncSelection();
+
+    var current = lang(state.locale);
+    document.getElementById('lang-title-flag').className = 'lang-picker__flag ' + current.flag;
+    document.getElementById('lang-title-text').textContent = current.name;
+    document.getElementById('lang-title-code').textContent = current.code;
+  }
+
+  /* ── Languages: filter + search ──────────────────────────── */
+  var LANG_STATUSES = [
+    { id: 'all', name: 'All Translations' },
+    { id: 'translated', name: 'Translated' },
+    { id: 'partial', name: 'Partially Translated' },
+    { id: 'untranslated', name: 'Not Translated' }
+  ];
+  var langFilter = { status: 'all', query: '' };
+  var langFilterMenu = document.getElementById('lang-filter-menu');
+  var langSearch = document.getElementById('lang-search');
+  var langResults = document.getElementById('lang-results');
+
+  // Search/no-results empty state (Clay search state = telescope), centred.
+  var langEmpty = document.createElement('div');
+  langEmpty.className = 'empty-state empty-state--sm';
+  langEmpty.style.margin = 'auto';
+  langEmpty.hidden = true;
+  langEmpty.innerHTML =
+    '<div class="empty-state__media"><img src="illustrations/illustration-telescope.svg" alt=""></div>' +
+    '<h3 class="empty-state__title">No Translations Found</h3>' +
+    '<p class="empty-state__text">Try a different search term or filter.</p>';
+  document.getElementById('lang-body').appendChild(langEmpty);
+
+  function langStatusId(code) {
+    var p = progress(code);
+    return p.done === 0 ? 'untranslated' : p.done === p.total ? 'translated' : 'partial';
+  }
+
+  // Matches name or locale code.
+  function langMatches(l) {
+    if (langFilter.status !== 'all') {
+      if (l.code === SOURCE_LOCALE || langStatusId(l.code) !== langFilter.status) return false;
+    }
+    if (!langFilter.query) return true;
+    var q = norm(langFilter.query);
+    return norm(l.name).indexOf(q) > -1 || norm(l.code).indexOf(q) > -1;
+  }
+
+  function renderLangFilterMenu() {
+    langFilterMenu.innerHTML = '<li class="dropdown__group-title" role="presentation">Filter by Status</li>' +
+      LANG_STATUSES.map(function (x) {
+        var on = x.id === langFilter.status;
+        return '<li role="none"><button type="button" class="dropdown__item' + (on ? ' is-active' : '') + '" role="menuitemradio" aria-checked="' + on + '" tabindex="-1" data-value="' + x.id + '">' +
+          checkIcon(on) + x.name + '</button></li>';
+      }).join('');
+  }
+
+  function renderLangResults(count) {
+    var active = langFilter.query || langFilter.status !== 'all';
+    langResults.hidden = !active;
+    if (!active) return;
+    document.getElementById('lang-results-text').textContent = count + ' ' + (count === 1 ? 'Result' : 'Results') + ' Found for:';
+    document.getElementById('lang-results-chips').innerHTML =
+      (langFilter.status !== 'all' ? filterChip('status', 'Status', LANG_STATUSES.filter(function (x) { return x.id === langFilter.status; })[0].name) : '') +
+      (langFilter.query ? filterChip('query', 'Search', langFilter.query) : '');
+  }
+
+  bindMenu(document.getElementById('lang-filter'), document.getElementById('lang-filter-trigger'), langFilterMenu, function (id) {
+    langFilter.status = id;
+    renderLangFilterMenu();
+    renderLangPicker();
+  });
+
+  langSearch.addEventListener('input', function () {
+    langFilter.query = langSearch.value.trim();
+    renderLangPicker();
+  });
+
+  document.getElementById('lang-search-clear').addEventListener('click', function () {
+    langSearch.value = '';
+    langFilter.query = '';
+    renderLangPicker();
+    langSearch.focus();
+  });
+
+  document.getElementById('lang-results-chips').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-remove]');
+    if (!btn) return;
+    if (btn.getAttribute('data-remove') === 'status') { langFilter.status = 'all'; renderLangFilterMenu(); }
+    else { langFilter.query = ''; langSearch.value = ''; }
+    renderLangPicker();
+    (langResults.hidden ? langSearch : document.getElementById('lang-results-clear')).focus();
+  });
+
+  document.getElementById('lang-results-clear').addEventListener('click', function () {
+    langFilter.status = 'all';
+    langFilter.query = '';
+    langSearch.value = '';
+    renderLangFilterMenu();
+    renderLangPicker();
+    langSearch.focus();
+  });
+
+  renderLangFilterMenu();
+
+  // Whole row is the hit area; the title link keeps it keyboard-reachable.
+  langList.addEventListener('click', function (e) {
+    var kebab = e.target.closest('[data-row-actions]');
+    if (kebab) {
+      e.stopPropagation();
+      rowTrigger === kebab && !rowMenu.hidden ? closeRowMenu(false) : openRowMenu(kebab, e.detail === 0);
+      return;
+    }
+    if (e.target.closest('.table__cell--gutter')) return;   // select / ⋮ cells don't open
+    var row = e.target.closest('tr[data-locale]');
+    if (!row || row.getAttribute('data-locale') === SOURCE_LOCALE) return;
+    e.preventDefault();
+    openLanguage(row.getAttribute('data-locale'));
+  });
+
+  /* ── Sorting (click a column header: ascending ⇄ descending) ── */
+  var langSort = { key: null, dir: 1 };
+
+  function sortLangs(list) {
+    if (!langSort.key) return list;
+    return list.slice().sort(function (a, b) {
+      var va, vb;
+      if (langSort.key === 'name') { va = a.name; vb = b.name; return va.localeCompare(vb) * langSort.dir; }
+      if (langSort.key === 'code') { return a.code.localeCompare(b.code) * langSort.dir; }
+      var pa = progress(a.code), pb = progress(b.code);
+      return (pa.done / pa.total - pb.done / pb.total) * langSort.dir || a.name.localeCompare(b.name);
+    });
+  }
+
+  document.querySelectorAll('[data-sort]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var key = btn.getAttribute('data-sort');
+      langSort.dir = langSort.key === key ? -langSort.dir : 1;
+      langSort.key = key;
+      document.querySelectorAll('[data-sort-col]').forEach(function (th) {
+        var on = th.getAttribute('data-sort-col') === key;
+        th.setAttribute('aria-sort', on ? (langSort.dir === 1 ? 'ascending' : 'descending') : 'none');
+        th.querySelector('use').setAttribute('href', on ? (langSort.dir === 1 ? '#order-arrow-up' : '#order-arrow-down') : '#order-arrow');
+      });
+      renderLangPicker();
+    });
+  });
+
+  /* ── Multi-selection + bulk actions ─────────────────────── */
+  var selected = {};            // locale → true
+  var TARGETS = LANGS.filter(function (l) { return l.code !== SOURCE_LOCALE; });
+
+  function selectedCodes() { return TARGETS.map(function (l) { return l.code; }).filter(function (c) { return selected[c]; }); }
+  function visibleTargets() {
+    return Array.prototype.slice.call(langList.querySelectorAll('[data-select]')).map(function (i) { return i.getAttribute('data-select'); });
+  }
+
+  function setCheck(wrapId, inputId, state_) {
+    var input = document.getElementById(inputId);
+    input.checked = state_ === 'all';
+    input.indeterminate = state_ === 'some';
+    document.getElementById(wrapId).classList.toggle('is-indeterminate', state_ === 'some');
+  }
+
+  // Updates rows, both "select all" checkboxes and the bulk bar in place
+  // (no re-render, so keyboard focus stays on the checkbox).
+  function syncSelection() {
+    langList.querySelectorAll('tr[data-locale]').forEach(function (tr) {
+      var code = tr.getAttribute('data-locale');
+      tr.classList.toggle('is-selected', !!selected[code]);
+      tr.style.background = selected[code] ? 'var(--color-primary-l3)' : 'var(--color-white)';   // no zebra, as in FDS
+      var cb = tr.querySelector('[data-select]');
+      if (cb) cb.checked = !!selected[code];
+    });
+    var vis = visibleTargets();
+    var n = vis.filter(function (c) { return selected[c]; }).length;
+    var st = n === 0 ? 'none' : n === vis.length ? 'all' : 'some';
+    setCheck('lang-select-all-wrap', 'lang-select-all', st);
+    setCheck('bulk-check-wrap', 'bulk-check', st);
+
+    var codes = selectedCodes();
+    document.getElementById('lang-tools').hidden = codes.length > 0;
+    document.getElementById('lang-bulk').hidden = codes.length === 0;
+    document.getElementById('bulk-count').textContent = codes.length === TARGETS.length
+      ? 'All Selected (' + codes.length + ' of ' + TARGETS.length + ' Items)'
+      : codes.length + ' of ' + TARGETS.length + ' Items Selected';
+    document.querySelectorAll('[data-bulk]').forEach(function (btn) {
+      var a = btn.getAttribute('data-bulk');
+      btn.disabled = !codes.some(function (c) { return !busy[c] && availability(c)[a]; });
+    });
+  }
+
+  langList.addEventListener('change', function (e) {
+    var code = e.target.getAttribute('data-select');
+    if (!code) return;
+    if (e.target.checked) selected[code] = true; else delete selected[code];
+    syncSelection();
+  });
+
+  function toggleAll(checked) {
+    visibleTargets().forEach(function (c) { if (checked) selected[c] = true; else delete selected[c]; });
+    syncSelection();
+  }
+  document.getElementById('lang-select-all').addEventListener('change', function (e) { toggleAll(e.target.checked); });
+  document.getElementById('bulk-check').addEventListener('change', function (e) {
+    toggleAll(e.target.checked);
+    if (!selectedCodes().length) document.getElementById('lang-select-all').focus();
+  });
+  document.getElementById('bulk-clear').addEventListener('click', function () {
+    selected = {};
+    syncSelection();
+    document.getElementById('lang-select-all').focus();
+  });
+
+  // Very narrow panel → the Filter buttons collapse to icon-only (+ tooltip).
+  function compactFilters() {
+    var compact = document.getElementById('fields-pane').clientWidth < 380;
+    document.querySelectorAll('[data-filter-btn]').forEach(function (btn) {
+      btn.classList.toggle('btn--icon', compact);
+      btn.querySelectorAll('.filter-label').forEach(function (el) { el.toggleAttribute('hidden', compact); });
+      if (compact) btn.removeAttribute('data-tooltip-muted'); else btn.setAttribute('data-tooltip-muted', '');
+    });
+  }
+  new ResizeObserver(compactFilters).observe(document.getElementById('fields-pane'));
+
+  document.querySelectorAll('[data-bulk]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var a = btn.getAttribute('data-bulk');
+      var codes = selectedCodes().filter(function (c) { return !busy[c] && availability(c)[a]; });
+      if (codes.length) runLangAction(a, codes);
+    });
+  });
+
+  /* ── Side panel levels: languages list ⇄ translation ───── */
+  function showView() {
+    var translating = state.view === 'translate';
+    document.getElementById('panel-languages').hidden = translating;
+    document.getElementById('panel-translate').hidden = !translating;
+    document.getElementById('fields-pane').setAttribute('aria-label', translating ? 'Translatable fields' : 'Translations');
+    document.getElementById('preview-canvas').scrollTop = 0;
+  }
+
+  function openLanguage(code) {
+    state.view = 'translate';
+    state.locale = code;
+    state.status = 'all';
+    state.query = '';
+    searchInput.value = '';
+    render();
+    showView();
+    document.getElementById('to-languages').focus();
+  }
+
+  function backToLanguages() {
+    var from = state.locale;
+    state.view = 'languages';
+    state.locale = SOURCE_LOCALE;
+    render();
+    showView();
+    var link = langList.querySelector('[data-open="' + from + '"]');
+    if (link) link.focus();
+  }
+
+  document.getElementById('to-languages').addEventListener('click', backToLanguages);
+
+  /* ── Translation options (⋮ in the list rows and next to the language title) ── */
+  var langActionsTrigger = document.getElementById('lang-actions-trigger');
+  var ACTIONS = ['auto-translate', 'mark-translated', 'reset'];
+  var busy = {};                // locale → Auto-translate in progress
+
+  // Scope = the localizable fields of the current experience.
+  function scopeFields() { return FIELDS.filter(isLocalizable); }
+
+  // Which actions make sense for a language right now.
+  function availability(code) {
+    var p = progress(code);
+    return {
+      'auto-translate': p.done < p.total,
+      'mark-translated': p.done < p.total || aiCount(code) > 0,
+      'reset': p.done > 0
+    };
+  }
+
+  function applyAvailability(menu, code) {
+    var av = availability(code);
+    ACTIONS.forEach(function (a) { menu.querySelector('[data-value="' + a + '"]').disabled = !av[a]; });
+  }
+
+  function renderLangActions() {
+    langActionsTrigger.disabled = state.locale === SOURCE_LOCALE || !!busy[state.locale];
+    applyAvailability(document.getElementById('lang-actions-menu'), state.locale);
+  }
+
+  // `codes`: a locale or an array of locales (bulk). One toast per run.
+  function runLangAction(action, codes) {
+    codes = [].concat(codes);
+    var what = codes.length === 1 ? codes[0] : codes.length + ' languages';
+    if (action === 'auto-translate') {
+      // Simulated service call: spinner (counter / table row), then empty
+      // fields are filled and flagged as AI translations for review.
+      codes.forEach(function (c) { busy[c] = true; });
+      render();
+      setTimeout(function () {
+        var count = 0;
+        codes.forEach(function (code) {
+          var t = T[code];
+          var ai = AI[code] = AI[code] || {};
+          scopeFields().forEach(function (f) {
+            if (translation(code, f)) return;
+            t[fid(f)] = (MT[code] || {})[fid(f)] || source(f);
+            ai[fid(f)] = true;
+            count++;
+          });
+          delete busy[code];
+        });
+        render();
+        toast('success', 'check-circle-full', 'Success', count + ' field' + (count === 1 ? '' : 's') + ' auto-translated to ' + what + '. Review the AI translations before publishing.');
+      }, 1200);
+    }
+    if (action === 'mark-translated') {
+      // Untranslated fields take the default-language value, as in Liferay;
+      // pending AI translations count as reviewed.
+      codes.forEach(function (code) {
+        scopeFields().forEach(function (f) { if (!translation(code, f)) T[code][fid(f)] = source(f); });
+        delete AI[code];
+      });
+      render();
+      toast('success', 'check-circle-full', 'Success', what + (codes.length === 1 ? ' has' : ' have') + ' been marked as translated.');
+    }
+    if (action === 'reset') {
+      codes.forEach(function (code) {
+        scopeFields().forEach(function (f) { delete T[code][fid(f)]; if (AI[code]) delete AI[code][fid(f)]; });
+      });
+      render();
+      toast('success', 'check-circle-full', 'Success', (codes.length === 1 ? 'The ' + what + ' translation has' : 'The translations of ' + what + ' have') + ' been reset.');
+    }
+  }
+
+  bindMenu(document.getElementById('lang-actions'), langActionsTrigger, document.getElementById('lang-actions-menu'), function (action) {
+    if (action === 'preview-tab') { openPreviewTab(); return; }
+    runLangAction(action, state.locale);
+  });
+
+  // Small screens: the preview opens on its own in a new tab, with the
+  // current (even unsaved) translation handed over through localStorage.
+  function openPreviewTab() {
+    try { localStorage.setItem('translation-editor-preview', JSON.stringify({ T: T, AI: AI })); } catch (e) {}
+    var q = new URLSearchParams({ preview: '1', locale: state.locale, exp: state.exp });
+    if (pageName) q.set('page', pageName);
+    window.open('translation-editor.html?' + q.toString(), '_blank');
+  }
+
+  /* Row ⋮ — one shared floating menu, anchored to the clicked row button. */
+  var rowMenu = document.getElementById('row-actions-menu');
+  var rowTrigger = null;
+
+  function rowItems() { return Array.prototype.slice.call(rowMenu.querySelectorAll('.dropdown__item:not(:disabled)')); }
+
+  function openRowMenu(btn, focusFirst) {
+    menus.forEach(function (m) { m.close(false); });
+    closeRowMenu(false);
+    rowTrigger = btn;
+    rowMenu.setAttribute('data-locale', btn.getAttribute('data-row-actions'));
+    applyAvailability(rowMenu, btn.getAttribute('data-row-actions'));
+    rowMenu.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    var r = btn.getBoundingClientRect();
+    rowMenu.style.top = (r.bottom + 4) + 'px';
+    rowMenu.style.left = Math.max(8, r.right - rowMenu.offsetWidth) + 'px';
+    if (focusFirst && rowItems()[0]) rowItems()[0].focus();
+  }
+
+  function closeRowMenu(returnFocus) {
+    if (rowMenu.hidden) return;
+    rowMenu.hidden = true;
+    if (rowTrigger) {
+      rowTrigger.setAttribute('aria-expanded', 'false');
+      if (returnFocus && document.body.contains(rowTrigger)) rowTrigger.focus();
+    }
+    rowTrigger = null;
+  }
+
+  rowMenu.addEventListener('keydown', function (e) {
+    var list = rowItems();
+    var i = list.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); list[(i + 1) % list.length].focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); list[(i - 1 + list.length) % list.length].focus(); }
+    else if (e.key === 'Escape') { e.preventDefault(); closeRowMenu(true); }
+    else if (e.key === 'Tab') { closeRowMenu(false); }
+  });
+
+  rowMenu.addEventListener('click', function (e) {
+    var item = e.target.closest('.dropdown__item');
+    if (!item || item.disabled) return;
+    var code = rowMenu.getAttribute('data-locale');
+    closeRowMenu(false);
+    runLangAction(item.getAttribute('data-value'), code);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!rowMenu.contains(e.target) && !e.target.closest('[data-row-actions]')) closeRowMenu(false);
+  });
+  document.getElementById('lang-body').addEventListener('scroll', function () { closeRowMenu(false); });
+
+  /* ── Preview ───────────────────────────────────────────── */
+  var previewPage = document.getElementById('preview-page');
+  var previewEls = Array.prototype.slice.call(previewPage.querySelectorAll('[data-field]'));
+
+  function renderPreview() {
+    previewPage.setAttribute('lang', state.locale);
+    previewEls.forEach(function (el) {
+      var f = fieldByKey(el.getAttribute('data-field'));
+      // Untranslated fields fall back to the default language, as in Liferay.
+      var text = translation(state.locale, f) || source(f);
+      if (el.tagName === 'IMG') el.alt = text;
+      else if (el.getAttribute('role') === 'img') el.setAttribute('aria-label', text);
+      else el.textContent = text;
+    });
+  }
+
+  function paint(el) {
+    var key = el.getAttribute('data-field');
+    var editable = state.locale !== SOURCE_LOCALE && !PREVIEW_ONLY;
+    el.style.cursor = editable ? 'pointer' : '';
+    el.style.outlineOffset = 'var(--spacing-1)';
+    el.style.outline = !editable ? '' :
+      key === state.active ? '2px solid var(--color-primary-l0)' :
+      key === state.hover ? '1px solid var(--color-primary-l1)' : '';
+  }
+
+  function paintAll() { previewEls.forEach(paint); }
+
+  // Scroll only the given pane — scrollIntoView() also scrolls the page itself,
+  // which pushed the header and toolbar out of view.
+  function scrollWithin(container, el, centre) {
+    var c = container.getBoundingClientRect();
+    var r = el.getBoundingClientRect();
+    var top = r.top - c.top + container.scrollTop;
+    var target;
+    if (centre) target = top - (container.clientHeight - r.height) / 2;
+    else if (r.top < c.top) target = top - 16;
+    else if (r.bottom > c.bottom) target = top + r.height - container.clientHeight + 16;
+    else return;
+    container.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+  }
+
+  function setActive(key) {
+    state.active = key;
+    paintAll();
+    if (!key) return;
+    var el = previewPage.querySelector('[data-field="' + key + '"]');
+    scrollWithin(document.getElementById('preview-canvas'), el, false);
+  }
+
+  previewPage.addEventListener('mouseover', function (e) {
+    var el = e.target.closest('[data-field]');
+    state.hover = el ? el.getAttribute('data-field') : null;
+    paintAll();
+  });
+
+  previewPage.addEventListener('mouseleave', function () {
+    state.hover = null;
+    paintAll();
+  });
+
+  // Click an element in the preview → jump to its field.
+  previewPage.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-field]');
+    if (!el || state.locale === SOURCE_LOCALE || PREVIEW_ONLY) return;
+    var selector = '[data-key="' + el.getAttribute('data-field') + '"]';
+    var field = fieldsBody.querySelector(selector);
+    if (!field) { clearFilters(); field = fieldsBody.querySelector(selector); }
+    field.focus({ preventScroll: true });
+    scrollWithin(fieldsBody, field.closest('.input'), true);
+  });
+
+  /* ── Fields ────────────────────────────────────────────── */
+  var fieldsBody = document.getElementById('fields-body');
+  var counter = document.getElementById('fields-counter');
+
+  function fieldHTML(f) {
+    var id = 'field-' + fid(f).replace('@', '-');
+
+    // Not localizable (Lexicon Input · State=Not Localizable): global value,
+    // read-only, reason given in the label itself — no reference below.
+    if (!isLocalizable(f)) {
+      return '<div class="input">' +
+        '<label class="input__label" for="' + id + '">' + esc(f.label) +
+          '<span class="input__label-meta">(Not Localizable)</span></label>' +
+        '<input type="text" class="input__field" id="' + id + '" data-key="' + f.key + '" value="' + esc(source(f)) + '" readonly>' +
+      '</div>';
+    }
+
+    var value = esc((T[state.locale] || {})[fid(f)] || '');
+    var attrs = ' class="input__field' + (f.multiline ? ' input__field--textarea' : '') + '" id="' + id + '" data-key="' + f.key + '"' +
+      ' aria-describedby="' + id + '-status ' + id + '-ref"';
+    var control = f.multiline
+      ? '<textarea' + attrs + ' rows="3">' + value + '</textarea>'
+      : '<input type="text"' + attrs + ' value="' + value + '">';
+
+    // Default-language reference, always visible under the field (Lexicon
+    // Input · Type=Localizable). Empty default → info "No default value".
+    var ref = source(f);
+    var reference = ref
+      ? '<p class="input__localization" id="' + id + '-ref"><span class="sr-only">Default language (' + SOURCE_LOCALE + '): </span>' + esc(ref) + '</p>'
+      : '<p class="input__localization input__localization--empty" id="' + id + '-ref">No default value to localize</p>';
+
+    // Translated fields take the success tone so the untranslated ones stand out.
+    // AI suggestions (not yet reviewed) show the purple AI state instead of
+    // success; reviewed/typed translations get success + check.
+    var ai = isAI(state.locale, f);
+    var st = fieldState(f);
+    var done = !ai && st !== 'empty';   // translated or default value → success
+    return '<div class="input' + (ai ? ' input--ai' : done ? ' input--success' : '') + '">' +
+      '<label class="input__label" for="' + id + '">' + esc(f.label) +
+      '</label>' +
+      control +
+      '<span class="input__feedback" id="' + id + '-status"' + (!ai && st !== 'empty' ? '' : ' hidden') + '>' +
+        (st === 'default' ? DEFAULT_FEEDBACK : TRANSLATED_FEEDBACK) + '</span>' +
+      (ai ? AI_CAPTION : '') +
+      reference +
+    '</div>';
+  }
+
+  function renderFields() {
+    fieldsTools.hidden = state.locale === SOURCE_LOCALE;
+    if (state.locale === SOURCE_LOCALE) {
+      results.hidden = true;
+      fieldsBody.innerHTML =
+        // Centred in the pane (margin: auto inside the flex column). No translation
+        // illustration exists in the kit, so the media circle uses the
+        // #automatic-translate icon.
+        '<div class="empty-state empty-state--sm" style="margin: auto;">' +
+          '<div class="empty-state__media"><svg class="lexicon-icon" aria-hidden="true"><use href="#automatic-translate"></use></svg></div>' +
+          '<h3 class="empty-state__title">en-US is the Default Language</h3>' +
+          '<p class="empty-state__text">Select another language in the preview to translate this page. To edit the default language, go to the edition of the page.</p>' +
+        '</div>';
+      return;
+    }
+
+    var visible = FIELDS.filter(matches);
+    renderResults(visible.length);
+
+    if (!visible.length) {
+      fieldsBody.innerHTML =
+        '<div class="empty-state empty-state--sm" style="margin: auto;">' +
+          // Clay "search state" illustration (telescope): no results.
+          '<div class="empty-state__media"><img src="illustrations/illustration-telescope.svg" alt=""></div>' +
+          '<h3 class="empty-state__title">No Fields Found</h3>' +
+          '<p class="empty-state__text">Try a different search term or filter.</p>' +
+        '</div>';
+      return;
+    }
+
+    fieldsBody.innerHTML = GROUPS.map(function (g) {
+      var inGroup = visible.filter(function (f) { return f.group === g.id; });
+      if (!inGroup.length) return '';
+      var fields = inGroup.map(fieldHTML).join('');
+      return '<div style="display: flex; flex-direction: column; gap: var(--spacing-5);">' +
+        '<header class="section section--sm"><h3 class="section__title">' + esc(g.name) + '</h3></header>' +
+        fields +
+      '</div>';
+    }).join('');
+  }
+
+  /* ── Filter + search ───────────────────────────────────── */
+  var fieldsTools = document.getElementById('fields-tools');
+  var statusMenu = document.getElementById('status-menu');
+  var searchInput = document.getElementById('fields-search');
+  var results = document.getElementById('fields-results');
+  var resultsText = document.getElementById('fields-results-text');
+  var resultsChips = document.getElementById('fields-results-chips');
+
+  // Case- and accent-insensitive ("traduccion" finds "traducción").
+  function norm(str) { return String(str).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
+
+  // A field matches if its status fits the filter and the query appears in its
+  // label, its group name, the default text or the current translation.
+  function matches(f) {
+    var done = !!translation(state.locale, f);
+    if (state.status !== 'all' && !isLocalizable(f)) return false;
+    if (state.status === 'untranslated' && done) return false;
+    if (state.status === 'translated' && !done) return false;
+    if (state.status === 'ai' && !isAI(state.locale, f)) return false;
+    if (!state.query) return true;
+    var group = GROUPS.filter(function (g) { return g.id === f.group; })[0].name;
+    var q = norm(state.query);
+    return [f.label, group, source(f), (T[state.locale] || {})[fid(f)] || ''].some(function (t) { return norm(t).indexOf(q) > -1; });
+  }
+
+  function filterChip(kind, name, value) {
+    return '<span class="label label--secondary" style="font-weight: var(--font-weight-normal);">' +
+      '<svg class="lexicon-icon lexicon-icon-sm" aria-hidden="true"><use href="#caret-bottom"></use></svg>' +
+      '<span>' + name + ': <strong>' + esc(value) + '</strong></span>' +
+      '<button class="label__close" type="button" data-remove="' + kind + '" aria-label="Remove ' + name + ' Filter">' +
+        '<svg class="lexicon-icon" aria-hidden="true"><use href="#times-small"></use></svg>' +
+      '</button></span>';
+  }
+
+  function renderResults(count) {
+    var active = state.query || state.status !== 'all';
+    results.hidden = !active;
+    if (!active) return;
+    resultsText.textContent = count + ' ' + (count === 1 ? 'Result' : 'Results') + ' Found for:';
+    resultsChips.innerHTML =
+      (state.status !== 'all' ? filterChip('status', 'Status', STATUSES.filter(function (x) { return x.id === state.status; })[0].name) : '') +
+      (state.query ? filterChip('query', 'Search', state.query) : '');
+  }
+
+  // × on a label removes just that filter.
+  resultsChips.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-remove]');
+    if (!btn) return;
+    if (btn.getAttribute('data-remove') === 'status') { state.status = 'all'; renderStatusMenu(); }
+    else { state.query = ''; searchInput.value = ''; }
+    renderFields();
+    (results.hidden ? searchInput : document.getElementById('fields-results-clear')).focus();
+  });
+
+  function renderStatusMenu() {
+    statusMenu.innerHTML = '<li class="dropdown__group-title" role="presentation">Filter by Status</li>' +
+      STATUSES.map(function (x) {
+        var on = x.id === state.status;
+        return '<li role="none"><button type="button" class="dropdown__item' + (on ? ' is-active' : '') + '" role="menuitemradio" aria-checked="' + on + '" tabindex="-1" data-value="' + x.id + '">' +
+          checkIcon(on) + x.name + '</button></li>';
+      }).join('');
+  }
+
+  function clearFilters() {
+    state.status = 'all';
+    state.query = '';
+    searchInput.value = '';
+    renderStatusMenu();
+    renderFields();
+  }
+
+  bindMenu(document.getElementById('status-picker'), document.getElementById('status-trigger'), statusMenu, function (id) {
+    state.status = id;
+    renderStatusMenu();
+    renderFields();
+  });
+
+  searchInput.addEventListener('input', function () {
+    state.query = searchInput.value.trim();
+    renderFields();
+  });
+
+  document.getElementById('fields-search-clear').addEventListener('click', function () {
+    searchInput.value = '';
+    state.query = '';
+    renderFields();
+    searchInput.focus();
+  });
+
+  document.getElementById('fields-results-clear').addEventListener('click', clearFilters);
+
+
+  // Per-field check next to the label; the hidden text makes "translated"
+  // perceivable without relying on the green tint alone.
+  var AI_CAPTION = '<p class="input__ai"><svg class="lexicon-icon" aria-hidden="true"><use href="#stars"></use></svg>AI Translated</p>';
+
+  // "✓ Translated" feedback (Lexicon Input · State=Success row, retitled).
+  var TRANSLATED_FEEDBACK = '<svg class="lexicon-icon" aria-hidden="true"><use href="#check-circle-full"></use></svg><span><strong>Translated</strong></span>';
+  // Default-value state — the field holds the default-language text (e.g.
+  // after Mark as Translated): success like any translated field, but the
+  // message says it uses the default value.
+  var DEFAULT_FEEDBACK = '<svg class="lexicon-icon" aria-hidden="true"><use href="#check-circle"></use></svg><span><strong>Marked as Translated:</strong> Uses Default Value</span>';
+
+  // 'empty' · 'default' (same text as the default language) · 'translated'
+  function fieldState(f) {
+    var v = translation(state.locale, f);
+    if (!v) return 'empty';
+    return v.trim() === String(source(f)).trim() ? 'default' : 'translated';
+  }
+
+  // Status next to the language title — the same label the table shows
+  // (or a spinner while Auto-translate runs).
+  function renderCounter() {
+    if (busy[state.locale]) {
+      counter.innerHTML = '<span style="display: inline-flex; align-items: center; gap: var(--spacing-2); font-size: var(--font-size-base); color: var(--color-info); white-space: nowrap;">' +
+        '<span class="loading-animation loading-animation-sm" aria-hidden="true" style="color: var(--color-info);"></span>Translating…</span>';
+      return;
+    }
+    var st = status(state.locale);
+    counter.innerHTML = '<span class="label label--sm label--' + st.tone + '">' + st.text + '</span>';
+  }
+
+  // Typing updates the preview live…
+  fieldsBody.addEventListener('input', function (e) {
+    var f = fieldByKey(e.target.getAttribute('data-key'));
+    if (!f) return;
+    T[state.locale][fid(f)] = e.target.value;
+    renderPreview();
+  });
+
+  // …while the field's state (Translated / AI), the counter and the language
+  // status only update once the user leaves the field (`change` fires on blur).
+  fieldsBody.addEventListener('change', function (e) {
+    var f = fieldByKey(e.target.getAttribute('data-key'));
+    if (!f) return;
+    var st = fieldState(f);
+    var wrap = e.target.closest('.input');
+    // Editing an AI suggestion counts as reviewing it.
+    if (AI[state.locale]) delete AI[state.locale][fid(f)];
+    wrap.classList.remove('input--ai');
+    var caption = wrap.querySelector('.input__ai');
+    if (caption) caption.remove();
+    wrap.classList.toggle('input--success', st !== 'empty');
+    var fb = wrap.querySelector('.input__feedback');
+    fb.hidden = st === 'empty';
+    fb.innerHTML = st === 'default' ? DEFAULT_FEEDBACK : TRANSLATED_FEEDBACK;
+    renderCounter();
+    renderLangPicker();
+    renderLangActions();
+    renderExpMenu();
+  });
+
+  fieldsBody.addEventListener('focusin', function (e) {
+    var key = e.target.getAttribute('data-key');
+    if (key) setActive(key);
+  });
+
+  fieldsBody.addEventListener('focusout', function () { setActive(null); });
+
+  /* ── Render ────────────────────────────────────────────── */
+  function renderPreviewBar() {
+    var l = lang(state.locale);
+    document.getElementById('preview-bar-flag').className = 'lang-picker__flag ' + l.flag;
+    document.getElementById('preview-bar-lang').textContent = l.name + ' (' + l.code + ')';
+    document.getElementById('preview-bar-default').hidden = l.code !== SOURCE_LOCALE;
+    document.getElementById('preview-bar-exp').textContent = EXPERIENCES.filter(function (x) { return x.id === state.exp; })[0].name;
+  }
+
+  function render() {
+    state.active = null;
+    renderPreviewBar();
+    renderExpMenu();
+    renderStatusMenu();
+    renderLangPicker();
+    renderPreview();
+    renderFields();
+    renderCounter();
+    renderLangActions();
+    paintAll();
+  }
+
+  render();
+  showView();
+
+  /* ── Resizable split ───────────────────────────────────── */
+  var workspace = document.getElementById('workspace');
+  var splitHandle = document.getElementById('split-handle');
+  // Every time the translator opens, fields take 30% of the width — never
+  // less than 300px on small screens. The preview keeps at least 320px.
+  var DEFAULT_SPLIT = 30;       // fields (left pane) width, % of the workspace
+  var MIN_FIELDS = 300;         // px
+  var MIN_PREVIEW = 320;        // px
+  var split = DEFAULT_SPLIT;
+  var dragging = false;
+
+  // Layout modes:
+  //   · split  ≥ 768px  side panel | preview, resizable
+  //   · solo   < 768px  no preview — the panel takes the whole width and
+  //                     "Preview in a New Tab" appears in the language ⋮ menu
+  var SOLO_BP = 768;
+  var pane = document.getElementById('fields-pane');
+
+  function layoutMode() { return window.innerWidth < SOLO_BP ? 'solo' : 'split'; }
+
+  function clampSplit(pct) {
+    var w = workspace.clientWidth;
+    var min = (MIN_FIELDS / w) * 100;
+    var max = Math.max(min, 100 - (MIN_PREVIEW / w) * 100);
+    return Math.max(min, Math.min(max, pct));
+  }
+
+  function applySplit(pct) {
+    if (PREVIEW_ONLY) {
+      workspace.style.gridTemplateColumns = 'minmax(0, 1fr)';
+      pane.hidden = true;
+      splitHandle.hidden = true;
+      return;
+    }
+    var solo = layoutMode() === 'solo';
+    split = clampSplit(pct);
+    splitHandle.setAttribute('aria-valuenow', Math.round(split));
+    // max() keeps the 300px floor even while the window is being resized.
+    workspace.style.gridTemplateColumns = solo ? 'minmax(0, 1fr)' : 'max(' + MIN_FIELDS + 'px, ' + split + '%) minmax(0, 1fr)';
+    document.getElementById('preview-pane').hidden = solo;
+    splitHandle.hidden = solo;
+    // Set explicitly: clearing it ('') would also wipe the pane's own inline
+    // border and hide the divider the resize handle sits on.
+    pane.style.borderRight = solo ? '0' : '1px solid var(--color-secondary-l3)';
+    document.querySelectorAll('[data-solo-only]').forEach(function (el) { el.hidden = !solo; });
+  }
+
+  splitHandle.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    dragging = true;
+    splitHandle.setPointerCapture(e.pointerId);
+    splitHandle.classList.add('is-dragging');
+    document.body.style.cursor = 'ew-resize';
+    document.body.style.userSelect = 'none';
+  });
+
+  splitHandle.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var r = workspace.getBoundingClientRect();
+    applySplit(((e.clientX - r.left) / r.width) * 100);
+  });
+
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    splitHandle.classList.remove('is-dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  }
+  splitHandle.addEventListener('pointerup', endDrag);
+  splitHandle.addEventListener('pointercancel', endDrag);
+
+  // Keyboard: ←/→ move 5%, Home/End jump to the limits, double-click resets to 30%.
+  splitHandle.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); applySplit(split - 5); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); applySplit(split + 5); }
+    if (e.key === 'Home')       { e.preventDefault(); applySplit(0); }
+    if (e.key === 'End')        { e.preventDefault(); applySplit(100); }
+  });
+  splitHandle.addEventListener('dblclick', function () { applySplit(DEFAULT_SPLIT); });
+
+  window.addEventListener('resize', function () { applySplit(split); });
+  applySplit(split);
+
+  /* ── Save as Draft / Publish → success toast (Liferay default copy, 5s auto-close) ── */
+  var region = document.getElementById('toast-region');
+
+  function toast(tone, icon, title, text) {
+    var el = document.createElement('div');
+    el.className = 'alert alert--toast alert--' + tone;
+    el.setAttribute('role', 'alert');
+    el.innerHTML =
+      '<div class="alert__content">' +
+        '<svg class="lexicon-icon" aria-hidden="true"><use href="#' + icon + '"></use></svg>' +
+        '<p class="alert__text"><strong>' + title + ':</strong> ' + text + '</p>' +
+      '</div>' +
+      '<button class="btn btn--borderless btn--sm btn--icon alert__close" type="button" aria-label="Close">' +
+        '<svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>' +
+      '</button>';
+    el.querySelector('.alert__close').addEventListener('click', function () { el.remove(); });
+    region.appendChild(el);
+    setTimeout(function () { el.remove(); }, 5000);
+  }
+
+  // Publish → Liferay's default success toast (stays in the editor).
+  /* ── Publish confirmation ──────────────────────────────── */
+  // Publish is global (all experiences, all languages): the modal says so and
+  // lists the experiences that have changes, with how many.
+  var publishModal = document.getElementById('publish-modal');
+  var publishBtn = document.getElementById('publish-btn');
+
+  function openPublishModal() {
+    // One line per experience with changes. Shared (non-personalized) fields
+    // show in every experience, so they count towards each of them.
+    var changes = pendingChanges();
+    var rows = EXPERIENCES.map(function (x) {
+      var n = changes.filter(function (c) { return c.scope === 'shared' || c.scope === x.id; })
+        .reduce(function (sum, c) { return sum + c.count; }, 0);
+      return { name: x.name, count: n };
+    }).filter(function (r) { return r.count; });
+
+    var page = esc(pageName || 'Orbit Summit 2026');
+    var html = !rows.length
+      ? '<p>There are no unpublished changes in <strong>' + page + '</strong>.</p>'
+      : '<p style="margin-bottom: var(--spacing-5);">All the changes made in every experience of <strong>' + page + '</strong> will be published:</p>' +
+        '<ul style="list-style: none; margin: 0; padding: 0; border: 1px solid var(--color-secondary-l3); border-radius: var(--rounded-md);">' +
+        rows.map(function (r, i) {
+          return '<li style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-3) var(--spacing-4);' + (i ? ' border-top: 1px solid var(--color-secondary-l3);' : '') + '">' +
+            '<span style="font-weight: var(--font-weight-bold);">' + esc(r.name) + '</span>' +
+            '<span style="margin-left: auto; color: var(--color-secondary);">' + r.count + ' change' + (r.count === 1 ? '' : 's') + '</span></li>';
+        }).join('') + '</ul>';
+    document.getElementById('publish-body').innerHTML = html;
+    publishModal.hidden = false;
+    document.getElementById('publish-confirm').focus();
+  }
+
+  function closePublishModal() {
+    publishModal.hidden = true;
+    publishBtn.focus();
+  }
+
+  publishBtn.addEventListener('click', openPublishModal);
+  publishModal.querySelectorAll('[data-close]').forEach(function (b) { b.addEventListener('click', closePublishModal); });
+  publishModal.addEventListener('click', function (e) { if (e.target === publishModal) closePublishModal(); });
+  publishModal.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { e.preventDefault(); closePublishModal(); }
+  });
+  document.getElementById('publish-confirm').addEventListener('click', function () {
+    PUB = JSON.parse(JSON.stringify(T));
+    saveDraft();
+    closePublishModal();
+    renderExpMenu();
+    toast('success', 'check-circle-full', 'Success', 'Your request completed successfully.');
+  });
+
+  // Save as Draft → keeps the progress without publishing, closes the
+  // translator and goes back to the Pages Miller columns, which shows the
+  // confirmation toast (?saved=draft).
+  document.getElementById('draft-btn').addEventListener('click', function () {
+    saveDraft();
+    location.href = 'index.html?saved=draft' + (pageName ? '&selected=' + encodeURIComponent(pageName) : '');
+  });
+})();
+</script>
+
+</body>
+</html>

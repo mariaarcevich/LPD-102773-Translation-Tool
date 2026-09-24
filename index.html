@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow: clip;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pages - Liferay DXP Site - Liferay</title>
+
+  <!-- Lexicon kit — in this order -->
+  <script>(function(){
+    var S=['light','light-hc','dark','dark-hc'];
+    function apply(){try{
+      var r=document.documentElement;
+      var s=localStorage.getItem('vanilla-skin')||'light';
+      S.forEach(function(c){r.classList.remove(c);});
+      r.classList.add(S.indexOf(s)>-1?s:'light');
+      if(localStorage.getItem('vanilla-cms-style')==='1'){
+        r.style.setProperty('--rounded-sm','4px');
+        r.style.setProperty('--rounded-md','8px');
+        r.style.setProperty('--rounded-lg','16px');
+      }else{
+        r.style.removeProperty('--rounded-sm');
+        r.style.removeProperty('--rounded-md');
+        r.style.removeProperty('--rounded-lg');
+      }
+    }catch(e){}}
+    apply();
+    window.addEventListener('pageshow',apply);
+  })()</script>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="tokens-high-contrast.css">
+  <link rel="stylesheet" href="tokens-dark.css">
+  <link rel="stylesheet" href="components.css">
+  <script src="icons.js"></script>
+</head>
+<body style="display: flex; height: 100vh; overflow: clip;">
+
+<!-- ════════════════════════════════════════════════════════════════
+     EDIT BELOW.
+     Site Administration › Site Builder › Pages — entry point of the
+     translation flow: page ⋮ › Translate opens translation-editor.html.
+     Measurements taken from a live Liferay DXP instance.
+     ════════════════════════════════════════════════════════════════ -->
+
+<!-- Product menu (320px) -->
+<nav aria-label="Site Administration" style="width: 320px; flex-shrink: 0; display: flex; flex-direction: column; background: var(--color-light-l1); border-right: 1px solid var(--color-secondary-l3); overflow: auto;">
+
+  <!-- Site header -->
+  <div style="display: flex; align-items: center; gap: var(--spacing-4); min-height: 56px; padding: var(--spacing-4) var(--spacing-4) var(--spacing-4) var(--spacing-7);">
+    <span class="sticker sticker--md sticker--circle" aria-hidden="true" style="background: var(--color-primary); color: var(--color-white);">
+      <svg class="lexicon-icon"><use href="#sites"></use></svg>
+    </span>
+    <span style="flex: 1; min-width: 0; font-weight: var(--font-weight-bold); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Liferay DXP Site</span>
+    <button class="btn btn--borderless btn--sm btn--icon" type="button" aria-label="Go to Other Site or Library" data-tooltip="Go to Other Site or Library" data-tooltip-align="end">
+      <svg class="lexicon-icon" aria-hidden="true"><use href="#sites"></use></svg>
+    </button>
+    <button class="btn btn--borderless btn--sm btn--icon" type="button" aria-label="Close Product Menu">
+      <svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>
+    </button>
+  </div>
+
+  <!-- Site home + page tree -->
+  <ul style="list-style: none; margin: 0; padding: 0 0 var(--spacing-4);">
+    <li><a href="#" style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-2) var(--spacing-7); font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--color-dark); text-decoration: none;">
+      <svg class="lexicon-icon" aria-hidden="true"><use href="#home"></use></svg> Home
+    </a></li>
+    <li><a href="#" style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-2) var(--spacing-7); font-size: var(--font-size-sm); color: var(--color-secondary); text-decoration: none;">
+      <svg class="lexicon-icon" aria-hidden="true"><use href="#pages-tree"></use></svg> Page Tree
+    </a></li>
+  </ul>
+
+  <!-- Sections (only Site Builder expanded) -->
+  <ul id="product-menu" style="list-style: none; margin: 0; padding: 0;">
+    <li><button type="button" data-section aria-expanded="false" style="display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 46px; padding: var(--spacing-4) var(--spacing-5) var(--spacing-4) var(--spacing-7); border: 0; background: none; font: inherit; font-size: var(--font-size-base); color: var(--color-dark); text-align: left; cursor: pointer;">Design <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-right"></use></svg></button></li>
+    <li>
+      <button type="button" data-section aria-expanded="true" style="display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 46px; padding: var(--spacing-4) var(--spacing-5) var(--spacing-4) var(--spacing-7); border: 0; background: none; font: inherit; font-size: var(--font-size-base); font-weight: var(--font-weight-bold); color: var(--color-dark); text-align: left; cursor: pointer;">Site Builder <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-down"></use></svg></button>
+      <ul style="list-style: none; margin: 0; padding: 0;">
+        <li><a href="index.html" aria-current="page" style="display: block; padding: var(--spacing-3) var(--spacing-5) var(--spacing-3) calc(var(--spacing-8) + var(--spacing-2)); border-left: 4px solid var(--color-primary); padding-left: var(--spacing-8); background: var(--color-light); font-size: var(--font-size-base); font-weight: var(--font-weight-bold); color: var(--color-dark); text-decoration: none;">Pages</a></li>
+        <li><a href="#" style="display: block; padding: var(--spacing-3) var(--spacing-5) var(--spacing-3) calc(var(--spacing-8) + var(--spacing-2)); font-size: var(--font-size-base); color: var(--color-dark); text-decoration: none;">Navigation Menus</a></li>
+        <li><a href="#" style="display: block; padding: var(--spacing-3) var(--spacing-5) var(--spacing-3) calc(var(--spacing-8) + var(--spacing-2)); font-size: var(--font-size-base); color: var(--color-dark); text-decoration: none;">Collections</a></li>
+      </ul>
+    </li>
+    <li><button type="button" data-section aria-expanded="false" style="display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 46px; padding: var(--spacing-4) var(--spacing-5) var(--spacing-4) var(--spacing-7); border: 0; background: none; font: inherit; font-size: var(--font-size-base); color: var(--color-dark); text-align: left; cursor: pointer;">Content &amp; Data <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-right"></use></svg></button></li>
+    <li><button type="button" data-section aria-expanded="false" style="display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 46px; padding: var(--spacing-4) var(--spacing-5) var(--spacing-4) var(--spacing-7); border: 0; background: none; font: inherit; font-size: var(--font-size-base); color: var(--color-dark); text-align: left; cursor: pointer;">Categorization <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-right"></use></svg></button></li>
+    <li><button type="button" data-section aria-expanded="false" style="display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 46px; padding: var(--spacing-4) var(--spacing-5) var(--spacing-4) var(--spacing-7); border: 0; background: none; font: inherit; font-size: var(--font-size-base); color: var(--color-dark); text-align: left; cursor: pointer;">Recycle Bin <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-right"></use></svg></button></li>
+    <li><button type="button" data-section aria-expanded="false" style="display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 46px; padding: var(--spacing-4) var(--spacing-5) var(--spacing-4) var(--spacing-7); border: 0; background: none; font: inherit; font-size: var(--font-size-base); color: var(--color-dark); text-align: left; cursor: pointer;">People <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-right"></use></svg></button></li>
+    <li><button type="button" data-section aria-expanded="false" style="display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 46px; padding: var(--spacing-4) var(--spacing-5) var(--spacing-4) var(--spacing-7); border: 0; background: none; font: inherit; font-size: var(--font-size-base); color: var(--color-dark); text-align: left; cursor: pointer;">Configuration <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-right"></use></svg></button></li>
+    <li><button type="button" data-section aria-expanded="false" style="display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 46px; padding: var(--spacing-4) var(--spacing-5) var(--spacing-4) var(--spacing-7); border: 0; background: none; font: inherit; font-size: var(--font-size-base); color: var(--color-dark); text-align: left; cursor: pointer;">Publishing <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-right"></use></svg></button></li>
+  </ul>
+</nav>
+
+<!-- Main column -->
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+
+  <!-- Control Menu -->
+  <header class="control-menu" style="padding-block: var(--spacing-4); flex-shrink: 0;">
+    <div class="control-menu__left" style="gap: var(--spacing-3);">
+      <div class="control-menu__btns">
+        <button class="control-menu__btn" type="button" aria-label="Close Product Menu" data-tooltip="Close Product Menu" data-tooltip-align="start">
+          <svg class="lexicon-icon" aria-hidden="true"><use href="#product-menu-open"></use></svg>
+        </button>
+      </div>
+      <h1 class="control-menu__title">Pages</h1>
+    </div>
+    <div class="control-menu__right" style="gap: var(--spacing-3);">
+      <button class="control-menu__btn" type="button" aria-label="Options">
+        <svg class="lexicon-icon" aria-hidden="true"><use href="#ellipsis-v"></use></svg>
+      </button>
+      <span aria-hidden="true" style="width: 1px; height: var(--spacing-5); background: var(--color-secondary-l2);"></span>
+      <button class="control-menu__btn" type="button" aria-label="Applications Menu">
+        <svg class="lexicon-icon" aria-hidden="true"><use href="#grid"></use></svg>
+      </button>
+      <span class="control-menu__avatar sticker sticker--circle" aria-label="User Profile" role="img" style="width: 32px; height: 32px; background: var(--color-warning-l2); color: var(--color-warning);">
+        <svg class="lexicon-icon" aria-hidden="true"><use href="#user"></use></svg>
+      </span>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="navbar" aria-label="Page Types" style="display: block; padding: 0 var(--spacing-4); border-radius: 0; flex-shrink: 0;">
+    <ul class="navbar__list">
+      <li><a href="#" class="navbar__item is-active" aria-current="page">Static Pages</a></li>
+      <li><a href="#" class="navbar__item">Utility Pages</a></li>
+    </ul>
+  </nav>
+
+  <!-- Management toolbar -->
+  <div class="management-toolbar" style="flex-shrink: 0;">
+    <div class="management-toolbar__bar">
+      <label class="checkbox">
+        <input type="checkbox" class="checkbox__input" aria-label="Select All Items on the Page">
+        <span class="checkbox__box"><svg class="checkbox__icon checkbox__icon--check"><use href="#check-small"></use></svg><svg class="checkbox__icon checkbox__icon--hr"><use href="#hr"></use></svg></span>
+      </label>
+      <div class="management-toolbar__search">
+        <label class="sr-only" for="pages-search">Search for</label>
+        <div class="search">
+          <input class="input__field search__field" type="search" id="pages-search" placeholder="Search for">
+          <button class="search__clear" type="button" aria-label="Clear" hidden><svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg></button>
+          <span class="search__submit" aria-hidden="true"><svg class="lexicon-icon"><use href="#search"></use></svg></span>
+        </div>
+      </div>
+      <button class="btn btn--primary btn--sm" type="button" style="font-size: var(--font-size-base); padding-inline: var(--spacing-7);">New</button>
+    </div>
+  </div>
+
+  <!-- Miller columns -->
+  <div style="flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; padding: var(--spacing-4);">
+    <h2 id="pages-col-title" style="margin: 0 0 var(--spacing-3); font-size: var(--font-size-base);">Pages</h2>
+    <div style="flex: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--color-secondary-l3); background: var(--color-white);">
+      <ul id="pages-list" aria-labelledby="pages-col-title" style="list-style: none; margin: 0; padding: 0; border-right: 1px solid var(--color-secondary-l3);"></ul>
+      <div style="border-right: 1px solid var(--color-secondary-l3);"></div>
+      <div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Page actions menu — shared by every row's ⋮ (positioned by script).
+     Same items/icons as the live Pages admin. -->
+<ul class="dropdown" role="menu" id="page-menu" aria-label="Page Options" hidden style="position: fixed; z-index: 1000;">
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#pencil"></use></svg> Edit</button></li>
+  <li role="none" data-content-only><a href="#" class="dropdown__item" role="menuitem" tabindex="-1" id="page-menu-translate"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#automatic-translate"></use></svg> Translate</a></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#view"></use></svg> View</button></li>
+  <li class="dropdown__divider" role="separator"></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true" style="visibility: hidden;"><use href="#view"></use></svg> Orphan Widgets</button></li>
+  <li class="dropdown__divider" role="separator"></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#page-template"></use></svg> Convert to Page Template</button></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#copy"></use></svg> <span class="dropdown__item-text">Make a Copy</span><svg class="lexicon-icon dropdown__item-meta" aria-hidden="true"><use href="#angle-right"></use></svg></button></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#upload"></use></svg> Export for Translation</button></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#download"></use></svg> Import Translation</button></li>
+  <li class="dropdown__divider" role="separator"></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#cog"></use></svg> Configure</button></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#password-policies"></use></svg> Permissions</button></li>
+  <li class="dropdown__divider" role="separator"></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#trash"></use></svg> Delete</button></li>
+</ul>
+
+<!-- Toast region — Clay toasts stack bottom-left. -->
+<div id="toast-region" aria-live="polite"
+     style="position: fixed; left: var(--spacing-4); bottom: var(--spacing-4); z-index: 1200; display: flex; flex-direction: column; gap: var(--spacing-3); max-width: 360px;"></div>
+
+<!-- Tooltip — shared -->
+<div class="tooltip tooltip--top" role="tooltip" id="tooltip" hidden
+     style="position: fixed; z-index: 1100; pointer-events: none; white-space: nowrap;"></div>
+
+<script>
+(function () {
+  /* ── Pages (first Miller column) ───────────────────────── */
+  var PAGES = [
+    { name: 'Home', type: 'Content Page' },
+    { name: 'Orbit Summit 2026', type: 'Content Page' },
+    { name: 'Spring Campaign', type: 'Content Page', empty: true },   // blank page → "No Content to Translate"
+    { name: 'Search', type: 'Widget Page' }
+  ];
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+  // Coming back from the translation editor (?selected=…) highlights that page.
+  var selectedName = new URLSearchParams(location.search).get('selected');
+
+  var list = document.getElementById('pages-list');
+  list.innerHTML = PAGES.map(function (p, i) {
+    var on = p.name === selectedName;
+    return '<li' + (on ? ' aria-current="true"' : '') + ' style="' + (on ? 'background: var(--color-primary-l3); ' : '') + 'display: flex; align-items: center; gap: var(--spacing-4); padding: var(--spacing-5) var(--spacing-2) var(--spacing-5) var(--spacing-2); border-bottom: 1px solid var(--color-secondary-l3);">' +
+      '<button type="button" aria-label="Drag ' + esc(p.name) + '" style="display: inline-flex; padding: 0; border: 0; background: none; color: var(--color-secondary); cursor: grab;"><svg class="lexicon-icon" aria-hidden="true"><use href="#drag"></use></svg></button>' +
+      '<label class="checkbox"><input type="checkbox" class="checkbox__input" aria-label="Select ' + esc(p.name) + '">' +
+        '<span class="checkbox__box"><svg class="checkbox__icon checkbox__icon--check"><use href="#check-small"></use></svg><svg class="checkbox__icon checkbox__icon--hr"><use href="#hr"></use></svg></span></label>' +
+      '<div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">' +
+        '<a href="#" style="align-self: flex-start; font-weight: var(--font-weight-bold); color: var(--color-dark);">' + esc(p.name) + '</a>' +
+        '<span style="color: var(--color-secondary);">' + p.type + '</span>' +
+      '</div>' +
+      '<button class="btn btn--borderless btn--sm btn--icon" type="button" aria-label="Add Child Page"><svg class="lexicon-icon" aria-hidden="true"><use href="#plus"></use></svg></button>' +
+      '<button class="btn btn--borderless btn--sm btn--icon" type="button" data-page="' + i + '" aria-label="Options for ' + esc(p.name) + '" aria-haspopup="menu" aria-expanded="false"><svg class="lexicon-icon" aria-hidden="true"><use href="#ellipsis-v"></use></svg></button>' +
+    '</li>';
+  }).join('');
+
+  /* ── Page ⋮ menu ───────────────────────────────────────── */
+  var menu = document.getElementById('page-menu');
+  var trigger = null;
+
+  function items() { return Array.prototype.slice.call(menu.querySelectorAll('li:not([hidden]) > .dropdown__item')); }
+
+  function openMenu(btn, focusFirst) {
+    closeMenu(false);
+    var page = PAGES[+btn.getAttribute('data-page')];
+    // Translate (→ translation editor) is offered for content pages.
+    menu.querySelector('[data-content-only]').hidden = page.type !== 'Content Page';
+    document.getElementById('page-menu-translate').href = 'translation-editor.html?page=' + encodeURIComponent(page.name) + (page.empty ? '&empty=1' : '');
+    trigger = btn;
+    menu.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    btn.style.background = 'var(--color-light)';
+    var r = btn.getBoundingClientRect();
+    var top = r.bottom + 4;
+    if (top + menu.offsetHeight > window.innerHeight - 8) top = Math.max(8, r.top - 4 - menu.offsetHeight);
+    menu.style.top = top + 'px';
+    menu.style.left = Math.min(r.left, window.innerWidth - menu.offsetWidth - 8) + 'px';
+    if (focusFirst) items()[0].focus();
+  }
+
+  function closeMenu(returnFocus) {
+    if (menu.hidden) return;
+    menu.hidden = true;
+    if (trigger) {
+      trigger.setAttribute('aria-expanded', 'false');
+      trigger.style.background = '';
+      if (returnFocus) trigger.focus();
+    }
+    trigger = null;
+  }
+
+  list.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-page]');
+    if (btn) { e.stopPropagation(); trigger === btn ? closeMenu(false) : openMenu(btn, e.detail === 0); return; }
+    if (e.target.closest('a[href="#"]')) e.preventDefault();
+  });
+
+  menu.addEventListener('keydown', function (e) {
+    var l = items(), i = l.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); l[(i + 1) % l.length].focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); l[(i - 1 + l.length) % l.length].focus(); }
+    else if (e.key === 'Escape') { e.preventDefault(); closeMenu(true); }
+    else if (e.key === 'Tab') { closeMenu(false); }
+  });
+
+  // Only Translate navigates; the rest just close the menu in this prototype.
+  menu.addEventListener('click', function (e) {
+    var item = e.target.closest('.dropdown__item');
+    if (item && item.id !== 'page-menu-translate') closeMenu(true);
+  });
+
+  document.addEventListener('click', function (e) { if (!menu.contains(e.target)) closeMenu(false); });
+  window.addEventListener('resize', function () { closeMenu(false); });
+
+  /* ── Product menu sections (expand / collapse) ─────────── */
+  document.querySelectorAll('[data-section]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', open);
+      btn.querySelector('use').setAttribute('href', open ? '#angle-down' : '#angle-right');
+      var sub = btn.nextElementSibling;
+      if (sub) sub.hidden = !open;
+    });
+  });
+
+  /* ── Arriving from the translator: "Save as Draft" confirmation ── */
+  function toast(text) {
+    var el = document.createElement('div');
+    el.className = 'alert alert--toast alert--success';
+    el.setAttribute('role', 'alert');
+    el.innerHTML =
+      '<div class="alert__content">' +
+        '<svg class="lexicon-icon" aria-hidden="true"><use href="#check-circle-full"></use></svg>' +
+        '<p class="alert__text"><strong>Success:</strong> ' + text + '</p>' +
+      '</div>' +
+      '<button class="btn btn--borderless btn--sm btn--icon alert__close" type="button" aria-label="Close">' +
+        '<svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>' +
+      '</button>';
+    el.querySelector('.alert__close').addEventListener('click', function () { el.remove(); });
+    document.getElementById('toast-region').appendChild(el);
+    setTimeout(function () { el.remove(); }, 5000);
+  }
+  if (new URLSearchParams(location.search).get('saved') === 'draft') {
+    toast('The translation of ' + esc(selectedName || 'the page') + ' was saved as a draft.');
+  }
+
+  /* ── Tooltips ──────────────────────────────────────────── */
+  var tooltip = document.getElementById('tooltip');
+  function showTooltip(el) {
+    var align = el.getAttribute('data-tooltip-align');
+    tooltip.textContent = el.getAttribute('data-tooltip');
+    tooltip.classList.toggle('tooltip--align-start', align === 'start');
+    tooltip.classList.toggle('tooltip--align-end', align === 'end');
+    tooltip.hidden = false;
+    var r = el.getBoundingClientRect(), c = r.left + r.width / 2, w = tooltip.offsetWidth;
+    tooltip.style.left = (align === 'start' ? c - 16 : align === 'end' ? c + 16 - w : c - w / 2) + 'px';
+    tooltip.style.top = (r.bottom + 8) + 'px';
+  }
+  function hideTooltip() { tooltip.hidden = true; }
+  document.querySelectorAll('[data-tooltip]').forEach(function (el) {
+    el.addEventListener('mouseenter', function () { showTooltip(el); });
+    el.addEventListener('mouseleave', hideTooltip);
+    el.addEventListener('click', hideTooltip);
+  });
+  document.addEventListener('pointerdown', hideTooltip, true);
+})();
+</script>
+
+</body>
+</html>
