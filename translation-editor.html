@@ -129,7 +129,7 @@
     <!-- Title: wraps onto two lines when space runs out (no ellipsis). -->
     <div id="hdr-left-wrap" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-2) var(--spacing-3); min-width: 0;">
     <h1 class="control-menu__title" id="editor-title" title="Translate Orbit Summit 2026" style="white-space: normal; overflow: visible; min-width: 0;">
-      Translate <span id="editor-page-name" style="font-weight: var(--font-weight-semi); color: var(--color-secondary);">Orbit Summit 2026</span>
+      Translate <span id="editor-page-name">Orbit Summit 2026</span>
     </h1>
 
     </div>
@@ -202,7 +202,7 @@
     <!-- Level 1 — languages: filter + search (or bulk bar while selecting),
          results bar, Table component with multi-selection -->
     <div id="panel-languages" style="flex: 1; min-height: 0; display: flex; flex-direction: column;">
-      <div id="lang-tools" style="position: relative; z-index: 20; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
+      <div id="lang-tools" data-toolbar style="position: relative; z-index: 20; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
         <!-- Select all — Management Toolbar checkbox, before the filter -->
         <label class="checkbox" id="lang-select-all-wrap">
           <input type="checkbox" class="checkbox__input" id="lang-select-all" aria-label="Select All Translations">
@@ -221,16 +221,25 @@
               style="position: absolute; top: calc(100% + var(--spacing-2)); left: 0; z-index: 1000;"></ul>
         </div>
 
-        <div class="input input--sm" style="flex: 1; min-width: 0;">
+        <div class="input input--sm" data-search-wrap style="flex: 1; min-width: 0;">
           <label class="sr-only" for="lang-search">Search languages</label>
           <div class="search">
             <input type="search" class="input__field search__field" id="lang-search" placeholder="Search" autocomplete="off">
-            <button class="search__clear" type="button" id="lang-search-clear" aria-label="Clear Search" hidden>
+            <button class="search__clear" type="button" id="lang-search-clear" aria-label="Clear" data-tooltip="Clear" hidden>
               <svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>
             </button>
-            <span class="search__submit" aria-hidden="true"><svg class="lexicon-icon"><use href="#search"></use></svg></span>
+            <button class="search__submit" type="button" data-search-submit aria-label="Search" data-tooltip="Search"><svg class="lexicon-icon" aria-hidden="true"><use href="#search"></use></svg></button>
           </div>
         </div>
+
+        <!-- Narrow panel (Clay management toolbar): search collapses to an
+             icon; opening it takes the whole row, with "Close Search". -->
+        <button class="btn btn--borderless btn--sm btn--icon" type="button" data-search-open hidden aria-label="Search" data-tooltip="Search" data-tooltip-align="end" style="margin-left: auto;">
+          <svg class="lexicon-icon" aria-hidden="true"><use href="#search"></use></svg>
+        </button>
+        <button class="btn btn--borderless btn--sm btn--icon" type="button" data-search-close hidden aria-label="Close Search" data-tooltip="Close Search" data-tooltip-align="end">
+          <svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>
+        </button>
       </div>
 
       <!-- Selection mode — Frontend Data Set selection bar (Management Toolbar active) -->
@@ -257,10 +266,15 @@
         </div>
       </div>
 
-      <div id="lang-results" hidden style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-2) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); background: var(--color-white); flex-shrink: 0;">
-        <span id="lang-results-text" aria-live="polite" style="flex-shrink: 0; font-size: var(--font-size-sm); color: var(--color-secondary);"></span>
-        <span id="lang-results-chips" style="display: flex; flex-wrap: wrap; gap: var(--spacing-2); min-width: 0;"></span>
-        <button class="btn btn--link btn--sm" type="button" id="lang-results-clear" style="margin-left: auto; font-weight: var(--font-weight-bold);">Clear</button>
+      <div id="lang-results" hidden style="display: flex; align-items: flex-start; gap: var(--spacing-4); padding: var(--spacing-3) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); background: var(--color-white); flex-shrink: 0;">
+        <!-- Text + filter labels wrap together: labels that don't fit drop to
+             the next line, under "N Results Found for:"; Clear keeps its own
+             column on the right so nothing overlaps it. -->
+        <div style="flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-2);">
+          <span id="lang-results-text" aria-live="polite" style="font-size: var(--font-size-sm); color: var(--color-secondary); margin-right: var(--spacing-1);"></span>
+          <span id="lang-results-chips" style="display: contents;"></span>
+        </div>
+        <button class="btn btn--link btn--sm" type="button" id="lang-results-clear" style="flex-shrink: 0; height: var(--spacing-7);">Clear</button>
       </div>
 
       <div id="lang-body" style="flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column;">
@@ -272,13 +286,36 @@
               <th data-sort-col="name" aria-sort="none" style="padding-block: var(--spacing-3); border-left: 1px solid var(--color-secondary-l3);">
                 <button type="button" data-sort="name" style="display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3); width: 100%; padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: pointer;">Translation<svg class="lexicon-icon" aria-hidden="true"><use href="#order-arrow"></use></svg></button>
               </th>
-              <th data-sort-col="code" aria-sort="none" style="padding-block: var(--spacing-3); border-left: 1px solid var(--color-secondary-l3);">
+              <th data-sort-col="code" data-col="code" aria-sort="none" style="padding-block: var(--spacing-3); border-left: 1px solid var(--color-secondary-l3);">
                 <button type="button" data-sort="code" style="display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3); width: 100%; padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: pointer;">Code<svg class="lexicon-icon" aria-hidden="true"><use href="#order-arrow"></use></svg></button>
               </th>
-              <th data-sort-col="status" aria-sort="none" style="padding-block: var(--spacing-3); border-left: 1px solid var(--color-secondary-l3);">
+              <th data-sort-col="status" data-col="status" aria-sort="none" style="padding-block: var(--spacing-3); border-left: 1px solid var(--color-secondary-l3);">
                 <button type="button" data-sort="status" style="display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3); width: 100%; padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: pointer;">Status<svg class="lexicon-icon" aria-hidden="true"><use href="#order-arrow"></use></svg></button>
               </th>
-              <th class="table__cell--gutter" style="padding-block: var(--spacing-3); border-left: 1px solid var(--color-secondary-l3);"><span class="sr-only">Actions</span></th>
+              <th class="table__cell--gutter" style="padding-block: var(--spacing-3); border-left: 1px solid var(--color-secondary-l3);">
+                <!-- Frontend Data Set · column visibility (▾ in the last header cell) -->
+                <div id="cols-menu-wrap" style="position: relative; display: flex; justify-content: center;">
+                  <button class="btn btn--borderless btn--xs btn--icon" type="button" id="cols-trigger"
+                          aria-label="Manage Columns" aria-haspopup="menu" aria-expanded="false" aria-controls="cols-menu"
+                          data-tooltip="Manage Columns" data-tooltip-align="end">
+                    <svg class="lexicon-icon" aria-hidden="true"><use href="#caret-bottom"></use></svg>
+                  </button>
+                  <ul class="dropdown" role="menu" id="cols-menu" aria-labelledby="cols-trigger" hidden
+                      style="position: absolute; top: calc(100% + var(--spacing-2)); right: 0; z-index: 1000; width: max-content; text-align: left; font-weight: var(--font-weight-semi);">
+                    <li class="dropdown__group-title" role="presentation">Columns</li>
+                    <li role="none"><label class="dropdown__item" role="menuitemcheckbox" aria-checked="true" aria-disabled="true" tabindex="-1" style="cursor: not-allowed;">
+                      <span class="checkbox is-disabled"><input type="checkbox" class="checkbox__input" checked disabled tabindex="-1"><span class="checkbox__box"><svg class="checkbox__icon checkbox__icon--check"><use href="#check-small"></use></svg><svg class="checkbox__icon checkbox__icon--hr"><use href="#hr"></use></svg></span></span> Translation
+                    </label></li>
+                    <li role="none"><label class="dropdown__item" role="menuitemcheckbox" aria-checked="true" tabindex="-1" data-toggle-col="code">
+                      <span class="checkbox"><input type="checkbox" class="checkbox__input" checked tabindex="-1"><span class="checkbox__box"><svg class="checkbox__icon checkbox__icon--check"><use href="#check-small"></use></svg><svg class="checkbox__icon checkbox__icon--hr"><use href="#hr"></use></svg></span></span> Code
+                    </label></li>
+                    <li role="none"><label class="dropdown__item" role="menuitemcheckbox" aria-checked="true" tabindex="-1" data-toggle-col="status">
+                      <span class="checkbox"><input type="checkbox" class="checkbox__input" checked tabindex="-1"><span class="checkbox__box"><svg class="checkbox__icon checkbox__icon--check"><use href="#check-small"></use></svg><svg class="checkbox__icon checkbox__icon--hr"><use href="#hr"></use></svg></span></span> Status
+                    </label></li>
+                  </ul>
+                </div>
+                <span class="sr-only">Actions</span>
+              </th>
             </tr>
           </thead>
           <tbody id="lang-list"></tbody>
@@ -338,7 +375,7 @@
       </div>
 
       <!-- Filter + search (Management Toolbar pattern, scoped to the fields) -->
-      <div id="fields-tools" style="position: relative; z-index: 20; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
+      <div id="fields-tools" data-toolbar style="position: relative; z-index: 20; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
         <!-- Filter — Management Toolbar filter button (not a picker): fixed
              "Filter" label, the active filter shows in the results bar. -->
         <div id="status-picker" style="position: relative; display: flex; flex-shrink: 0;">
@@ -353,24 +390,38 @@
               style="position: absolute; top: calc(100% + var(--spacing-2)); left: 0; z-index: 1000;"></ul>
         </div>
 
-        <div class="input input--sm" style="flex: 1; min-width: 0;">
+        <div class="input input--sm" data-search-wrap style="flex: 1; min-width: 0;">
           <label class="sr-only" for="fields-search">Search fields</label>
           <div class="search">
             <input type="search" class="input__field search__field" id="fields-search" placeholder="Search Fields or Text" autocomplete="off">
-            <button class="search__clear" type="button" id="fields-search-clear" aria-label="Clear Search" hidden>
+            <button class="search__clear" type="button" id="fields-search-clear" aria-label="Clear" data-tooltip="Clear" hidden>
               <svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>
             </button>
-            <span class="search__submit" aria-hidden="true"><svg class="lexicon-icon"><use href="#search"></use></svg></span>
+            <button class="search__submit" type="button" data-search-submit aria-label="Search" data-tooltip="Search"><svg class="lexicon-icon" aria-hidden="true"><use href="#search"></use></svg></button>
           </div>
         </div>
+
+        <!-- Narrow panel (Clay management toolbar): search collapses to an
+             icon; opening it takes the whole row, with "Close Search". -->
+        <button class="btn btn--borderless btn--sm btn--icon" type="button" data-search-open hidden aria-label="Search" data-tooltip="Search" data-tooltip-align="end" style="margin-left: auto;">
+          <svg class="lexicon-icon" aria-hidden="true"><use href="#search"></use></svg>
+        </button>
+        <button class="btn btn--borderless btn--sm btn--icon" type="button" data-search-close hidden aria-label="Close Search" data-tooltip="Close Search" data-tooltip-align="end">
+          <svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>
+        </button>
       </div>
 
       <!-- Results bar — as in the CMS: "N Results Found for:" + one removable
            label per active filter + Clear. Shown while a search/filter is active. -->
-      <div id="fields-results" hidden style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-2) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); background: var(--color-white); flex-shrink: 0;">
-        <span id="fields-results-text" aria-live="polite" style="flex-shrink: 0; font-size: var(--font-size-sm); color: var(--color-secondary);"></span>
-        <span id="fields-results-chips" style="display: flex; flex-wrap: wrap; gap: var(--spacing-2); min-width: 0;"></span>
-        <button class="btn btn--link btn--sm" type="button" id="fields-results-clear" style="margin-left: auto; font-weight: var(--font-weight-bold);">Clear</button>
+      <div id="fields-results" hidden style="display: flex; align-items: flex-start; gap: var(--spacing-4); padding: var(--spacing-3) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); background: var(--color-white); flex-shrink: 0;">
+        <!-- Text + filter labels wrap together: labels that don't fit drop to
+             the next line, under "N Results Found for:"; Clear keeps its own
+             column on the right so nothing overlaps it. -->
+        <div style="flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-2);">
+          <span id="fields-results-text" aria-live="polite" style="font-size: var(--font-size-sm); color: var(--color-secondary); margin-right: var(--spacing-1);"></span>
+          <span id="fields-results-chips" style="display: contents;"></span>
+        </div>
+        <button class="btn btn--link btn--sm" type="button" id="fields-results-clear" style="flex-shrink: 0; height: var(--spacing-7);">Clear</button>
       </div>
 
       <div id="fields-body" style="flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: var(--spacing-7); padding: var(--spacing-5) var(--spacing-5) var(--spacing-8);"></div>
@@ -385,19 +436,27 @@
   <!-- ── Right: preview ────────────────────────────────────── -->
   <section id="preview-pane" aria-label="Page Preview" style="display: flex; flex-direction: column; min-height: 0;">
 
-    <!-- Preview language bar — which language (and experience) the preview
-         is showing: the default language on arrival, the chosen one inside a
-         translation. -->
-    <div id="preview-bar" aria-live="polite" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-2) var(--spacing-3); padding: var(--spacing-3) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); background: var(--color-light-l1); font-size: var(--font-size-sm); color: var(--color-secondary); flex-shrink: 0;">
-      <svg class="lexicon-icon" aria-hidden="true"><use href="#view"></use></svg>
-      <span>Page Preview:</span>
-      <span style="display: inline-flex; align-items: center; gap: var(--spacing-2); font-weight: var(--font-weight-bold); color: var(--color-dark);">
-        <span class="lang-picker__flag" id="preview-bar-flag" aria-hidden="true"></span>
-        <span id="preview-bar-lang"></span>
-      </span>
-      <span id="preview-bar-default" class="label label--sm label--info" hidden>Default</span>
-      <span aria-hidden="true">·</span>
-      <span>Experience: <strong id="preview-bar-exp" style="color: var(--color-dark);"></strong></span>
+    <!-- Preview language notice — which language (and experience) the
+         preview is showing: the default language on arrival, the chosen one
+         inside a translation. -->
+    <!-- Lexicon Alert · Stripe · Info — full-width strip on top of the preview. -->
+    <div style="flex-shrink: 0;">
+      <div class="alert alert--stripe alert--info" id="preview-bar" role="status" aria-live="polite">
+        <!-- Icon stays beside the text; only the text's own pieces wrap (the
+             paragraph takes the remaining width instead of dropping below). -->
+        <div class="alert__content" style="padding-block: 0;">
+          <svg class="lexicon-icon" aria-hidden="true" style="margin-top: var(--spacing-1);"><use href="#info-circle"></use></svg>
+          <p class="alert__text" style="flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-1) var(--spacing-3);">
+            <strong>Page Preview:</strong>
+            <span style="display: inline-flex; align-items: center; gap: var(--spacing-2);">
+              <span class="lang-picker__flag" id="preview-bar-flag" aria-hidden="true"></span>
+              <span id="preview-bar-lang"></span>
+            </span>
+            <span id="preview-bar-default" class="label label--sm label--info" hidden>Default</span>
+            <span style="white-space: nowrap;"><span aria-hidden="true" style="margin-right: var(--spacing-3);">·</span>Experience: <strong id="preview-bar-exp"></strong></span>
+          </p>
+        </div>
+      </div>
     </div>
 
     <!-- Canvas -->
@@ -1016,8 +1075,8 @@
               // Inline colour pins the title to dark text (no blue :hover).
               : '<a href="#" class="table__title" data-open="' + l.code + '" style="color: var(--color-dark);">' + esc(l.name) + '</a>') +
           '</span></td>' +
-        '<td' + TD + '>' + l.code + '</td>' +
-        '<td' + TD + '>' + status_ + '</td>' +
+        '<td data-col="code"' + TD + (cols.code ? '' : ' hidden') + '>' + l.code + '</td>' +
+        '<td data-col="status"' + TD + (cols.status ? '' : ' hidden') + '>' + status_ + '</td>' +
         '<td class="table__cell--gutter"' + TD + '>' + (isDefault ? '' :
           '<button class="btn btn--borderless btn--sm btn--icon" type="button" data-row-actions="' + l.code + '"' +
             ' aria-label="Options for ' + esc(l.name) + '" aria-haspopup="menu" aria-expanded="false"' + (busy[l.code] ? ' disabled' : '') + '>' +
@@ -1096,10 +1155,10 @@
     renderLangPicker();
   });
 
-  langSearch.addEventListener('input', function () {
-    langFilter.query = langSearch.value.trim();
-    renderLangPicker();
-  });
+  // Data set search runs on submit (Enter or the magnifier), not per keystroke.
+  function submitLangSearch() { langFilter.query = langSearch.value.trim(); renderLangPicker(); }
+  langSearch.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); submitLangSearch(); } });
+  langSearch.closest('.search').querySelector('[data-search-submit]').addEventListener('click', submitLangSearch);
 
   document.getElementById('lang-search-clear').addEventListener('click', function () {
     langSearch.value = '';
@@ -1142,6 +1201,46 @@
     e.preventDefault();
     openLanguage(row.getAttribute('data-locale'));
   });
+
+  /* ── Column visibility (Frontend Data Set ▾ menu) ───────── */
+  // Translation is always shown; Code and Status can be hidden. Remembered
+  // per viewer (localStorage).
+  var COLS_KEY = 'translation-editor-cols';
+  var cols = { code: true, status: true };
+  try { var savedCols = JSON.parse(localStorage.getItem(COLS_KEY) || 'null'); if (savedCols) cols = savedCols; } catch (e) {}
+
+  function applyCols() {
+    document.querySelectorAll('#lang-table [data-col]').forEach(function (cell) {
+      cell.hidden = !cols[cell.getAttribute('data-col')];
+    });
+    document.querySelectorAll('[data-toggle-col]').forEach(function (item) {
+      var on = !!cols[item.getAttribute('data-toggle-col')];
+      item.setAttribute('aria-checked', String(on));
+      item.querySelector('input').checked = on;
+    });
+  }
+
+  var colsMenu = document.getElementById('cols-menu');
+  // Toggle on click / Enter / Space; the menu stays open for several changes.
+  function toggleCol(item) {
+    var key = item.getAttribute('data-toggle-col');
+    cols[key] = !cols[key];
+    try { localStorage.setItem(COLS_KEY, JSON.stringify(cols)); } catch (e) {}
+    applyCols();
+  }
+  colsMenu.addEventListener('click', function (e) {
+    var item = e.target.closest('[data-toggle-col]');
+    e.preventDefault();          // label would also toggle the input: handle it ourselves
+    e.stopPropagation();         // keep the menu open
+    if (item) toggleCol(item);
+  }, true);
+  colsMenu.addEventListener('keydown', function (e) {
+    var item = e.target.closest('[data-toggle-col]');
+    if (item && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); toggleCol(item); }
+  });
+
+  bindMenu(document.getElementById('cols-menu-wrap'), document.getElementById('cols-trigger'), colsMenu, function () {});
+  applyCols();
 
   /* ── Sorting (click a column header: ascending ⇄ descending) ── */
   var langSort = { key: null, dir: 1 };
@@ -1238,8 +1337,33 @@
   });
 
   // Very narrow panel → the Filter buttons collapse to icon-only (+ tooltip).
+  var COMPACT_W = 400;          // panel width under which toolbars compact
+
+  // Clay management toolbar, narrow: Filter → icon, search → icon button that
+  // expands the search over the whole row (other controls hide) + Close Search.
+  function setupToolbar(bar) {
+    var wrap = bar.querySelector('[data-search-wrap]');
+    var open = bar.querySelector('[data-search-open]');
+    var close = bar.querySelector('[data-search-close]');
+    var others = Array.prototype.slice.call(bar.children).filter(function (el) { return el !== wrap && el !== open && el !== close; });
+    var searching = false;
+    function layout() {
+      var compact = document.getElementById('fields-pane').clientWidth < COMPACT_W;
+      if (!compact) searching = false;
+      wrap.hidden = compact && !searching;
+      open.hidden = !compact || searching;
+      close.hidden = !(compact && searching);
+      others.forEach(function (el) { el.hidden = compact && searching; });
+    }
+    open.addEventListener('click', function () { searching = true; layout(); wrap.querySelector('input').focus(); });
+    close.addEventListener('click', function () { searching = false; layout(); open.focus(); });
+    new ResizeObserver(layout).observe(document.getElementById('fields-pane'));
+    layout();
+  }
+  document.querySelectorAll('[data-toolbar]').forEach(setupToolbar);
+
   function compactFilters() {
-    var compact = document.getElementById('fields-pane').clientWidth < 380;
+    var compact = document.getElementById('fields-pane').clientWidth < COMPACT_W;
     document.querySelectorAll('[data-filter-btn]').forEach(function (btn) {
       btn.classList.toggle('btn--icon', compact);
       btn.querySelectorAll('.filter-label').forEach(function (el) { el.toggleAttribute('hidden', compact); });
@@ -1665,10 +1789,10 @@
     renderFields();
   });
 
-  searchInput.addEventListener('input', function () {
-    state.query = searchInput.value.trim();
-    renderFields();
-  });
+  // Data set search runs on submit (Enter or the magnifier), not per keystroke.
+  function submitFieldSearch() { state.query = searchInput.value.trim(); renderFields(); }
+  searchInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); submitFieldSearch(); } });
+  searchInput.closest('.search').querySelector('[data-search-submit]').addEventListener('click', submitFieldSearch);
 
   document.getElementById('fields-search-clear').addEventListener('click', function () {
     searchInput.value = '';
