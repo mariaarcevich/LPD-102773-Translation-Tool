@@ -662,15 +662,32 @@
 <div class="modal-overlay" id="discard-modal" hidden>
   <div class="modal modal--warning" role="alertdialog" aria-modal="true" aria-labelledby="discard-title" aria-describedby="discard-body">
     <header class="modal__header">
-      <h2 class="modal__title" id="discard-title">Discard Draft</h2>
+      <h2 class="modal__title" id="discard-title"><svg class="lexicon-icon" aria-hidden="true"><use href="#warning-full"></use></svg> Discard Draft</h2>
       <button class="btn btn--borderless btn--sm btn--icon modal__close" type="button" aria-label="Close" data-close>
         <svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>
       </button>
     </header>
-    <div class="modal__body" id="discard-body"></div>
+    <div class="modal__body" id="discard-body" style="font-size: var(--font-size-md);"></div>
     <footer class="modal__footer">
       <button class="btn btn--secondary" type="button" data-close>Cancel</button>
-      <button class="btn btn--primary btn--danger" type="button" id="discard-confirm">Discard</button>
+      <button class="btn btn--primary btn--warning" type="button" id="discard-confirm">Discard</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Reset Translation confirmation — empties the chosen language(s). -->
+<div class="modal-overlay" id="reset-modal" hidden>
+  <div class="modal modal--warning" role="alertdialog" aria-modal="true" aria-labelledby="reset-title" aria-describedby="reset-body">
+    <header class="modal__header">
+      <h2 class="modal__title" id="reset-title"><svg class="lexicon-icon" aria-hidden="true"><use href="#warning-full"></use></svg> <span id="reset-title-text">Reset Translation</span></h2>
+      <button class="btn btn--borderless btn--sm btn--icon modal__close" type="button" aria-label="Close" data-close>
+        <svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>
+      </button>
+    </header>
+    <div class="modal__body" id="reset-body" style="font-size: var(--font-size-md);"></div>
+    <footer class="modal__footer">
+      <button class="btn btn--secondary" type="button" data-close>Cancel</button>
+      <button class="btn btn--primary btn--warning" type="button" id="reset-confirm">Reset</button>
     </footer>
   </div>
 </div>
@@ -1782,8 +1799,11 @@
   }
 
   // `codes`: a locale or an array of locales (bulk). One toast per run.
-  function runLangAction(action, codes) {
+  function runLangAction(action, codes, confirmed) {
     codes = [].concat(codes);
+    // Reset empties whole languages: confirm first (every entry point —
+    // row ⋮, bulk bar, language ⋮ — goes through here).
+    if (action === 'reset' && !confirmed) { openResetModal(codes); return; }
     var what = codes.length === 1 ? codes[0] : codes.length + ' languages';
     if (action === 'auto-translate') {
       // Simulated service call: spinner (counter / table row), then empty
@@ -2602,6 +2622,39 @@
     renderExpMenu();
     syncDiscard();
     toast('success', 'check-circle-full', 'Success', 'Your request completed successfully.');
+  });
+
+  /* ── Reset Translation confirmation ─────────────────────── */
+  var resetModal = document.getElementById('reset-modal');
+  var resetCodes = [];
+  var resetReturn = null;
+
+  function openResetModal(codes) {
+    resetCodes = codes;
+    resetReturn = document.activeElement;
+    var many = codes.length > 1;
+    var names = codes.map(function (c) { var l = lang(c); return '<strong>' + esc(l.name) + ' (' + c + ')</strong>'; });
+    var list = names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] : names[0];
+    document.getElementById('reset-title-text').textContent = many ? 'Reset Translations' : 'Reset Translation';
+    document.getElementById('reset-body').innerHTML =
+      '<p>All the translated text in ' + list + ' will be removed from <strong>' + esc(pageName || 'Orbit Summit 2026') + '</strong>' +
+      (IS_CMS ? '' : ' (current experience and shared fields)') +
+      '. Until ' + (many ? 'they are' : 'it is') + ' translated again, the ' + NOUN + ' shows the default language.</p>';
+    resetModal.hidden = false;
+    document.getElementById('reset-confirm').focus();
+  }
+  function closeResetModal(returnFocus) {
+    resetModal.hidden = true;
+    if (returnFocus && resetReturn && document.contains(resetReturn)) resetReturn.focus();
+  }
+  resetModal.querySelectorAll('[data-close]').forEach(function (b) { b.addEventListener('click', function () { closeResetModal(true); }); });
+  resetModal.addEventListener('click', function (e) { if (e.target === resetModal) closeResetModal(true); });
+  resetModal.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { e.preventDefault(); closeResetModal(true); }
+  });
+  document.getElementById('reset-confirm').addEventListener('click', function () {
+    closeResetModal(false);
+    runLangAction('reset', resetCodes, true);
   });
 
   /* ── Discard Draft (⋮) ─────────────────────────────────── */
