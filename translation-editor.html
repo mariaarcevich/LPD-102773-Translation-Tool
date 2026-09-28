@@ -1088,8 +1088,16 @@
   // PUB = what's live (last Publish). The sample translations start out as
   // published; anything that differs from PUB is an unpublished change.
   var PUB = JSON.parse(JSON.stringify(T));
+  // EDITED['locale|fieldId'] = { experienceId: true } — the experiences in
+  // which each unpublished change was made. Shared fields show in every
+  // experience, but only the one being edited counts as changed (Draft).
+  var EDITED = {};
+  function noteEdit(locale, id) {
+    var k = locale + '|' + id;
+    (EDITED[k] = EDITED[k] || {})[state.exp] = true;
+  }
   function saveDraft() {
-    try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ T: T, AI: AI, PUB: PUB })); } catch (e) {}
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ T: T, AI: AI, PUB: PUB, EDITED: EDITED })); } catch (e) {}
   }
   try {
     var draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
@@ -1097,6 +1105,7 @@
       Object.keys(draft.T).forEach(function (code) { T[code] = draft.T[code]; });
       AI = draft.AI || {};
       if (draft.PUB) PUB = draft.PUB;
+      EDITED = draft.EDITED || {};
     }
   } catch (e) {}
   // Autosave (header indicator): each change is kept as a draft shortly
@@ -1177,26 +1186,31 @@
   function isChanged(locale, id) { return val(T, locale, id) !== val(PUB, locale, id); }
 
   // { scope: 'shared' | experienceId, locale, count } for every change.
+  // { scope: experienceId, locale, count } for every change. A personalized
+  // field belongs to its experience; a shared one to the experience(s) it was
+  // edited in (all of them if unknown, e.g. an older saved draft).
   function pendingChanges() {
     var out = [];
     Object.keys(T).forEach(function (locale) {
-      var shared = 0, per = {};
+      var per = {};
+      function add(x) { per[x] = (per[x] || 0) + 1; }
       FIELDS.forEach(function (f) {
         if (f.localizable === false) return;
         if (typeof f.source === 'object') {
-          EXPERIENCES.forEach(function (x) { if (isChanged(locale, f.key + '@' + x.id)) per[x.id] = (per[x.id] || 0) + 1; });
-        } else if (isChanged(locale, f.key)) shared++;
+          EXPERIENCES.forEach(function (x) { if (isChanged(locale, f.key + '@' + x.id)) add(x.id); });
+        } else if (isChanged(locale, f.key)) {
+          var where = Object.keys(EDITED[locale + '|' + f.key] || {});
+          (where.length ? where : EXPERIENCES.map(function (x) { return x.id; })).forEach(add);
+        }
       });
-      if (shared) out.push({ scope: 'shared', locale: locale, count: shared });
       Object.keys(per).forEach(function (x) { out.push({ scope: x, locale: locale, count: per[x] }); });
     });
     return out;
   }
 
-  // An experience is marked when its own content or the shared content
-  // (which every experience shows) has unpublished changes.
+  // An experience is marked (Draft) only when changes were made in it.
   function expHasChanges(expId) {
-    return pendingChanges().some(function (c) { return c.scope === 'shared' || c.scope === expId; });
+    return pendingChanges().some(function (c) { return c.scope === expId; });
   }
   function source(f) { return isPersonalized(f) ? f.source[state.exp] : f.source; }
   function isLocalizable(f) { return f.localizable !== false; }
@@ -1785,6 +1799,7 @@
             if (translation(code, f)) return;
             t[fid(f)] = (MT[code] || {})[fid(f)] || source(f);
             ai[fid(f)] = true;
+            noteEdit(code, fid(f));
             count++;
           });
           delete busy[code];
@@ -1798,7 +1813,7 @@
       // Untranslated fields take the default-language value, as in Liferay;
       // pending AI translations count as reviewed.
       codes.forEach(function (code) {
-        scopeFields().forEach(function (f) { if (!translation(code, f)) T[code][fid(f)] = source(f); });
+        scopeFields().forEach(function (f) { if (!translation(code, f)) { T[code][fid(f)] = source(f); noteEdit(code, fid(f)); } });
         delete AI[code];
       });
       render();
@@ -1807,7 +1822,10 @@
     }
     if (action === 'reset') {
       codes.forEach(function (code) {
-        scopeFields().forEach(function (f) { delete T[code][fid(f)]; if (AI[code]) delete AI[code][fid(f)]; });
+        scopeFields().forEach(function (f) {
+          if (translation(code, f)) noteEdit(code, fid(f));
+          delete T[code][fid(f)]; if (AI[code]) delete AI[code][fid(f)];
+        });
       });
       render();
       autosave();
@@ -2347,6 +2365,7 @@
     var f = fieldByKey(e.target.getAttribute('data-key'));
     if (!f) return;
     T[state.locale][fid(f)] = e.target.value;
+    noteEdit(state.locale, fid(f));
     renderPreview();
     autosave();
   });
@@ -2528,11 +2547,11 @@
   var publishBtn = document.getElementById('publish-btn');
 
   function openPublishModal() {
-    // One line per experience with changes. Shared (non-personalized) fields
-    // show in every experience, so they count towards each of them.
+    // One line per experience with changes (a shared field counts for the
+    // experience(s) it was edited in — see pendingChanges).
     var changes = pendingChanges();
     var rows = EXPERIENCES.map(function (x) {
-      var n = changes.filter(function (c) { return c.scope === 'shared' || c.scope === x.id; })
+      var n = changes.filter(function (c) { return c.scope === x.id; })
         .reduce(function (sum, c) { return sum + c.count; }, 0);
       return { name: x.name, count: n };
     }).filter(function (r) { return r.count; });
@@ -2577,6 +2596,7 @@
   });
   document.getElementById('publish-confirm').addEventListener('click', function () {
     PUB = JSON.parse(JSON.stringify(T));
+    EDITED = {};
     saveDraft();
     closePublishModal();
     renderExpMenu();
@@ -2614,6 +2634,7 @@
     clearTimeout(autosaveTimer);
     autosaveTimer = null;
     T = JSON.parse(JSON.stringify(PUB));
+    EDITED = {};
     AI = {};
     saveDraft();
     setAutosave(false);
