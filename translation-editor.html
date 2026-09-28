@@ -13,7 +13,8 @@
       var s=localStorage.getItem('vanilla-skin')||'light';
       S.forEach(function(c){r.classList.remove(c);});
       r.classList.add(S.indexOf(s)>-1?s:'light');
-      if(localStorage.getItem('vanilla-cms-style')==='1'){
+      // CMS Style: on when toggled in the kit, and always when translating CMS content
+      if(localStorage.getItem('vanilla-cms-style')==='1'||/[?&]source=cms(&|$)/.test(location.search)){
         r.style.setProperty('--rounded-sm','4px');
         r.style.setProperty('--rounded-md','8px');
         r.style.setProperty('--rounded-lg','16px');
@@ -104,6 +105,33 @@
 
     .site-footer { padding: 24px 48px; background: var(--site-navy-d); font-size: 12px; opacity: 0.7; }
 
+    /* Display page (CMS content) — article template of the same site */
+    .site-article { display: flex; flex-direction: column; gap: 24px; max-width: 760px; margin: 0 auto; padding: 64px 48px 80px; }
+    .site-article__meta { margin: 0; font-size: 14px; opacity: 0.7; }
+    .site-article__visual { aspect-ratio: 16 / 9; }
+    .site-article__body { display: flex; flex-direction: column; gap: 20px; }
+    .site-article__body p { margin: 0; font-size: 18px; line-height: 1.7; opacity: 0.9; }
+    .site-article__body p:first-child { font-size: 21px; opacity: 1; }
+    .site-article--minimal { max-width: 640px; padding-top: 48px; }
+    .site-article--minimal .site-h1 { font-size: 32px; }
+
+    /* Second channel (Partner Portal) — a site on Liferay's default Classic theme */
+    .classic { min-height: 100%; display: flex; flex-direction: column; background: #FFFFFF; color: #272833; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.5; }
+    .classic h1, .classic h2 { margin: 0; font-family: inherit; color: inherit; }
+    .classic-header { display: flex; align-items: center; gap: 16px; padding: 24px 40px; }
+    .classic-logo { width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; background: radial-gradient(circle at 35% 40%, #0B5FFF 0 45%, #1C2E8E 46%); }
+    .classic-name { font-size: 26px; font-weight: 700; }
+    .classic-search { display: flex; align-items: center; justify-content: space-between; width: 280px; margin-left: auto; padding: 10px 16px; border-radius: 6px; background: #F1F2F5; color: #6B6C7E; }
+    .classic-signin { display: inline-flex; align-items: center; gap: 8px; color: #6B6C7E; font-weight: 600; }
+    .classic-nav { padding: 12px 40px 20px; color: #6B6C7E; font-weight: 600; }
+    .classic-main { flex: 1; display: flex; flex-direction: column; gap: 16px; max-width: 880px; padding: 32px 40px 64px; }
+    .classic-title { font-size: 36px; font-weight: 700; line-height: 1.2; }
+    .classic-subtitle { margin: 0; font-size: 20px; color: #6B6C7E; }
+    .classic-date { margin: 0; font-size: 14px; color: #6B6C7E; }
+    .classic-body { display: flex; flex-direction: column; gap: 16px; }
+    .classic-body p { margin: 0; }
+    .classic-footer { padding: 40px 96px; background: #272833; color: #FFFFFF; font-size: 14px; }
+    .classic-footer span { text-decoration: underline; }
   </style>
 </head>
 <body style="display: flex; flex-direction: column; height: 100vh; overflow: clip;">
@@ -146,6 +174,7 @@
       <span class="loading-animation loading-animation-sm" id="autosave-saving" role="img" aria-label="Saving" hidden></span>
       <span class="sr-only" id="autosave-live" aria-live="polite"></span>
     </span>
+    <span aria-hidden="true" style="flex-shrink: 0; width: 1px; height: var(--spacing-5); background: var(--color-secondary-l2);"></span>
     <!-- AI — purple #stars (same AI colour as "AI Translated"), then a divider -->
     <button class="btn btn--borderless btn--sm btn--icon" type="button" id="ai-btn"
             aria-label="AI Assistant" data-tooltip="AI Assistant" style="color: var(--color-chart-purple-d1);">
@@ -215,9 +244,9 @@
          results bar, Table component with multi-selection -->
     <div id="panel-languages" style="flex: 1; min-height: 0; display: flex; flex-direction: column;">
       <!-- Panel header — same row the language breadcrumb takes in level 2 -->
-      <div style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); flex-shrink: 0;">
         <svg class="lexicon-icon" aria-hidden="true" style="flex-shrink: 0; color: var(--color-secondary);"><use href="#automatic-translate"></use></svg>
-        <h2 style="display: flex; align-items: center; min-height: var(--spacing-8); margin: 0; font-size: var(--font-size-base); font-weight: var(--font-weight-bold); color: var(--color-dark);">All Translations</h2>
+        <h2 style="display: flex; align-items: center; min-height: var(--spacing-8); margin: 0; font-size: var(--font-size-base); font-weight: var(--font-weight-bold); color: var(--color-dark);">Translations</h2>
       </div>
 
       <div id="lang-tools" data-toolbar style="position: relative; z-index: 20; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
@@ -344,17 +373,17 @@
     <!-- Level 2 — translation of the chosen language -->
     <div id="panel-translate" hidden style="flex: 1; min-height: 0; display: flex; flex-direction: column;">
 
-      <!-- Panel header: translations icon · breadcrumb (All Translations ›
+      <!-- Panel header: translations icon · breadcrumb (Translations ›
            flag + code; the language name is for screen readers only) ·
            status label · options (right) -->
-      <div style="position: relative; z-index: 25; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
+      <div style="position: relative; z-index: 25; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); flex-shrink: 0;">
         <!-- Breadcrumb + status. When space runs out this wraps onto two lines
              (no ellipsis): the label drops below. -->
         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-2) var(--spacing-4); flex: 1; min-width: 0; min-height: var(--spacing-8);">
           <nav aria-label="Breadcrumb" style="display: flex; align-items: center; gap: var(--spacing-3); min-width: 0;">
             <svg class="lexicon-icon" aria-hidden="true" style="flex-shrink: 0; color: var(--color-secondary);"><use href="#automatic-translate"></use></svg>
             <ol class="breadcrumb" id="lang-title">
-              <li><a href="#" id="to-languages">All Translations</a><svg class="lexicon-icon breadcrumb__sep" aria-hidden="true"><use href="#angle-right"></use></svg></li>
+              <li><a href="#" id="to-languages">Translations</a><svg class="lexicon-icon breadcrumb__sep" aria-hidden="true"><use href="#angle-right"></use></svg></li>
               <li aria-current="page" style="gap: var(--spacing-2);">
                 <span class="lang-picker__flag" id="lang-title-flag" aria-hidden="true"></span>
                 <span id="lang-title-code"></span>
@@ -461,7 +490,13 @@
          inside a translation. -->
     <!-- Lexicon Alert · Stripe · Info — full-width strip on top of the preview. -->
     <div style="flex-shrink: 0;">
-      <!-- Lexicon Alert · Stripe · Info — which language (and experience) the preview shows. -->
+      <!-- Lexicon Alert · Stripe · Info. Left: which language the preview
+           shows. CMS only (right): where to preview the content, as in the
+           CMS content editor's Preview panel — Channel (None = plain content
+           form · a connected site · External URL) · Display Page of that site.
+           Everything wraps instead of overflowing. The 32px pickers overflow
+           the text line equally above and below (negative margin), so the
+           bar keeps the height it has with text only. -->
       <div class="alert alert--stripe alert--info" id="preview-bar" style="position: relative; z-index: 20;">
         <div class="alert__content" style="padding-block: 0;">
           <svg class="lexicon-icon" id="preview-bar-icon" aria-hidden="true" style="margin-top: var(--spacing-1);"><use href="#info-circle"></use></svg>
@@ -475,6 +510,45 @@
               <span id="preview-bar-default" class="label label--sm label--info" hidden>Default</span>
               <span id="preview-bar-exp-wrap" style="white-space: nowrap;"><span aria-hidden="true" style="margin-right: var(--spacing-3);">·</span>Experience: <strong id="preview-bar-exp"></strong></span>
             </span>
+            <div id="preview-tools" hidden style="flex: 1 1 auto; min-width: 0; margin-block: calc((1.5em - var(--spacing-8)) / 2); display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-3) var(--spacing-6);">
+              <!-- Divider between the language and the selectors; hidden once the
+                   selectors wrap onto their own line. -->
+              <span id="preview-tools-divider" aria-hidden="true" style="flex-shrink: 0; width: 1px; height: var(--spacing-5); margin-right: var(--spacing-2); background: var(--color-info-l1);"></span>
+              <div style="display: flex; align-items: center; gap: var(--spacing-3);">
+                <span id="channel-label" style="font-weight: var(--font-weight-bold);">Channel</span>
+                <div class="picker" id="channel-picker">
+                  <button class="btn btn--secondary btn--sm picker__trigger" type="button" id="channel-trigger"
+                          aria-haspopup="listbox" aria-expanded="false" aria-controls="channel-menu" aria-labelledby="channel-label channel-trigger-text"
+                          style="font-size: var(--font-size-base);">
+                    <span class="picker__trigger-text" id="channel-trigger-text"></span>
+                    <svg class="lexicon-icon" aria-hidden="true"><use href="#caret-double-l"></use></svg>
+                  </button>
+                  <ul class="dropdown" role="listbox" id="channel-menu" aria-labelledby="channel-label" hidden
+                      style="position: absolute; top: calc(100% + var(--spacing-2)); left: 0; z-index: 1000; width: max-content;"></ul>
+                </div>
+              </div>
+              <div id="dpt-group" style="display: flex; align-items: center; gap: var(--spacing-3);">
+                <span id="dpt-label" style="font-weight: var(--font-weight-bold);">Display Page</span>
+                <div class="picker" id="dpt-picker">
+                  <button class="btn btn--secondary btn--sm picker__trigger" type="button" id="dpt-trigger"
+                          aria-haspopup="listbox" aria-expanded="false" aria-controls="dpt-menu" aria-labelledby="dpt-label dpt-trigger-text"
+                          style="font-size: var(--font-size-base);">
+                    <span class="picker__trigger-text" id="dpt-trigger-text"></span>
+                    <svg class="lexicon-icon" aria-hidden="true"><use href="#caret-double-l"></use></svg>
+                  </button>
+                  <ul class="dropdown" role="listbox" id="dpt-menu" aria-labelledby="dpt-label" hidden
+                      style="position: absolute; top: calc(100% + var(--spacing-2)); left: 0; z-index: 1000; width: max-content;"></ul>
+                </div>
+              </div>
+              <!-- External URL: the page that renders the content outside Liferay -->
+              <div id="url-group" class="input input--sm" hidden style="flex: 1 1 220px; min-width: 0;">
+                <label class="sr-only" for="preview-url">External URL</label>
+                <div class="search">
+                  <input type="url" class="input__field search__field" id="preview-url" placeholder="https://" autocomplete="off">
+                  <button class="search__submit" type="button" id="preview-url-reload" aria-label="Reload" data-tooltip="Reload"><svg class="lexicon-icon" aria-hidden="true"><use href="#reload"></use></svg></button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -539,6 +613,9 @@
         <footer class="site-footer">© 2026 Orbit Summit</footer>
       </article>
 
+      <!-- CMS content (?source=cms) — filled by script for the chosen
+           channel: plain content form · a site's display page · External URL. -->
+      <article id="preview-cms" hidden></article>
     </div>
 
   </section>
@@ -624,13 +701,16 @@
   }
   new ResizeObserver(fitHeader).observe(header);
 
-  /* ── Entry point: Site Builder › Pages › ⋮ › Translate ──── */
-  // The page being translated comes from ?page=… (site-pages.html);
-  // Back and Cancel return there (changes autosave).
+  /* ── Entry points ───────────────────────────────────────── */
+  //  · Site Builder › Pages › ⋮ › Translate  → ?page=…           (site-pages.html)
+  //  · CMS › Content › ⋮ › Translate         → ?source=cms&content=…  (cms.html)
+  // Back and Cancel return to where the user came from (changes autosave).
+  // CMS content has no experiences, and its preview is the display page.
   var params = new URLSearchParams(location.search);
-  var HOME = 'index.html';
-  var NOUN = 'page';
-  var pageName = params.get('page');
+  var IS_CMS = params.get('source') === 'cms';
+  var HOME = IS_CMS ? 'cms.html' : 'index.html';
+  var NOUN = IS_CMS ? 'content' : 'page';
+  var pageName = IS_CMS ? (params.get('content') || 'The Future of Conversational AI') : params.get('page');
   if (pageName) {
     document.getElementById('editor-page-name').textContent = pageName;
     document.getElementById('editor-title').title = 'Translate ' + pageName;
@@ -648,6 +728,24 @@
   // Preview tab (?preview=1&locale=…&exp=…), opened from "Preview in a New
   // Tab" on small screens: only the page preview, no editor chrome.
   var PREVIEW_ONLY = new URLSearchParams(location.search).get('preview') === '1';
+  if (IS_CMS) {
+    document.getElementById('scope-bar').hidden = true;
+    document.getElementById('preview-bar-exp-wrap').hidden = true;
+    document.getElementById('preview-bar-title').textContent = 'Preview:';
+    document.getElementById('preview-pane').setAttribute('aria-label', 'Content Preview');
+    document.getElementById('preview-page').remove();
+    document.getElementById('preview-cms').id = 'preview-page';
+    document.getElementById('preview-page').hidden = false;
+    document.getElementById('preview-tools').hidden = PREVIEW_ONLY;
+    // The divider only makes sense while language and selectors share a line.
+    var toolsEl = document.getElementById('preview-tools');
+    new ResizeObserver(function () {
+      var status = toolsEl.previousElementSibling;
+      document.getElementById('preview-tools-divider').hidden = toolsEl.offsetTop > status.offsetTop + status.offsetHeight / 2;
+    }).observe(document.getElementById('preview-bar'));
+  } else {
+    document.getElementById('preview-cms').remove();
+  }
   if (PREVIEW_ONLY) document.querySelector('header.control-menu').hidden = true;
   if (isEmptyPage) {
     document.getElementById('workspace').hidden = true;
@@ -835,6 +933,149 @@
       'cta-button': 'Garanta seu ingresso'
     }
   };
+  // CMS — where content can be previewed. A space is connected to zero or
+  // more sites; each site has its own theme and display page templates.
+  var SITES = [
+    { id: 'dxp', name: 'Liferay DXP Site', theme: 'orbit', dpts: [
+      { id: 'article', name: 'Article' }, { id: 'article-minimal', name: 'Article Minimal' }] },
+    { id: 'partner', name: 'Partner Portal', theme: 'classic', dpts: [
+      { id: 'basic', name: 'Basic Web Content' }] }
+  ];
+  var SPACE_SITES = { 'Marketing': ['dxp', 'partner'], 'Internal Comms': [] };
+
+  // CMS contents (cms.html › ⋮ › Translate), keyed by title. One experience
+  // only: display pages and the CMS have none.
+  // · The Future of Conversational AI — Basic Web Content, Marketing (2 sites)
+  //   es-ES complete · fr-FR partial · de/it/pt not translated
+  // · Behind the Scenes at Orbit Summit — Blog, Internal Comms (no site)
+  //   es-ES partial · the rest not translated
+  var CMS_CONTENTS = {
+    'The Future of Conversational AI': {
+      type: 'Basic Web Content', space: 'Marketing', author: 'Amanda Costa',
+      fields: [
+        { key: 'cms-title', label: 'Title', source: 'The Future of Conversational AI' },
+        { key: 'cms-url', label: 'Friendly URL', source: 'the-future-of-conversational-ai' },
+        { key: 'cms-content', label: 'Content', multiline: true, rows: 10, source:
+          'Conversational AI has moved beyond simple chatbots. Today’s assistants understand context, remember preferences and hand over to a person when a question needs a personal touch.\n\n' +
+          'For digital experience teams, this changes how content is planned. Answers must be accurate, consistent across channels and available in every language customers speak.\n\n' +
+          'Start small: pick the ten questions your support team hears most often, publish clear answers in your CMS and let the assistant draw from that single source of truth.' }
+      ],
+      mt: {
+        'es-ES': {
+          'cms-title': 'El futuro de la IA conversacional',
+          'cms-url': 'el-futuro-de-la-ia-conversacional',
+          'cms-content':
+            'La IA conversacional ha ido mucho más allá de los chatbots sencillos. Los asistentes actuales entienden el contexto, recuerdan las preferencias y pasan la conversación a una persona cuando una pregunta necesita un trato personal.\n\n' +
+            'Para los equipos de experiencia digital, esto cambia la forma de planificar el contenido. Las respuestas deben ser precisas, coherentes en todos los canales y estar disponibles en todos los idiomas que hablan los clientes.\n\n' +
+            'Empieza poco a poco: elige las diez preguntas que más escucha tu equipo de soporte, publica respuestas claras en tu CMS y deja que el asistente se base en esa única fuente de verdad.'
+        },
+        'fr-FR': {
+          'cms-title': 'L’avenir de l’IA conversationnelle',
+          'cms-url': 'l-avenir-de-l-ia-conversationnelle',
+          'cms-content':
+            'L’IA conversationnelle va désormais bien au-delà des simples chatbots. Les assistants actuels comprennent le contexte, retiennent les préférences et passent le relais à un conseiller lorsqu’une question demande une attention personnelle.\n\n' +
+            'Pour les équipes chargées de l’expérience digitale, cela change la façon de planifier le contenu. Les réponses doivent être exactes, cohérentes sur tous les canaux et disponibles dans toutes les langues de vos clients.\n\n' +
+            'Commencez petit : choisissez les dix questions que votre équipe support entend le plus souvent, publiez des réponses claires dans votre CMS et laissez l’assistant s’appuyer sur cette source unique de vérité.'
+        },
+        'de-DE': {
+          'cms-title': 'Die Zukunft der Conversational AI',
+          'cms-url': 'die-zukunft-der-conversational-ai',
+          'cms-content':
+            'Conversational AI ist längst mehr als ein einfacher Chatbot. Heutige Assistenten verstehen den Kontext, merken sich Vorlieben und übergeben an eine Person, wenn eine Frage persönliche Betreuung braucht.\n\n' +
+            'Für Digital-Experience-Teams verändert das die Content-Planung. Antworten müssen korrekt, über alle Kanäle hinweg einheitlich und in jeder Sprache verfügbar sein, die Ihre Kunden sprechen.\n\n' +
+            'Fangen Sie klein an: Wählen Sie die zehn Fragen, die Ihr Support-Team am häufigsten hört, veröffentlichen Sie klare Antworten in Ihrem CMS und lassen Sie den Assistenten auf diese eine verlässliche Quelle zugreifen.'
+        },
+        'it-IT': {
+          'cms-title': 'Il futuro dell’IA conversazionale',
+          'cms-url': 'il-futuro-dell-ia-conversazionale',
+          'cms-content':
+            'L’IA conversazionale è andata ben oltre i semplici chatbot. Gli assistenti di oggi comprendono il contesto, ricordano le preferenze e passano la conversazione a una persona quando una domanda richiede un tocco personale.\n\n' +
+            'Per i team che si occupano di esperienza digitale, questo cambia il modo di pianificare i contenuti. Le risposte devono essere accurate, coerenti su tutti i canali e disponibili in ogni lingua parlata dai clienti.\n\n' +
+            'Inizia in piccolo: scegli le dieci domande che il tuo team di supporto sente più spesso, pubblica risposte chiare nel tuo CMS e lascia che l’assistente attinga a quell’unica fonte di verità.'
+        },
+        'pt-BR': {
+          'cms-title': 'O futuro da IA conversacional',
+          'cms-url': 'o-futuro-da-ia-conversacional',
+          'cms-content':
+            'A IA conversacional foi muito além dos chatbots simples. Os assistentes de hoje entendem o contexto, lembram preferências e transferem a conversa para uma pessoa quando uma pergunta precisa de um toque pessoal.\n\n' +
+            'Para as equipes de experiência digital, isso muda a forma de planejar o conteúdo. As respostas precisam ser precisas, consistentes em todos os canais e estar disponíveis em todos os idiomas que seus clientes falam.\n\n' +
+            'Comece pequeno: escolha as dez perguntas que sua equipe de suporte mais ouve, publique respostas claras no seu CMS e deixe o assistente usar essa única fonte de verdade.'
+        }
+      },
+      translated: { 'es-ES': 'all', 'fr-FR': ['cms-title', 'cms-url'] }
+    },
+    'Behind the Scenes at Orbit Summit': {
+      type: 'Blog', space: 'Internal Comms', author: 'Carolina Díaz',
+      fields: [
+        { key: 'cms-title', label: 'Title', source: 'Behind the Scenes at Orbit Summit' },
+        { key: 'cms-url', label: 'Friendly URL', source: 'behind-the-scenes-at-orbit-summit' },
+        { key: 'cms-subtitle', label: 'Subtitle', source: 'How a team of twelve prepares three days for 2,000 attendees' },
+        { key: 'cms-content', label: 'Content', multiline: true, rows: 6, source:
+          'Months before the doors open, the event team is already testing badges, rehearsing keynotes and mapping every room of the venue.\n\n' +
+          'This year we also translated the whole agenda into five languages, so every attendee can find their sessions in the language they prefer.' },
+        { key: 'cms-cover', label: 'Cover Image', localizable: false, source: 'orbit-backstage.jpg' }
+      ],
+      mt: {
+        'es-ES': {
+          'cms-title': 'Entre bastidores de Orbit Summit',
+          'cms-url': 'entre-bastidores-de-orbit-summit',
+          'cms-subtitle': 'Cómo un equipo de doce personas prepara tres días para 2.000 asistentes',
+          'cms-content':
+            'Meses antes de abrir las puertas, el equipo del evento ya está probando acreditaciones, ensayando las keynotes y trazando cada sala del recinto.\n\n' +
+            'Este año también hemos traducido toda la agenda a cinco idiomas, para que cada asistente encuentre sus sesiones en el idioma que prefiera.'
+        },
+        'fr-FR': {
+          'cms-title': 'Les coulisses d’Orbit Summit',
+          'cms-url': 'les-coulisses-d-orbit-summit',
+          'cms-subtitle': 'Comment une équipe de douze personnes prépare trois jours pour 2 000 participants',
+          'cms-content':
+            'Des mois avant l’ouverture, l’équipe de l’événement teste déjà les badges, répète les keynotes et cartographie chaque salle du lieu.\n\n' +
+            'Cette année, nous avons aussi traduit tout le programme en cinq langues, afin que chaque participant trouve ses sessions dans la langue de son choix.'
+        },
+        'de-DE': {
+          'cms-title': 'Hinter den Kulissen des Orbit Summit',
+          'cms-url': 'hinter-den-kulissen-des-orbit-summit',
+          'cms-subtitle': 'Wie ein zwölfköpfiges Team drei Tage für 2.000 Teilnehmende vorbereitet',
+          'cms-content':
+            'Monate bevor sich die Türen öffnen, testet das Eventteam bereits Badges, probt die Keynotes und plant jeden Raum des Veranstaltungsorts.\n\n' +
+            'In diesem Jahr haben wir außerdem die gesamte Agenda in fünf Sprachen übersetzt, damit alle Teilnehmenden ihre Sessions in ihrer bevorzugten Sprache finden.'
+        },
+        'it-IT': {
+          'cms-title': 'Dietro le quinte di Orbit Summit',
+          'cms-url': 'dietro-le-quinte-di-orbit-summit',
+          'cms-subtitle': 'Come un team di dodici persone prepara tre giorni per 2.000 partecipanti',
+          'cms-content':
+            'Mesi prima dell’apertura, il team dell’evento sta già testando i badge, provando i keynote e mappando ogni sala della sede.\n\n' +
+            'Quest’anno abbiamo anche tradotto l’intero programma in cinque lingue, così ogni partecipante può trovare le sue sessioni nella lingua che preferisce.'
+        },
+        'pt-BR': {
+          'cms-title': 'Os bastidores do Orbit Summit',
+          'cms-url': 'os-bastidores-do-orbit-summit',
+          'cms-subtitle': 'Como uma equipe de doze pessoas prepara três dias para 2.000 participantes',
+          'cms-content':
+            'Meses antes da abertura, a equipe do evento já está testando crachás, ensaiando as keynotes e mapeando cada sala do local.\n\n' +
+            'Este ano também traduzimos toda a programação para cinco idiomas, para que cada participante encontre suas sessões no idioma que preferir.'
+        }
+      },
+      translated: { 'es-ES': ['cms-title', 'cms-url', 'cms-subtitle'] }
+    }
+  };
+
+  var CONTENT = null;
+  if (IS_CMS) {
+    CONTENT = CMS_CONTENTS[pageName] || CMS_CONTENTS['The Future of Conversational AI'];
+    EXPERIENCES = [{ id: 'default', name: 'Default' }];
+    GROUPS = [{ id: 'content', name: '' }];
+    FIELDS = CONTENT.fields.map(function (f) { f.group = 'content'; return f; });
+    MT = CONTENT.mt;
+    T = {};
+    ['es-ES', 'fr-FR', 'de-DE', 'it-IT', 'pt-BR'].forEach(function (code) {
+      var done = CONTENT.translated[code] || [];
+      T[code] = {};
+      Object.keys(MT[code]).forEach(function (k) { if (done === 'all' || done.indexOf(k) > -1) T[code][k] = MT[code][k]; });
+    });
+  }
+
   // es-ES auto-translates to the same copy it ships with (useful after a reset).
   MT['es-ES'] = JSON.parse(JSON.stringify(T['es-ES']));
 
@@ -843,7 +1084,7 @@
 
   // Saved progress (autosave / Publish), one entry per page in this
   // browser. Restored when the page is opened again in the translator.
-  var DRAFT_KEY = 'translation-editor-draft:' + (pageName || 'Orbit Summit 2026');
+  var DRAFT_KEY = 'translation-editor-draft:' + (IS_CMS ? 'cms:' : '') + (pageName || 'Orbit Summit 2026');
   // PUB = what's live (last Publish). The sample translations start out as
   // published; anything that differs from PUB is an unpublished change.
   var PUB = JSON.parse(JSON.stringify(T));
@@ -888,6 +1129,18 @@
 
   var state = { view: 'languages', locale: 'en-US', exp: 'default', active: null, hover: null, status: 'all', query: '' };
 
+  // CMS preview channel — by default the first site connected to the
+  // content's space with its first display page; a space with no site
+  // previews the plain content form ('none').
+  function linkedSites() {
+    return SITES.filter(function (x) { return (SPACE_SITES[CONTENT.space] || []).indexOf(x.id) > -1; });
+  }
+  if (IS_CMS) {
+    var firstSite = linkedSites()[0];
+    state.channel = firstSite ? firstSite.id : 'none';
+    state.dpt = firstSite ? firstSite.dpts[0].id : null;
+    state.url = '';
+  }
   if (PREVIEW_ONLY) {
     var pq = new URLSearchParams(location.search);
     try {
@@ -897,6 +1150,11 @@
     state.view = 'translate';
     state.locale = pq.get('locale') || 'en-US';
     state.exp = pq.get('exp') || 'default';
+    if (IS_CMS && pq.get('channel')) {
+      state.channel = pq.get('channel');
+      state.dpt = pq.get('dpt');
+      state.url = pq.get('url') || '';
+    }
     document.title = 'Preview: ' + (pageName || 'Orbit Summit 2026') + ' (' + state.locale + ')';
   }
 
@@ -1567,7 +1825,13 @@
   function openPreviewTab() {
     try { localStorage.setItem('translation-editor-preview', JSON.stringify({ T: T, AI: AI })); } catch (e) {}
     var q = new URLSearchParams({ preview: '1', locale: state.locale, exp: state.exp });
-    if (pageName) q.set('page', pageName);
+    if (IS_CMS) {
+      q.set('source', 'cms'); q.set('content', pageName);
+      q.set('channel', state.channel);
+      if (state.dpt) q.set('dpt', state.dpt);
+      if (state.url) q.set('url', state.url);
+    }
+    else if (pageName) q.set('page', pageName);
     window.open('translation-editor.html?' + q.toString(), '_blank');
   }
 
@@ -1628,6 +1892,7 @@
   function previewEls() { return Array.prototype.slice.call(previewPage.querySelectorAll('[data-field]')); }
 
   function renderPreview() {
+    if (IS_CMS) buildCmsPreview();
     previewPage.setAttribute('lang', state.locale);
     previewEls().forEach(function (el) {
       var f = fieldByKey(el.getAttribute('data-field'));
@@ -1636,8 +1901,25 @@
       if (el.tagName === 'IMG') el.alt = text;
       else if (el.tagName === 'INPUT') el.value = text;
       else if (el.getAttribute('role') === 'img') el.setAttribute('aria-label', text);
+      // Rich text (CMS Content): one paragraph per blank-line-separated block.
+      else if (el.getAttribute('data-format') === 'paragraphs') {
+        el.innerHTML = String(text).split(/\n\s*\n/).filter(function (p) { return p.trim(); })
+          .map(function (p) { return '<p>' + esc(p.trim()) + '</p>'; }).join('');
+      }
       else el.textContent = text;
     });
+    // Display page date — formatted for the previewed language by the template.
+    var date = document.getElementById('preview-date');
+    if (date) {
+      try { date.textContent = new Intl.DateTimeFormat(state.locale, { dateStyle: 'long' }).format(new Date(2026, 5, 3)); }
+      catch (e) { date.textContent = 'June 3, 2026'; }
+    }
+    // Plain content form: its language selector shows the previewed language.
+    var formLang = document.getElementById('preview-form-lang');
+    if (formLang) {
+      formLang.querySelector('.lang-picker__flag').className = 'lang-picker__flag ' + lang(state.locale).flag;
+      formLang.querySelector('[data-code]').textContent = state.locale;
+    }
   }
 
   function paint(el) {
@@ -1651,6 +1933,159 @@
   }
 
   function paintAll() { previewEls().forEach(paint); }
+
+  /* ── CMS preview — channel · display page · External URL ── */
+  function hasField(key) { return FIELDS.some(function (f) { return f.key === key; }); }
+  function siteById(id) { return SITES.filter(function (x) { return x.id === id; })[0]; }
+
+  // "None": the content as it is in the CMS — the creation form, unstyled
+  // (Liferay UI, so kit components), showing the previewed language. Every
+  // field is shown read-only (kit read-only look + "(Read Only)" in the
+  // label, per PEDS) so it doesn't read as editable here: no editor
+  // toolbar, no file picker, no required marks, no language picker.
+  function tplForm() {
+    var RO = '<span class="input__label-meta">(Read Only)</span>';
+    var label = function (text) { return '<span style="font-weight: var(--font-weight-bold);">' + text + RO + '</span>'; };
+    // Kit `.input__field:read-only`: white fill, secondary-l2 border.
+    var box = 'display: block; min-height: var(--spacing-9); padding: var(--spacing-3) var(--spacing-5); border: 1px solid var(--color-secondary-l2); border-radius: var(--rounded-md); background: var(--color-white); color: var(--color-dark); cursor: default;';
+    var row = function (icon, text, value) {
+      return '<div style="display: flex; align-items: center; gap: var(--spacing-5);">' +
+        '<span style="display: inline-flex; align-items: center; gap: var(--spacing-4); width: 190px; flex-shrink: 0; font-weight: var(--font-weight-bold);">' +
+          '<svg class="lexicon-icon" aria-hidden="true" style="color: var(--color-secondary);"><use href="#' + icon + '"></use></svg><span>' + text + '</span></span>' + value + '</div>';
+    };
+    return '<div style="display: flex; flex-direction: column; gap: var(--spacing-7); max-width: 960px; margin: 0 auto; padding: var(--spacing-7); font-family: var(--font-family-base); font-size: var(--font-size-base); color: var(--color-dark);">' +
+      '<div id="preview-form-lang" style="display: inline-flex; align-items: center; gap: var(--spacing-3); color: var(--color-secondary);">' +
+        '<span class="lang-picker__flag"></span><span data-code></span></div>' +
+      '<div style="display: flex; flex-direction: column; gap: var(--spacing-3);">' + label('Title') +
+        '<span data-field="cms-title" style="font-size: calc(var(--font-size-xl) * 1.6); font-weight: var(--font-weight-bold); line-height: 1.3;"></span>' +
+      '</div>' +
+      '<div style="display: flex; flex-direction: column; gap: var(--spacing-5);">' +
+        row('box-container', 'Space', '<span style="display: inline-flex; align-items: center; gap: var(--spacing-3);"><span class="sticker sticker--outline" aria-hidden="true">' + esc(CONTENT.space.charAt(0)) + '</span>' + esc(CONTENT.space) + '</span>') +
+        row('link', 'Friendly URL' + RO, '<span data-field="cms-url" style="' + box + ' flex: 1; min-width: 0;"></span>') +
+      '</div>' +
+      (hasField('cms-subtitle') ? '<div style="display: flex; flex-direction: column; gap: var(--spacing-3);">' + label('Subtitle') + '<span data-field="cms-subtitle" style="' + box + '"></span></div>' : '') +
+      '<div style="display: flex; flex-direction: column; gap: var(--spacing-3);">' + label('Content') +
+        '<div data-field="cms-content" data-format="paragraphs" style="' + box + ' display: flex; flex-direction: column; gap: var(--spacing-5); padding: var(--spacing-5);"></div>' +
+      '</div>' +
+      (hasField('cms-cover') ? '<div style="display: flex; flex-direction: column; gap: var(--spacing-3);">' + label('Cover Image') +
+        '<span style="display: inline-flex; align-items: center; gap: var(--spacing-3);"><svg class="lexicon-icon" aria-hidden="true" style="color: var(--color-secondary);"><use href="#document-image"></use></svg>' +
+        '<span data-field="cms-cover"></span></span></div>' : '') +
+    '</div>';
+  }
+
+  // Liferay DXP Site — the event site theme (same as the Pages preview).
+  function tplOrbit(minimal) {
+    return '<header class="site-header"><span class="site-logo">ORBIT<span>SUMMIT</span></span></header>' +
+      '<section class="site-article' + (minimal ? ' site-article--minimal' : '') + '">' +
+        '<h1 class="site-h1" data-field="cms-title"></h1>' +
+        (hasField('cms-subtitle') ? '<p class="site-lead" data-field="cms-subtitle"></p>' : '') +
+        '<p class="site-article__meta">' + esc(CONTENT.author) + ' · <time id="preview-date" datetime="2026-06-03"></time></p>' +
+        (minimal ? '' : '<div class="site-visual site-article__visual" aria-hidden="true"></div>') +
+        '<div class="site-article__body" data-field="cms-content" data-format="paragraphs"></div>' +
+      '</section>' +
+      '<footer class="site-footer">© 2026 Orbit Summit</footer>';
+  }
+
+  // Partner Portal — Liferay's Classic theme.
+  function tplClassic() {
+    return '<header class="classic-header"><span class="classic-logo" aria-hidden="true"></span><span class="classic-name">Partner Portal</span>' +
+        '<span class="classic-search">Search…<svg class="lexicon-icon" aria-hidden="true"><use href="#search"></use></svg></span>' +
+        '<span class="classic-signin"><svg class="lexicon-icon" aria-hidden="true"><use href="#user"></use></svg>Sign In</span></header>' +
+      '<nav class="classic-nav">Home</nav>' +
+      '<main class="classic-main">' +
+        '<h1 class="classic-title" data-field="cms-title"></h1>' +
+        (hasField('cms-subtitle') ? '<p class="classic-subtitle" data-field="cms-subtitle"></p>' : '') +
+        '<p class="classic-date"><time id="preview-date" datetime="2026-06-03"></time></p>' +
+        '<div class="classic-body" data-field="cms-content" data-format="paragraphs"></div>' +
+      '</main>' +
+      '<footer class="classic-footer">Powered by <span>Liferay</span></footer>';
+  }
+
+  // External URL — the page is rendered outside Liferay; until a URL is
+  // entered there is nothing to show.
+  function tplExternal() {
+    if (state.url) {
+      return '<iframe src="' + esc(state.url) + '" title="External Preview" style="display: block; width: 100%; height: 100%; min-height: 100%; border: 0;"></iframe>';
+    }
+    return '<div style="display: flex; align-items: center; justify-content: center; min-height: 100%; padding: var(--spacing-7);">' +
+      '<div class="empty-state empty-state--sm">' +
+        '<div class="empty-state__media"><svg class="lexicon-icon" aria-hidden="true"><use href="#globe"></use></svg></div>' +
+        '<h3 class="empty-state__title">Enter an External URL</h3>' +
+        '<p class="empty-state__text">Type the URL of the page that shows this content and reload to preview the translation there.</p>' +
+      '</div></div>';
+  }
+
+  function buildCmsPreview() {
+    var key = state.channel + '|' + state.dpt + '|' + state.url;
+    if (previewPage.getAttribute('data-tpl') === key) return;
+    previewPage.setAttribute('data-tpl', key);
+    var site = siteById(state.channel);
+    var canvas = document.getElementById('preview-canvas');
+    canvas.style.overflow = state.channel === 'external' && state.url ? 'hidden' : 'auto';
+    previewPage.style.height = state.channel === 'external' ? '100%' : '';
+    if (site) {
+      previewPage.className = site.theme === 'orbit' ? 'site' : 'classic';
+      previewPage.innerHTML = site.theme === 'orbit' ? tplOrbit(state.dpt === 'article-minimal') : tplClassic();
+    } else {
+      previewPage.className = '';
+      previewPage.innerHTML = state.channel === 'external' ? tplExternal() : tplForm();
+    }
+    canvas.scrollTop = 0;
+  }
+
+  // Toolbar: Channel = None · connected sites · External URL.
+  function channels() {
+    return [{ id: 'none', name: 'None' }].concat(linkedSites()).concat([{ id: 'external', name: 'External URL' }]);
+  }
+  function optionsHTML(list, current) {
+    return list.map(function (o) {
+      var on = o.id === current;
+      return '<li role="none"><button type="button" class="dropdown__item' + (on ? ' is-active' : '') + '" role="option" aria-selected="' + on + '" tabindex="-1" data-value="' + o.id + '">' +
+        checkIcon(on) + '<span class="dropdown__item-text">' + esc(o.name) + '</span></button></li>';
+    }).join('');
+  }
+  function renderPreviewTools() {
+    var list = channels();
+    var site = siteById(state.channel);
+    document.getElementById('channel-menu').innerHTML = optionsHTML(list, state.channel);
+    document.getElementById('channel-trigger-text').textContent = list.filter(function (c) { return c.id === state.channel; })[0].name;
+    document.getElementById('dpt-group').hidden = !site;
+    if (site) {
+      document.getElementById('dpt-menu').innerHTML = optionsHTML(site.dpts, state.dpt);
+      document.getElementById('dpt-trigger-text').textContent = site.dpts.filter(function (d) { return d.id === state.dpt; })[0].name;
+    }
+    document.getElementById('url-group').hidden = state.channel !== 'external';
+    document.getElementById('preview-url').value = state.url;
+  }
+  function refreshCmsPreview() {
+    renderPreviewTools();
+    renderPreview();
+    paintAll();
+  }
+
+  if (IS_CMS) {
+    bindMenu(document.getElementById('channel-picker'), document.getElementById('channel-trigger'), document.getElementById('channel-menu'), function (id) {
+      state.channel = id;
+      var site = siteById(id);
+      state.dpt = site ? site.dpts[0].id : null;
+      refreshCmsPreview();
+      if (id === 'external' && !state.url) document.getElementById('preview-url').focus();
+    });
+    bindMenu(document.getElementById('dpt-picker'), document.getElementById('dpt-trigger'), document.getElementById('dpt-menu'), function (id) {
+      state.dpt = id;
+      refreshCmsPreview();
+    });
+    var urlInput = document.getElementById('preview-url');
+    function loadUrl() {
+      var v = urlInput.value.trim();
+      if (v && !/^https?:\/\//i.test(v)) v = 'https://' + v;
+      state.url = v;
+      previewPage.removeAttribute('data-tpl');   // reload even if unchanged
+      refreshCmsPreview();
+    }
+    urlInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); loadUrl(); } });
+    document.getElementById('preview-url-reload').addEventListener('click', loadUrl);
+  }
 
   // Scroll only the given pane — scrollIntoView() also scrolls the page itself,
   // which pushed the header and toolbar out of view.
@@ -1963,6 +2398,7 @@
   function render() {
     state.active = null;
     syncDiscard();
+    if (IS_CMS) renderPreviewTools();
     renderPreviewBar();
     renderExpMenu();
     renderStatusMenu();
@@ -2101,14 +2537,25 @@
       return { name: x.name, count: n };
     }).filter(function (r) { return r.count; });
 
+    // CMS content has no experiences: one line per language with changes.
+    if (IS_CMS) {
+      var perLang = {};
+      changes.forEach(function (c) { perLang[c.locale] = (perLang[c.locale] || 0) + c.count; });
+      rows = LANGS.filter(function (l) { return perLang[l.code]; })
+        .map(function (l) { return { name: l.name, flag: l.flag, count: perLang[l.code] }; });
+    }
+
     var page = esc(pageName || 'Orbit Summit 2026');
-    var intro = 'All the changes made in every experience of <strong>' + page + '</strong> will be published:';
+    var intro = IS_CMS
+      ? 'All the changes made in the translations of <strong>' + page + '</strong> will be published:'
+      : 'All the changes made in every experience of <strong>' + page + '</strong> will be published:';
     var html = !rows.length
       ? '<p>There are no unpublished changes in <strong>' + page + '</strong>.</p>'
       : '<p style="margin-bottom: var(--spacing-5);">' + intro + '</p>' +
         '<ul style="list-style: none; margin: 0; padding: 0; border: 1px solid var(--color-secondary-l3); border-radius: var(--rounded-md);">' +
         rows.map(function (r, i) {
           return '<li style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-3) var(--spacing-4);' + (i ? ' border-top: 1px solid var(--color-secondary-l3);' : '') + '">' +
+            (r.flag ? '<span class="lang-picker__flag ' + r.flag + '" aria-hidden="true"></span>' : '') +
             '<span style="font-weight: var(--font-weight-bold);">' + esc(r.name) + '</span>' +
             '<span style="margin-left: auto; color: var(--color-secondary);">' + r.count + ' change' + (r.count === 1 ? '' : 's') + '</span></li>';
         }).join('') + '</ul>';
@@ -2153,7 +2600,7 @@
     var name = esc(pageName || 'Orbit Summit 2026');
     document.getElementById('discard-body').innerHTML =
       '<p>All the unpublished changes in the translations of <strong>' + name + '</strong>' +
-      ', in every experience,' +
+      (IS_CMS ? '' : ', in every experience,') +
       ' will be discarded and the latest published version will be restored. This action cannot be undone.</p>';
     discardModal.hidden = false;
     document.getElementById('discard-confirm').focus();

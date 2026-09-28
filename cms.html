@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow: clip;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS — Liferay DXP</title>
+
+  <!-- Lexicon kit — in this order -->
+  <script>(function(){
+    var S=['light','light-hc','dark','dark-hc'];
+    function apply(){try{
+      var r=document.documentElement;
+      var s=localStorage.getItem('vanilla-skin')||'light';
+      S.forEach(function(c){r.classList.remove(c);});
+      r.classList.add(S.indexOf(s)>-1?s:'light');
+      // CMS app: CMS Style is always on (rounded 4 / 8 / 16)
+      if(true){
+        r.style.setProperty('--rounded-sm','4px');
+        r.style.setProperty('--rounded-md','8px');
+        r.style.setProperty('--rounded-lg','16px');
+      }else{
+        r.style.removeProperty('--rounded-sm');
+        r.style.removeProperty('--rounded-md');
+        r.style.removeProperty('--rounded-lg');
+      }
+    }catch(e){}}
+    apply();
+    window.addEventListener('pageshow',apply);
+  })()</script>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="tokens-high-contrast.css">
+  <link rel="stylesheet" href="tokens-dark.css">
+  <link rel="stylesheet" href="components.css">
+  <script src="icons.js"></script>
+
+  <!-- Live CMS menu (differs from the Figma satellite the kit's .cms-menu
+       comes from): no gaps between groups, children of a group indented,
+       active item = light fill + 4px primary rail + bold label. -->
+  <style>
+    .cms-menu .cms-menu__groups,
+    .cms-menu .vert-nav__list { gap: 0; }
+    .cms-menu .vert-nav__item { padding-block: var(--spacing-2); }
+    .cms-menu .vert-nav__list--nested .vert-nav__item { padding-left: calc(var(--spacing-5) + var(--spacing-5)); }
+    .cms-menu .vert-nav__item.is-active {
+      background: var(--color-light);
+      border-left-width: var(--spacing-2);
+      padding-left: calc(var(--spacing-5) - var(--spacing-2));
+      font-weight: var(--font-weight-bold);
+    }
+    .cms-menu .vert-nav__list--nested .vert-nav__item.is-active { padding-left: calc(var(--spacing-5) + var(--spacing-5) - var(--spacing-2)); }
+    .cms-menu .vert-nav__item.is-active .vert-nav__icon { color: var(--color-dark); }
+    .cms-menu .vert-nav__group-header { min-height: 0; padding-block: var(--spacing-3); }
+  </style>
+</head>
+<body style="display: flex; flex-direction: column; height: 100vh; overflow: clip;">
+
+<!-- ════════════════════════════════════════════════════════════════
+     Liferay CMS — Assets › Contents (modelled on the live CMS app).
+     Reached from the Applications Menu (grid icon) › CMS. Each content
+     row's ⋮ › Translate opens translation-editor.html?source=cms.
+     ════════════════════════════════════════════════════════════════ -->
+
+<!-- App bar — full width, above the CMS menu -->
+<header class="control-menu" style="padding-block: var(--spacing-3); padding-inline: var(--spacing-4); flex-shrink: 0; position: relative; z-index: 100;">
+  <div class="control-menu__left" style="gap: var(--spacing-4);">
+    <div class="control-menu__btns">
+      <button class="control-menu__btn" type="button" aria-label="Close Product Menu" aria-pressed="true" data-tooltip="Close Product Menu" data-tooltip-align="start" style="background: var(--color-light); color: var(--color-dark);">
+        <svg class="lexicon-icon" aria-hidden="true"><use href="#product-menu-open"></use></svg>
+      </button>
+    </div>
+    <span style="display: inline-flex; align-items: center; gap: var(--spacing-4);">
+      <span class="sticker" aria-hidden="true" style="background: var(--color-primary); color: var(--color-white); border-radius: var(--rounded-sm);">
+        <svg class="lexicon-icon lexicon-icon-sm" aria-hidden="true"><use href="#grid"></use></svg>
+      </span>
+      <span style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); color: var(--color-dark);">Liferay CMS</span>
+    </span>
+  </div>
+  <div class="control-menu__right" style="gap: var(--spacing-3);">
+    <!-- Applications Menu — same menu as in Site Builder; CMS is the current app -->
+    <div id="apps" style="position: relative; display: flex;">
+      <button class="control-menu__btn" type="button" id="apps-trigger" aria-label="Applications Menu" aria-haspopup="menu" aria-expanded="false" aria-controls="apps-menu" data-tooltip="Applications Menu" data-tooltip-align="end" style="color: var(--color-dark);">
+        <svg class="lexicon-icon" aria-hidden="true"><use href="#grid"></use></svg>
+      </button>
+      <ul class="dropdown" role="menu" id="apps-menu" aria-labelledby="apps-trigger" hidden
+          style="position: absolute; top: calc(100% + var(--spacing-2)); right: 0; z-index: 1000; width: 240px; padding-bottom: 0; overflow: hidden;">
+        <li role="none"><a href="#" class="dropdown__item" role="menuitem" tabindex="-1" style="padding-block: var(--spacing-4); font-size: var(--font-size-md); color: var(--color-dark);"><svg class="lexicon-icon lexicon-icon-lg dropdown__item-icon" aria-hidden="true" style="color: var(--color-primary);"><use href="#grid"></use></svg> Applications</a></li>
+        <li role="none"><a href="#" class="dropdown__item" role="menuitem" tabindex="-1" style="padding-block: var(--spacing-4); font-size: var(--font-size-md); color: var(--color-dark);"><svg class="lexicon-icon lexicon-icon-lg dropdown__item-icon" aria-hidden="true" style="color: var(--color-primary);"><use href="#shopping-cart"></use></svg> Commerce</a></li>
+        <li role="none"><a href="cms.html" class="dropdown__item is-active" role="menuitem" tabindex="-1" aria-current="page" style="padding-block: var(--spacing-4); padding-left: calc(var(--spacing-5) - var(--spacing-2)); border-left: var(--spacing-2) solid var(--color-primary); font-size: var(--font-size-md); font-weight: var(--font-weight-semi); color: var(--color-dark);"><svg class="lexicon-icon lexicon-icon-lg dropdown__item-icon" aria-hidden="true" style="color: var(--color-primary);"><use href="#document-vector"></use></svg> CMS</a></li>
+        <li class="dropdown__divider" role="separator"></li>
+        <li role="none"><a href="#" class="dropdown__item" role="menuitem" tabindex="-1" style="padding-block: var(--spacing-4); font-size: var(--font-size-md); color: var(--color-dark);"><svg class="lexicon-icon lexicon-icon-lg dropdown__item-icon" aria-hidden="true" style="color: var(--color-primary);"><use href="#control-panel"></use></svg> Control Panel</a></li>
+        <li role="none" style="margin-top: var(--spacing-2); padding: var(--spacing-4) 0 var(--spacing-3); border-top: 1px solid var(--color-secondary-l3); background: var(--color-light-l1);">
+          <div class="dropdown__group-title" style="color: var(--color-secondary);">Sites</div>
+          <ul role="none" style="list-style: none; margin: 0; padding: 0;">
+            <li role="none"><a href="index.html" class="dropdown__item" role="menuitem" tabindex="-1" style="background: transparent; font-size: var(--font-size-md); color: var(--color-primary);"><span class="sticker" aria-hidden="true" style="background: var(--color-primary); color: var(--color-white);"><svg class="lexicon-icon" aria-hidden="true"><use href="#sites"></use></svg></span> Liferay DXP Site</a></li>
+            <li role="none"><a href="#" class="dropdown__item" role="menuitem" tabindex="-1" style="background: transparent; font-size: var(--font-size-md); color: var(--color-primary);"><span class="sticker sticker--md" aria-hidden="true" style="background: var(--color-primary-l3); color: var(--color-primary);"><svg class="lexicon-icon" aria-hidden="true"><use href="#globe"></use></svg></span> Global</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <span class="control-menu__avatar sticker sticker--circle" aria-label="User Profile" role="img" style="width: var(--spacing-8); height: var(--spacing-8); background: var(--color-warning-l2); color: var(--color-warning);">
+      <svg class="lexicon-icon" aria-hidden="true"><use href="#user"></use></svg>
+    </span>
+  </div>
+</header>
+
+<div style="flex: 1; min-height: 0; display: flex;">
+
+<!-- CMS Menu (Lexicon Satellites 2545:4896) — items as in the live app -->
+<aside class="cms-menu" aria-label="CMS" style="flex-shrink: 0; overflow: auto; padding-top: var(--spacing-5);">
+  <ul class="cms-menu__groups">
+    <li>
+      <ul class="vert-nav__list">
+        <li class="vert-nav__item"><span class="vert-nav__icon-cell"><svg class="lexicon-icon vert-nav__icon" aria-hidden="true"><use href="#home"></use></svg></span>Home</li>
+        <li class="vert-nav__item"><span class="vert-nav__icon-cell"><svg class="lexicon-icon vert-nav__icon" aria-hidden="true"><use href="#analytics"></use></svg></span>Dashboard</li>
+        <li class="vert-nav__item"><span class="vert-nav__icon-cell"><svg class="lexicon-icon vert-nav__icon" aria-hidden="true"><use href="#users"></use></svg></span>Shared with Me</li>
+      </ul>
+    </li>
+    <li>
+      <button class="vert-nav__group-header" type="button" aria-expanded="true">ASSETS <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-down-small"></use></svg></button>
+      <ul class="vert-nav__list vert-nav__list--nested">
+        <li class="vert-nav__item" data-view="all" tabindex="0"><span class="vert-nav__icon-cell"><svg class="lexicon-icon vert-nav__icon" aria-hidden="true"><use href="#sheets"></use></svg></span>All</li>
+        <li class="vert-nav__item" data-view="contents" tabindex="0"><span class="vert-nav__icon-cell"><svg class="lexicon-icon vert-nav__icon" aria-hidden="true"><use href="#catalog"></use></svg></span>Contents</li>
+        <li class="vert-nav__item" data-view="files" tabindex="0"><span class="vert-nav__icon-cell"><svg class="lexicon-icon vert-nav__icon" aria-hidden="true"><use href="#documents-and-media"></use></svg></span>Files</li>
+      </ul>
+    </li>
+    <li>
+      <button class="vert-nav__group-header" type="button" aria-expanded="true">ADMIN <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-down-small"></use></svg></button>
+      <ul class="vert-nav__list vert-nav__list--nested">
+        <li class="vert-nav__item"><span class="vert-nav__icon-cell"><svg class="lexicon-icon vert-nav__icon" aria-hidden="true"><use href="#edit-layout"></use></svg></span>Content Structures</li>
+        <li class="vert-nav__item"><span class="vert-nav__icon-cell"><svg class="lexicon-icon vert-nav__icon" aria-hidden="true"><use href="#vocabulary"></use></svg></span>Categorization</li>
+      </ul>
+    </li>
+    <li>
+      <div class="vert-nav__group-header">
+        SPACES
+        <span class="vert-nav__group-actions">
+          <button class="btn btn--secondary btn--xs btn--icon" type="button" aria-label="Add Space"><svg class="lexicon-icon lexicon-icon-sm" aria-hidden="true"><use href="#plus"></use></svg></button>
+          <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-down-small"></use></svg>
+        </span>
+      </div>
+      <ul class="vert-nav__list vert-nav__list--nested">
+        <li class="vert-nav__item"><span class="vert-nav__icon-cell"><span class="sticker sticker--outline" aria-hidden="true">M</span></span>Marketing</li>
+        <li class="vert-nav__item"><span class="vert-nav__icon-cell"><span class="sticker sticker--outline" aria-hidden="true">I</span></span>Internal Comms</li>
+        <li class="vert-nav__item"><span class="vert-nav__icon-cell"><svg class="lexicon-icon vert-nav__icon" aria-hidden="true"><use href="#box-container"></use></svg></span>All Spaces (2)</li>
+      </ul>
+    </li>
+    <li>
+      <ul class="vert-nav__list">
+        <li class="vert-nav__item"><span class="vert-nav__icon-cell"><svg class="lexicon-icon vert-nav__icon" aria-hidden="true"><use href="#trash"></use></svg></span>Recycle Bin</li>
+      </ul>
+    </li>
+  </ul>
+</aside>
+
+<!-- Main column -->
+<main style="flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: auto;">
+  <h1 id="cms-title" style="margin: 0; padding: var(--spacing-7) var(--spacing-6) var(--spacing-5); font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); color: var(--color-dark);">Contents</h1>
+
+  <!-- Management toolbar -->
+  <div class="management-toolbar" style="flex-shrink: 0;">
+    <div class="management-toolbar__bar" style="padding-inline: var(--spacing-6);">
+      <label class="checkbox">
+        <input type="checkbox" class="checkbox__input" aria-label="Select All Items on the Page">
+        <span class="checkbox__box"><svg class="checkbox__icon checkbox__icon--check"><use href="#check-small"></use></svg><svg class="checkbox__icon checkbox__icon--hr"><use href="#hr"></use></svg></span>
+      </label>
+      <button class="btn btn--borderless btn--sm" type="button" style="font-size: var(--font-size-base);"><svg class="lexicon-icon" aria-hidden="true"><use href="#filter"></use></svg> Filter <svg class="lexicon-icon" aria-hidden="true"><use href="#caret-bottom"></use></svg></button>
+      <div class="management-toolbar__search">
+        <label class="sr-only" for="cms-search">Search</label>
+        <div class="search">
+          <input class="input__field search__field" type="search" id="cms-search" placeholder="Search" autocomplete="off">
+          <button class="search__clear" type="button" aria-label="Clear" hidden><svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg></button>
+          <span class="search__submit" aria-hidden="true"><svg class="lexicon-icon"><use href="#search"></use></svg></span>
+        </div>
+      </div>
+      <button class="btn btn--borderless btn--sm btn--icon" type="button" aria-label="Show View Options" data-tooltip="Show View Options"><svg class="lexicon-icon" aria-hidden="true"><use href="#table"></use></svg></button>
+      <button class="btn btn--secondary btn--sm" type="button" style="font-size: var(--font-size-base);">New <svg class="lexicon-icon" aria-hidden="true"><use href="#caret-bottom"></use></svg></button>
+      <button class="btn btn--borderless btn--sm btn--icon" type="button" aria-label="Show Details" data-tooltip="Show Details" data-tooltip-align="end"><svg class="lexicon-icon" aria-hidden="true"><use href="#info-circle-open"></use></svg></button>
+    </div>
+  </div>
+
+  <!-- Asset table — full bleed, column dividers, sortable Modified / Review Date -->
+  <table class="table" aria-labelledby="cms-title" style="margin-top: var(--spacing-5); border: 0; border-top: 1px solid var(--color-secondary-l3); border-radius: 0;">
+    <thead>
+      <tr>
+        <th class="table__cell--gutter"><span class="sr-only">Item Selection</span></th>
+        <th style="border-left: 1px solid var(--color-secondary-l3);">Title</th>
+        <th style="border-left: 1px solid var(--color-secondary-l3);">Type</th>
+        <th style="border-left: 1px solid var(--color-secondary-l3);">Space</th>
+        <th style="border-left: 1px solid var(--color-secondary-l3);">Author</th>
+        <th style="border-left: 1px solid var(--color-secondary-l3);"><span style="display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3);">Modified<svg class="lexicon-icon" aria-hidden="true"><use href="#order-arrow"></use></svg></span></th>
+        <th style="border-left: 1px solid var(--color-secondary-l3);"><span style="display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3);">Review Date<svg class="lexicon-icon" aria-hidden="true"><use href="#order-arrow"></use></svg></span></th>
+        <th style="border-left: 1px solid var(--color-secondary-l3);">Status</th>
+        <th class="table__cell--gutter" style="border-left: 1px solid var(--color-secondary-l3);">
+          <button class="btn btn--borderless btn--xs btn--icon" type="button" aria-label="Manage Columns" data-tooltip="Manage Columns" data-tooltip-align="end"><svg class="lexicon-icon" aria-hidden="true"><use href="#caret-bottom"></use></svg></button>
+          <span class="sr-only">Item Actions</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody id="asset-list"></tbody>
+  </table>
+
+  <nav class="pagination" aria-label="Pagination" style="padding: var(--spacing-5) var(--spacing-3) var(--spacing-5) var(--spacing-3);">
+    <button class="pagination__size btn btn--borderless btn--sm" type="button">20 Items <svg class="lexicon-icon" aria-hidden="true"><use href="#caret-double-l"></use></svg></button>
+    <span class="pagination__summary" id="cms-summary" style="margin-right: auto;"></span>
+    <ul class="pagination__pages">
+      <li><button class="pagination__btn" type="button" aria-label="Previous" disabled><svg class="lexicon-icon" aria-hidden="true"><use href="#angle-left"></use></svg></button></li>
+      <li><button class="pagination__btn is-active" type="button" aria-current="page">1</button></li>
+      <li><button class="pagination__btn" type="button" aria-label="Next" disabled><svg class="lexicon-icon" aria-hidden="true"><use href="#angle-right"></use></svg></button></li>
+    </ul>
+  </nav>
+</main>
+</div>
+
+<!-- Item actions — the live CMS menu for content (no dividers). Items tagged
+     data-kinds only show for those asset kinds; Translate opens the editor. -->
+<ul class="dropdown" role="menu" id="asset-menu" aria-label="Item Actions" hidden style="position: fixed; z-index: 1000; width: max-content;">
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#pencil"></use></svg> Edit</button></li>
+  <li role="none" data-kinds="content file"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#view"></use></svg> View</button></li>
+  <li role="none" data-kinds="content"><a href="#" class="dropdown__item" role="menuitem" tabindex="-1" id="asset-menu-translate"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#automatic-translate"></use></svg> Translate</a></li>
+  <li role="none" data-kinds="file"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#download"></use></svg> Download</button></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#share"></use></svg> Share</button></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#info-circle-open"></use></svg> Show Details</button></li>
+  <li role="none" data-kinds="content file"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#date-time"></use></svg> View History</button></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#move-folder"></use></svg> Move</button></li>
+  <li role="none" data-kinds="content file"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#copy"></use></svg> <span class="dropdown__item-text">Copy</span><svg class="lexicon-icon dropdown__item-meta" aria-hidden="true"><use href="#angle-right"></use></svg></button></li>
+  <li role="none" data-kinds="content"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#upload"></use></svg> Export for Translation</button></li>
+  <li role="none" data-kinds="content"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#download"></use></svg> Import Translation</button></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#password-policies"></use></svg> <span class="dropdown__item-text">Permissions</span><svg class="lexicon-icon dropdown__item-meta" aria-hidden="true"><use href="#angle-right"></use></svg></button></li>
+  <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#trash"></use></svg> Delete</button></li>
+  <li role="none" data-kinds="content file"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#date-time"></use></svg> Update Expiration Date</button></li>
+  <li role="none" data-kinds="content file"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#date-time"></use></svg> Update Review Date</button></li>
+</ul>
+
+<!-- Toast region — Clay toasts stack bottom-left. -->
+<div id="toast-region" aria-live="polite"
+     style="position: fixed; left: var(--spacing-4); bottom: var(--spacing-4); z-index: 1200; display: flex; flex-direction: column; gap: var(--spacing-3); max-width: 360px;"></div>
+
+<!-- Tooltip — shared -->
+<div class="tooltip tooltip--top" role="tooltip" id="tooltip" hidden
+     style="position: fixed; z-index: 1100; pointer-events: none; white-space: nowrap;"></div>
+
+<script>
+(function () {
+  /* ── Assets ────────────────────────────────────────────── */
+  // kind: content (structured, translatable) · file · folder.
+  var ASSETS = [
+    { title: 'Campaign Assets', kind: 'folder', icon: 'folder', type: 'Folder', author: 'Carolina Díaz', space: 'Marketing', modified: 'Sep 28, 2026, 9:12:04 AM' },
+    { title: 'The Future of Conversational AI', kind: 'content', icon: 'forms', type: 'Basic Web Content', author: 'Amanda Costa', space: 'Marketing', modified: 'Sep 28, 2026, 8:41:37 AM', status: ['Approved', 'success'] },
+    { title: 'Behind the Scenes at Orbit Summit', kind: 'content', icon: 'blogs', type: 'Blog', author: 'Carolina Díaz', space: 'Internal Comms', modified: 'Sep 28, 2026, 8:05:12 AM', status: ['Draft', 'secondary'] },
+    { title: 'Madrid.jpg', kind: 'file', icon: 'document-image', type: 'Basic Document', author: 'Amanda Costa', space: 'Marketing', modified: 'Sep 27, 2026, 5:03:19 PM', status: ['Approved', 'success'] },
+    { title: 'Speaker Kit.pdf', kind: 'file', icon: 'document-pdf', type: 'Basic Document', author: 'Maria Martín', space: 'Marketing', modified: 'Sep 26, 2026, 11:48:52 AM', status: ['Approved', 'success'] },
+    { title: 'Budget 2027.xlsx', kind: 'file', icon: 'document-table', type: 'Basic Document', author: 'Carolina Díaz', space: 'Marketing', modified: 'Sep 24, 2026, 3:27:10 PM', status: ['Draft', 'secondary'] }
+  ];
+  var VIEWS = {
+    all: { name: 'All', kinds: ['folder', 'content', 'file'] },
+    contents: { name: 'Contents', kinds: ['folder', 'content'] },
+    files: { name: 'Files', kinds: ['folder', 'file'] }
+  };
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+  var params = new URLSearchParams(location.search);
+  // Coming back from the translation editor (?selected=…) highlights that content.
+  var selectedTitle = params.get('selected');
+  var view = VIEWS[params.get('view')] ? params.get('view') : 'contents';
+
+  var list = document.getElementById('asset-list');
+  var CHECK = '<label class="checkbox"><input type="checkbox" class="checkbox__input" aria-label="Select {t}">' +
+    '<span class="checkbox__box"><svg class="checkbox__icon checkbox__icon--check"><use href="#check-small"></use></svg><svg class="checkbox__icon checkbox__icon--hr"><use href="#hr"></use></svg></span></label>';
+
+  function render() {
+    document.getElementById('cms-title').textContent = VIEWS[view].name;
+    document.title = VIEWS[view].name + ' - CMS';
+    document.querySelectorAll('[data-view]').forEach(function (el) {
+      var on = el.getAttribute('data-view') === view;
+      el.classList.toggle('is-active', on);
+      if (on) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current');
+    });
+    var rows = ASSETS.map(function (a, i) { return { a: a, i: i }; })
+      .filter(function (r) { return VIEWS[view].kinds.indexOf(r.a.kind) > -1; });
+    list.innerHTML = rows.map(function (r) {
+      var a = r.a, on = a.title === selectedTitle;
+      return '<tr' + (on ? ' class="is-selected" aria-current="true"' : '') + '>' +
+        '<td class="table__cell--gutter">' + CHECK.replace('{t}', esc(a.title)) + '</td>' +
+        '<td><span class="table__title-wrap"><svg class="lexicon-icon table__icon" aria-hidden="true" style="width: var(--spacing-5); height: var(--spacing-5);"><use href="#' + a.icon + '"></use></svg>' +
+          '<a href="#" class="table__title">' + esc(a.title) + '</a></span></td>' +
+        '<td>' + esc(a.type) + '</td>' +
+        '<td><span style="display: inline-flex; align-items: center; gap: var(--spacing-3); white-space: nowrap;">' +
+          '<span class="sticker sticker--outline sticker--sm" aria-hidden="true">' + esc(a.space.charAt(0)) + '</span>' + esc(a.space) + '</span></td>' +
+        '<td><span style="display: inline-flex; align-items: center; gap: var(--spacing-3); white-space: nowrap;">' +
+          '<span class="sticker sticker--circle" aria-hidden="true" style="background: var(--color-light); color: var(--color-secondary);"><svg class="lexicon-icon lexicon-icon-sm" aria-hidden="true"><use href="#user"></use></svg></span>' + esc(a.author) + '</span></td>' +
+        '<td style="white-space: nowrap;">' + esc(a.modified) + '</td>' +
+        '<td>--</td>' +
+        '<td>' + (a.status ? '<span class="label label--sm label--' + a.status[1] + '">' + a.status[0] + '</span>' : '--') + '</td>' +
+        '<td class="table__cell--gutter"><button class="btn btn--borderless btn--sm btn--icon" type="button" data-asset="' + r.i + '" aria-label="Actions for ' + esc(a.title) + '" aria-haspopup="menu" aria-expanded="false"><svg class="lexicon-icon" aria-hidden="true"><use href="#ellipsis-v"></use></svg></button></td>' +
+      '</tr>';
+    }).join('');
+    document.getElementById('cms-summary').textContent = 'Showing 1 to ' + rows.length + ' of ' + rows.length + ' entries.';
+  }
+
+  document.querySelectorAll('[data-view]').forEach(function (el) {
+    function go() { view = el.getAttribute('data-view'); selectedTitle = null; render(); }
+    el.addEventListener('click', go);
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  });
+  render();
+
+  /* ── Shared menu helpers (row ⋮ + Applications Menu) ───── */
+  function menuItems(menu) {
+    return Array.prototype.slice.call(menu.querySelectorAll('.dropdown__item')).filter(function (el) { return !el.closest('[hidden]'); });
+  }
+  function menuKeys(menu, close) {
+    menu.addEventListener('keydown', function (e) {
+      var l = menuItems(menu), i = l.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); l[(i + 1) % l.length].focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); l[(i - 1 + l.length) % l.length].focus(); }
+      else if (e.key === 'Escape') { e.preventDefault(); close(true); }
+      else if (e.key === 'Tab') { close(false); }
+    });
+  }
+
+  /* ── Asset ⋮ menu ──────────────────────────────────────── */
+  var menu = document.getElementById('asset-menu');
+  var trigger = null;
+
+  function openMenu(btn, focusFirst) {
+    closeMenu(false);
+    var a = ASSETS[+btn.getAttribute('data-asset')];
+    // Items tagged with data-kinds only apply to those asset kinds.
+    menu.querySelectorAll('[data-kinds]').forEach(function (li) {
+      li.hidden = li.getAttribute('data-kinds').split(' ').indexOf(a.kind) < 0;
+    });
+    document.getElementById('asset-menu-translate').href =
+      'translation-editor.html?source=cms&content=' + encodeURIComponent(a.title);
+    trigger = btn;
+    menu.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    btn.style.background = 'var(--color-light)';
+    var r = btn.getBoundingClientRect();
+    var top = r.bottom + 4;
+    if (top + menu.offsetHeight > window.innerHeight - 8) top = Math.max(8, r.top - 4 - menu.offsetHeight);
+    menu.style.top = top + 'px';
+    menu.style.left = Math.max(8, Math.min(r.right - menu.offsetWidth, window.innerWidth - menu.offsetWidth - 8)) + 'px';
+    if (focusFirst) menuItems(menu)[0].focus();
+  }
+
+  function closeMenu(returnFocus) {
+    if (menu.hidden) return;
+    menu.hidden = true;
+    if (trigger) {
+      trigger.setAttribute('aria-expanded', 'false');
+      trigger.style.background = '';
+      if (returnFocus) trigger.focus();
+    }
+    trigger = null;
+  }
+
+  list.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-asset]');
+    if (btn) { e.stopPropagation(); trigger === btn ? closeMenu(false) : openMenu(btn, e.detail === 0); return; }
+    if (e.target.closest('a[href="#"]')) e.preventDefault();
+  });
+  menuKeys(menu, closeMenu);
+  // Only Translate navigates; the rest just close the menu in this prototype.
+  menu.addEventListener('click', function (e) {
+    var item = e.target.closest('.dropdown__item');
+    if (item && item.id !== 'asset-menu-translate') closeMenu(true);
+  });
+  document.addEventListener('click', function (e) { if (!menu.contains(e.target)) closeMenu(false); });
+  window.addEventListener('resize', function () { closeMenu(false); });
+
+  /* ── Applications Menu ─────────────────────────────────── */
+  var apps = document.getElementById('apps-menu');
+  var appsTrigger = document.getElementById('apps-trigger');
+  function closeApps(returnFocus) {
+    if (apps.hidden) return;
+    apps.hidden = true;
+    appsTrigger.setAttribute('aria-expanded', 'false');
+    if (returnFocus) appsTrigger.focus();
+  }
+  appsTrigger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (!apps.hidden) { closeApps(false); return; }
+    apps.hidden = false;
+    appsTrigger.setAttribute('aria-expanded', 'true');
+    if (e.detail === 0) menuItems(apps)[0].focus();
+  });
+  menuKeys(apps, closeApps);
+  apps.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href="#"]');
+    if (a) { e.preventDefault(); closeApps(true); }
+  });
+  document.addEventListener('click', function (e) { if (!document.getElementById('apps').contains(e.target)) closeApps(false); });
+
+  /* ── Arriving from the translator: "Save as Draft" confirmation ── */
+  function toast(text) {
+    var el = document.createElement('div');
+    el.className = 'alert alert--toast alert--success';
+    el.setAttribute('role', 'alert');
+    el.innerHTML =
+      '<div class="alert__content">' +
+        '<svg class="lexicon-icon" aria-hidden="true"><use href="#check-circle-full"></use></svg>' +
+        '<p class="alert__text"><strong>Success:</strong> ' + text + '</p>' +
+      '</div>' +
+      '<button class="btn btn--borderless btn--sm btn--icon alert__close" type="button" aria-label="Close">' +
+        '<svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>' +
+      '</button>';
+    el.querySelector('.alert__close').addEventListener('click', function () { el.remove(); });
+    document.getElementById('toast-region').appendChild(el);
+    setTimeout(function () { el.remove(); }, 5000);
+  }
+  if (params.get('saved') === 'draft') {
+    toast('The translation of ' + esc(selectedTitle || 'the content') + ' was saved as a draft.');
+  }
+
+  /* ── Tooltips ──────────────────────────────────────────── */
+  var tooltip = document.getElementById('tooltip');
+  function showTooltip(el) {
+    var align = el.getAttribute('data-tooltip-align');
+    tooltip.textContent = el.getAttribute('data-tooltip');
+    tooltip.classList.toggle('tooltip--align-start', align === 'start');
+    tooltip.classList.toggle('tooltip--align-end', align === 'end');
+    tooltip.hidden = false;
+    var r = el.getBoundingClientRect(), c = r.left + r.width / 2, w = tooltip.offsetWidth;
+    tooltip.style.left = (align === 'start' ? c - 16 : align === 'end' ? c + 16 - w : c - w / 2) + 'px';
+    tooltip.style.top = (r.bottom + 8) + 'px';
+  }
+  function hideTooltip() { tooltip.hidden = true; }
+  document.querySelectorAll('[data-tooltip]').forEach(function (el) {
+    el.addEventListener('mouseenter', function () { if (el.getAttribute('aria-expanded') !== 'true') showTooltip(el); });
+    el.addEventListener('mouseleave', hideTooltip);
+    el.addEventListener('click', hideTooltip);
+  });
+  document.addEventListener('pointerdown', hideTooltip, true);
+})();
+</script>
+
+</body>
+</html>

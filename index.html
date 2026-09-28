@@ -92,7 +92,7 @@
 <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
 
   <!-- Control Menu -->
-  <header class="control-menu" style="padding-block: var(--spacing-4); flex-shrink: 0;">
+  <header class="control-menu" style="padding-block: var(--spacing-4); flex-shrink: 0; position: relative; z-index: 100;">
     <div class="control-menu__left" style="gap: var(--spacing-3);">
       <div class="control-menu__btns">
         <button class="control-menu__btn" type="button" aria-label="Close Product Menu" data-tooltip="Close Product Menu" data-tooltip-align="start">
@@ -106,9 +106,27 @@
         <svg class="lexicon-icon" aria-hidden="true"><use href="#ellipsis-v"></use></svg>
       </button>
       <span aria-hidden="true" style="width: 1px; height: var(--spacing-5); background: var(--color-secondary-l2);"></span>
-      <button class="control-menu__btn" type="button" aria-label="Applications Menu">
-        <svg class="lexicon-icon" aria-hidden="true"><use href="#grid"></use></svg>
-      </button>
+      <!-- Applications Menu (grid) — Applications · Commerce · CMS · Control Panel · Sites -->
+      <div id="apps" style="position: relative; display: flex;">
+        <button class="control-menu__btn" type="button" id="apps-trigger" aria-label="Applications Menu" aria-haspopup="menu" aria-expanded="false" aria-controls="apps-menu" data-tooltip="Applications Menu" data-tooltip-align="end">
+          <svg class="lexicon-icon" aria-hidden="true"><use href="#grid"></use></svg>
+        </button>
+        <ul class="dropdown" role="menu" id="apps-menu" aria-labelledby="apps-trigger" hidden
+            style="position: absolute; top: calc(100% + var(--spacing-2)); right: 0; z-index: 1000; width: 240px; padding-bottom: 0; overflow: hidden;">
+          <li role="none"><a href="#" class="dropdown__item" role="menuitem" tabindex="-1" style="padding-block: var(--spacing-4); font-size: var(--font-size-md); color: var(--color-dark);"><svg class="lexicon-icon lexicon-icon-lg dropdown__item-icon" aria-hidden="true" style="color: var(--color-primary);"><use href="#grid"></use></svg> Applications</a></li>
+          <li role="none"><a href="#" class="dropdown__item" role="menuitem" tabindex="-1" style="padding-block: var(--spacing-4); font-size: var(--font-size-md); color: var(--color-dark);"><svg class="lexicon-icon lexicon-icon-lg dropdown__item-icon" aria-hidden="true" style="color: var(--color-primary);"><use href="#shopping-cart"></use></svg> Commerce</a></li>
+          <li role="none"><a href="cms.html" class="dropdown__item" role="menuitem" tabindex="-1" style="padding-block: var(--spacing-4); font-size: var(--font-size-md); color: var(--color-dark);"><svg class="lexicon-icon lexicon-icon-lg dropdown__item-icon" aria-hidden="true" style="color: var(--color-primary);"><use href="#document-vector"></use></svg> CMS</a></li>
+          <li class="dropdown__divider" role="separator"></li>
+          <li role="none"><a href="#" class="dropdown__item" role="menuitem" tabindex="-1" style="padding-block: var(--spacing-4); font-size: var(--font-size-md); color: var(--color-dark);"><svg class="lexicon-icon lexicon-icon-lg dropdown__item-icon" aria-hidden="true" style="color: var(--color-primary);"><use href="#control-panel"></use></svg> Control Panel</a></li>
+          <li role="none" style="margin-top: var(--spacing-2); padding: var(--spacing-4) 0 var(--spacing-3); border-top: 1px solid var(--color-secondary-l3); background: var(--color-light-l1);">
+            <div class="dropdown__group-title" style="color: var(--color-secondary);">Sites</div>
+            <ul role="none" style="list-style: none; margin: 0; padding: 0;">
+              <li role="none"><a href="index.html" class="dropdown__item" role="menuitem" tabindex="-1" style="background: transparent; font-size: var(--font-size-md); color: var(--color-primary);"><span class="sticker" aria-hidden="true" style="background: var(--color-primary); color: var(--color-white);"><svg class="lexicon-icon" aria-hidden="true"><use href="#sites"></use></svg></span> Liferay DXP Site</a></li>
+              <li role="none"><a href="#" class="dropdown__item" role="menuitem" tabindex="-1" style="background: transparent; font-size: var(--font-size-md); color: var(--color-primary);"><span class="sticker sticker--md" aria-hidden="true" style="background: var(--color-primary-l3); color: var(--color-primary);"><svg class="lexicon-icon" aria-hidden="true"><use href="#globe"></use></svg></span> Global</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
       <span class="control-menu__avatar sticker sticker--circle" aria-label="User Profile" role="img" style="width: 32px; height: 32px; background: var(--color-warning-l2); color: var(--color-warning);">
         <svg class="lexicon-icon" aria-hidden="true"><use href="#user"></use></svg>
       </span>
@@ -270,6 +288,37 @@
   document.addEventListener('click', function (e) { if (!menu.contains(e.target)) closeMenu(false); });
   window.addEventListener('resize', function () { closeMenu(false); });
 
+  /* ── Applications Menu ─────────────────────────────────── */
+  var apps = document.getElementById('apps-menu');
+  var appsTrigger = document.getElementById('apps-trigger');
+  function appItems() { return Array.prototype.slice.call(apps.querySelectorAll('.dropdown__item')); }
+  function closeApps(returnFocus) {
+    if (apps.hidden) return;
+    apps.hidden = true;
+    appsTrigger.setAttribute('aria-expanded', 'false');
+    if (returnFocus) appsTrigger.focus();
+  }
+  appsTrigger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (!apps.hidden) { closeApps(false); return; }
+    apps.hidden = false;
+    appsTrigger.setAttribute('aria-expanded', 'true');
+    if (e.detail === 0) appItems()[0].focus();
+  });
+  apps.addEventListener('keydown', function (e) {
+    var l = appItems(), i = l.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); l[(i + 1) % l.length].focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); l[(i - 1 + l.length) % l.length].focus(); }
+    else if (e.key === 'Escape') { e.preventDefault(); closeApps(true); }
+    else if (e.key === 'Tab') { closeApps(false); }
+  });
+  // Only CMS and the current site navigate in this prototype.
+  apps.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href="#"]');
+    if (a) { e.preventDefault(); closeApps(true); }
+  });
+  document.addEventListener('click', function (e) { if (!document.getElementById('apps').contains(e.target)) closeApps(false); });
+
   /* ── Product menu sections (expand / collapse) ─────────── */
   document.querySelectorAll('[data-section]').forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -316,7 +365,7 @@
   }
   function hideTooltip() { tooltip.hidden = true; }
   document.querySelectorAll('[data-tooltip]').forEach(function (el) {
-    el.addEventListener('mouseenter', function () { showTooltip(el); });
+    el.addEventListener('mouseenter', function () { if (el.getAttribute('aria-expanded') !== 'true') showTooltip(el); });
     el.addEventListener('mouseleave', hideTooltip);
     el.addEventListener('click', hideTooltip);
   });
