@@ -103,6 +103,7 @@
     .site-code { margin-top: 8px; padding: 4px 14px; border: 1px dashed var(--site-white); border-radius: 8px; font-family: var(--site-display); font-size: 18px; font-weight: 700; letter-spacing: 0.08em; }
 
     .site-footer { padding: 24px 48px; background: var(--site-navy-d); font-size: 12px; opacity: 0.7; }
+
   </style>
 </head>
 <body style="display: flex; flex-direction: column; height: 100vh; overflow: clip;">
@@ -136,6 +137,15 @@
   </div>
 
   <div class="control-menu__right" style="gap: var(--spacing-3);">
+    <!-- Autosave status — as the page editor's NetworkStatusBar: every change
+         is saved as a draft automatically. Spinner while saving, success
+         check once saved (name in the tooltip). -->
+    <span id="autosave" tabindex="0" data-tooltip="Saved as Draft"
+          style="display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: var(--spacing-8); height: var(--spacing-8);">
+      <svg class="lexicon-icon" id="autosave-saved" role="img" aria-label="Saved as Draft" style="color: var(--color-success);"><use href="#check-circle"></use></svg>
+      <span class="loading-animation loading-animation-sm" id="autosave-saving" role="img" aria-label="Saving" hidden></span>
+      <span class="sr-only" id="autosave-live" aria-live="polite"></span>
+    </span>
     <!-- AI — purple #stars (same AI colour as "AI Translated"), then a divider -->
     <button class="btn btn--borderless btn--sm btn--icon" type="button" id="ai-btn"
             aria-label="AI Assistant" data-tooltip="AI Assistant" style="color: var(--color-chart-purple-d1);">
@@ -143,7 +153,6 @@
     </button>
     <span aria-hidden="true" style="flex-shrink: 0; width: 1px; height: var(--spacing-5); background: var(--color-secondary-l2);"></span>
     <button class="btn btn--borderless btn--sm" type="button" id="cancel-btn" data-compact aria-label="Cancel" data-tooltip="Cancel" data-tooltip-muted style="font-size: var(--font-size-base);"><svg class="lexicon-icon" aria-hidden="true" data-compact-icon hidden><use href="#times"></use></svg><span data-compact-label>Cancel</span></button>
-    <button class="btn btn--secondary btn--sm" type="button" id="draft-btn" data-compact aria-label="Save as Draft" data-tooltip="Save as Draft" data-tooltip-muted style="font-size: var(--font-size-base);"><svg class="lexicon-icon" aria-hidden="true" data-compact-icon hidden><use href="#disk"></use></svg><span data-compact-label>Save as Draft</span></button>
     <button class="btn btn--primary btn--sm" type="button" id="publish-btn" data-compact aria-label="Publish" data-tooltip="Publish" data-tooltip-muted style="font-size: var(--font-size-base);"><svg class="lexicon-icon" aria-hidden="true" data-compact-icon hidden><use href="#arrow-up-full"></use></svg><span data-compact-label>Publish</span></button>
 
     <div id="more-actions" style="position: relative;">
@@ -156,6 +165,9 @@
           style="position: absolute; top: calc(100% + var(--spacing-2)); right: 0; z-index: 1000;">
         <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="download-xlf"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#download"></use></svg> Download XLF</button></li>
         <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="configuration"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#cog"></use></svg> Configuration</button></li>
+        <li class="dropdown__divider" role="separator"></li>
+        <!-- Back to the last published version (disabled when there is no draft) -->
+        <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="discard-draft" id="discard-draft-item"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#times-circle"></use></svg> Discard Draft</button></li>
       </ul>
     </div>
   </div>
@@ -175,14 +187,14 @@
   </div>
 </div>
 
-<main id="workspace" style="position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: max(300px, 30%) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr);">
+<main id="workspace" style="position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: clamp(300px, 30%, 500px) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr);">
 
   <!-- ── Left: side panel ──────────────────────────────────── -->
   <section id="fields-pane" aria-label="Translations" style="position: relative; display: flex; flex-direction: column; min-height: 0; background: var(--color-white); border-right: 1px solid var(--color-secondary-l3);">
 
     <!-- Scope — Experience, shared by both levels (above Filter / Search).
          Each experience shows its status in the dropdown: Draft / Published. -->
-    <div style="position: relative; z-index: 30; padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
+    <div id="scope-bar" style="position: relative; z-index: 30; padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
       <div id="exp-group" style="display: flex; align-items: center; gap: var(--spacing-3); flex-shrink: 1; min-width: 0;">
         <span id="exp-label" style="font-weight: var(--font-weight-bold);">Experience</span>
         <!-- Up to 200px; shrinks on narrow screens (down to the picker minimum). -->
@@ -202,6 +214,12 @@
     <!-- Level 1 — languages: filter + search (or bulk bar while selecting),
          results bar, Table component with multi-selection -->
     <div id="panel-languages" style="flex: 1; min-height: 0; display: flex; flex-direction: column;">
+      <!-- Panel header — same row the language breadcrumb takes in level 2 -->
+      <div style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
+        <svg class="lexicon-icon" aria-hidden="true" style="flex-shrink: 0; color: var(--color-secondary);"><use href="#automatic-translate"></use></svg>
+        <h2 style="display: flex; align-items: center; min-height: var(--spacing-8); margin: 0; font-size: var(--font-size-base); font-weight: var(--font-weight-bold); color: var(--color-dark);">All Translations</h2>
+      </div>
+
       <div id="lang-tools" data-toolbar style="position: relative; z-index: 20; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
         <!-- Select all — Management Toolbar checkbox, before the filter -->
         <label class="checkbox" id="lang-select-all-wrap">
@@ -326,22 +344,24 @@
     <!-- Level 2 — translation of the chosen language -->
     <div id="panel-translate" hidden style="flex: 1; min-height: 0; display: flex; flex-direction: column;">
 
-      <!-- Panel header: back · language + status label · options (right) -->
+      <!-- Panel header: translations icon · breadcrumb (All Translations ›
+           flag + code; the language name is for screen readers only) ·
+           status label · options (right) -->
       <div style="position: relative; z-index: 25; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--color-secondary-l3); flex-shrink: 0;">
-        <!-- Back to the languages list -->
-        <button class="btn btn--borderless btn--sm btn--icon" type="button" id="to-languages"
-                aria-label="Back to All Translations" data-tooltip="Back to All Translations" data-tooltip-align="start">
-          <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-left"></use></svg>
-        </button>
-
-        <!-- Language being translated + status. When space runs out this
-             wraps onto two lines (no ellipsis): the label drops below. -->
-        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-2) var(--spacing-4); flex: 1; min-width: 0;">
-          <h2 id="lang-title" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-1) var(--spacing-3); min-width: 0; font-size: var(--font-size-md);">
-            <span class="lang-picker__flag" id="lang-title-flag" aria-hidden="true"></span>
-            <span id="lang-title-text"></span>
-            <span id="lang-title-code" style="font-weight: var(--font-weight-normal); color: var(--color-secondary);"></span>
-          </h2>
+        <!-- Breadcrumb + status. When space runs out this wraps onto two lines
+             (no ellipsis): the label drops below. -->
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-2) var(--spacing-4); flex: 1; min-width: 0; min-height: var(--spacing-8);">
+          <nav aria-label="Breadcrumb" style="display: flex; align-items: center; gap: var(--spacing-3); min-width: 0;">
+            <svg class="lexicon-icon" aria-hidden="true" style="flex-shrink: 0; color: var(--color-secondary);"><use href="#automatic-translate"></use></svg>
+            <ol class="breadcrumb" id="lang-title">
+              <li><a href="#" id="to-languages">All Translations</a><svg class="lexicon-icon breadcrumb__sep" aria-hidden="true"><use href="#angle-right"></use></svg></li>
+              <li aria-current="page" style="gap: var(--spacing-2);">
+                <span class="lang-picker__flag" id="lang-title-flag" aria-hidden="true"></span>
+                <span id="lang-title-code"></span>
+                <span class="sr-only" id="lang-title-text"></span>
+              </li>
+            </ol>
+          </nav>
 
           <!-- Status — same label as in the translations table -->
           <span id="fields-counter" aria-live="polite" style="display: flex; align-items: center; flex-shrink: 0;"></span>
@@ -441,20 +461,21 @@
          inside a translation. -->
     <!-- Lexicon Alert · Stripe · Info — full-width strip on top of the preview. -->
     <div style="flex-shrink: 0;">
-      <div class="alert alert--stripe alert--info" id="preview-bar" role="status" aria-live="polite">
-        <!-- Icon stays beside the text; only the text's own pieces wrap (the
-             paragraph takes the remaining width instead of dropping below). -->
+      <!-- Lexicon Alert · Stripe · Info — which language (and experience) the preview shows. -->
+      <div class="alert alert--stripe alert--info" id="preview-bar" style="position: relative; z-index: 20;">
         <div class="alert__content" style="padding-block: 0;">
-          <svg class="lexicon-icon" aria-hidden="true" style="margin-top: var(--spacing-1);"><use href="#info-circle"></use></svg>
-          <p class="alert__text" style="flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-1) var(--spacing-3);">
-            <strong>Page Preview:</strong>
-            <span style="display: inline-flex; align-items: center; gap: var(--spacing-2);">
-              <span class="lang-picker__flag" id="preview-bar-flag" aria-hidden="true"></span>
-              <span id="preview-bar-lang"></span>
+          <svg class="lexicon-icon" id="preview-bar-icon" aria-hidden="true" style="margin-top: var(--spacing-1);"><use href="#info-circle"></use></svg>
+          <div class="alert__text" style="flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-3) var(--spacing-7);">
+            <span role="status" aria-live="polite" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-1) var(--spacing-3);">
+              <strong id="preview-bar-title">Page Preview:</strong>
+              <span style="display: inline-flex; align-items: center; gap: var(--spacing-2);">
+                <span class="lang-picker__flag" id="preview-bar-flag" aria-hidden="true"></span>
+                <span id="preview-bar-lang"></span>
+              </span>
+              <span id="preview-bar-default" class="label label--sm label--info" hidden>Default</span>
+              <span id="preview-bar-exp-wrap" style="white-space: nowrap;"><span aria-hidden="true" style="margin-right: var(--spacing-3);">·</span>Experience: <strong id="preview-bar-exp"></strong></span>
             </span>
-            <span id="preview-bar-default" class="label label--sm label--info" hidden>Default</span>
-            <span style="white-space: nowrap;"><span aria-hidden="true" style="margin-right: var(--spacing-3);">·</span>Experience: <strong id="preview-bar-exp"></strong></span>
-          </p>
+          </div>
         </div>
       </div>
     </div>
@@ -517,6 +538,7 @@
 
         <footer class="site-footer">© 2026 Orbit Summit</footer>
       </article>
+
     </div>
 
   </section>
@@ -559,6 +581,23 @@
   </div>
 </div>
 
+<!-- Discard Draft confirmation — destructive: drops every unpublished change. -->
+<div class="modal-overlay" id="discard-modal" hidden>
+  <div class="modal modal--warning" role="alertdialog" aria-modal="true" aria-labelledby="discard-title" aria-describedby="discard-body">
+    <header class="modal__header">
+      <h2 class="modal__title" id="discard-title">Discard Draft</h2>
+      <button class="btn btn--borderless btn--sm btn--icon modal__close" type="button" aria-label="Close" data-close>
+        <svg class="lexicon-icon" aria-hidden="true"><use href="#times"></use></svg>
+      </button>
+    </header>
+    <div class="modal__body" id="discard-body"></div>
+    <footer class="modal__footer">
+      <button class="btn btn--secondary" type="button" data-close>Cancel</button>
+      <button class="btn btn--primary btn--danger" type="button" id="discard-confirm">Discard</button>
+    </footer>
+  </div>
+</div>
+
 <!-- Toast region — Clay toasts stack bottom-left. -->
 <div id="toast-region" aria-live="polite"
      style="position: fixed; left: var(--spacing-4); bottom: var(--spacing-4); z-index: 1200; display: flex; flex-direction: column; gap: var(--spacing-3); max-width: 360px;"></div>
@@ -566,8 +605,8 @@
 <script>
 (function () {
   /* ── Responsive header ─────────────────────────────────── */
-  // Narrow screens: Save as Draft / Publish become icon buttons (disk ·
-  // arrow-up-full, name in the tooltip) and Cancel is dropped. Title + experience wrap to
+  // Narrow screens: Publish becomes an icon button (arrow-up-full, name in
+  // the tooltip) and Cancel is dropped. Title + experience wrap to
   // two lines instead of truncating; the divider hides once they wrap.
   var header = document.querySelector('header.control-menu');
   function fitHeader() {
@@ -587,15 +626,18 @@
 
   /* ── Entry point: Site Builder › Pages › ⋮ › Translate ──── */
   // The page being translated comes from ?page=… (site-pages.html);
-  // Back and Cancel return there.
-  var pageName = new URLSearchParams(location.search).get('page');
+  // Back and Cancel return there (changes autosave).
+  var params = new URLSearchParams(location.search);
+  var HOME = 'index.html';
+  var NOUN = 'page';
+  var pageName = params.get('page');
   if (pageName) {
     document.getElementById('editor-page-name').textContent = pageName;
     document.getElementById('editor-title').title = 'Translate ' + pageName;
     document.title = 'Translate ' + pageName + ' — Liferay DXP';
   }
   // Returns to the Pages Miller columns with the translated page highlighted.
-  function exitEditor() { location.href = 'index.html' + (pageName ? '?selected=' + encodeURIComponent(pageName) : ''); }
+  function exitEditor() { flushAutosave(); location.href = HOME + (pageName ? '?selected=' + encodeURIComponent(pageName) : ''); }
   document.getElementById('back-btn').addEventListener('click', exitEditor);
   document.getElementById('cancel-btn').addEventListener('click', exitEditor);
 
@@ -610,9 +652,10 @@
   if (isEmptyPage) {
     document.getElementById('workspace').hidden = true;
     document.getElementById('no-content').hidden = false;
-    ['draft-btn', 'publish-btn'].forEach(function (id) { document.getElementById(id).disabled = true; });
+    document.getElementById('publish-btn').disabled = true;
     document.querySelector('#more-actions-menu [data-value="download-xlf"]').disabled = true;
     document.getElementById('no-content-edit').addEventListener('click', exitEditor);
+    document.getElementById('autosave').hidden = true;   // nothing to save
   }
 
   /* ── Data ──────────────────────────────────────────────── */
@@ -798,7 +841,7 @@
   // Fields filled by Auto-translate and not yet reviewed: AI[locale][fieldId].
   var AI = {};
 
-  // Saved progress (Save as Draft / Publish), one entry per page in this
+  // Saved progress (autosave / Publish), one entry per page in this
   // browser. Restored when the page is opened again in the translator.
   var DRAFT_KEY = 'translation-editor-draft:' + (pageName || 'Orbit Summit 2026');
   // PUB = what's live (last Publish). The sample translations start out as
@@ -815,10 +858,36 @@
       if (draft.PUB) PUB = draft.PUB;
     }
   } catch (e) {}
+  // Autosave (header indicator): each change is kept as a draft shortly
+  // after it happens, so leaving the translator never loses work.
+  var autosaveTimer = null;
+  function setAutosave(saving) {
+    var el = document.getElementById('autosave');
+    document.getElementById('autosave-saving').hidden = !saving;
+    document.getElementById('autosave-saved').toggleAttribute('hidden', saving);
+    el.setAttribute('data-tooltip', saving ? 'Saving' : 'Saved as Draft');
+    document.getElementById('autosave-live').textContent = saving ? '' :
+      'Changes have been saved. The translation tool will autosave new changes.';
+  }
+  function autosave() {
+    if (PREVIEW_ONLY) return;
+    setAutosave(true);
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(function () { autosaveTimer = null; saveDraft(); setAutosave(false); syncDiscard(); }, 800);
+  }
+  // Leaving right after a change still keeps it.
+  function flushAutosave() {
+    if (!autosaveTimer) return;
+    clearTimeout(autosaveTimer);
+    autosaveTimer = null;
+    saveDraft();
+  }
+  window.addEventListener('pagehide', flushAutosave);
   function isAI(locale, f) { return !!(AI[locale] && AI[locale][fid(f)]); }
   function aiCount(locale) { return FIELDS.filter(function (f) { return isAI(locale, f); }).length; }
 
   var state = { view: 'languages', locale: 'en-US', exp: 'default', active: null, hover: null, status: 'all', query: '' };
+
   if (PREVIEW_ONLY) {
     var pq = new URLSearchParams(location.search);
     try {
@@ -1088,7 +1157,7 @@
 
     var current = lang(state.locale);
     document.getElementById('lang-title-flag').className = 'lang-picker__flag ' + current.flag;
-    document.getElementById('lang-title-text').textContent = current.name;
+    document.getElementById('lang-title-text').textContent = '(' + current.name + ')';   // screen readers only
     document.getElementById('lang-title-code').textContent = current.code;
   }
 
@@ -1410,7 +1479,7 @@
     if (link) link.focus();
   }
 
-  document.getElementById('to-languages').addEventListener('click', backToLanguages);
+  document.getElementById('to-languages').addEventListener('click', function (e) { e.preventDefault(); backToLanguages(); });
 
   /* ── Translation options (⋮ in the list rows and next to the language title) ── */
   var langActionsTrigger = document.getElementById('lang-actions-trigger');
@@ -1463,6 +1532,7 @@
           delete busy[code];
         });
         render();
+        autosave();
         toast('success', 'check-circle-full', 'Success', count + ' field' + (count === 1 ? '' : 's') + ' auto-translated to ' + what + '. Review the AI translations before publishing.');
       }, 1200);
     }
@@ -1474,6 +1544,7 @@
         delete AI[code];
       });
       render();
+      autosave();
       toast('success', 'check-circle-full', 'Success', what + (codes.length === 1 ? ' has' : ' have') + ' been marked as translated.');
     }
     if (action === 'reset') {
@@ -1481,6 +1552,7 @@
         scopeFields().forEach(function (f) { delete T[code][fid(f)]; if (AI[code]) delete AI[code][fid(f)]; });
       });
       render();
+      autosave();
       toast('success', 'check-circle-full', 'Success', (codes.length === 1 ? 'The ' + what + ' translation has' : 'The translations of ' + what + ' have') + ' been reset.');
     }
   }
@@ -1553,15 +1625,16 @@
 
   /* ── Preview ───────────────────────────────────────────── */
   var previewPage = document.getElementById('preview-page');
-  var previewEls = Array.prototype.slice.call(previewPage.querySelectorAll('[data-field]'));
+  function previewEls() { return Array.prototype.slice.call(previewPage.querySelectorAll('[data-field]')); }
 
   function renderPreview() {
     previewPage.setAttribute('lang', state.locale);
-    previewEls.forEach(function (el) {
+    previewEls().forEach(function (el) {
       var f = fieldByKey(el.getAttribute('data-field'));
       // Untranslated fields fall back to the default language, as in Liferay.
       var text = translation(state.locale, f) || source(f);
       if (el.tagName === 'IMG') el.alt = text;
+      else if (el.tagName === 'INPUT') el.value = text;
       else if (el.getAttribute('role') === 'img') el.setAttribute('aria-label', text);
       else el.textContent = text;
     });
@@ -1577,7 +1650,7 @@
       key === state.hover ? '1px solid var(--color-primary-l1)' : '';
   }
 
-  function paintAll() { previewEls.forEach(paint); }
+  function paintAll() { previewEls().forEach(paint); }
 
   // Scroll only the given pane — scrollIntoView() also scrolls the page itself,
   // which pushed the header and toolbar out of view.
@@ -1598,7 +1671,7 @@
     paintAll();
     if (!key) return;
     var el = previewPage.querySelector('[data-field="' + key + '"]');
-    scrollWithin(document.getElementById('preview-canvas'), el, false);
+    if (el) scrollWithin(document.getElementById('preview-canvas'), el, false);
   }
 
   previewPage.addEventListener('mouseover', function (e) {
@@ -1644,7 +1717,7 @@
     var attrs = ' class="input__field' + (f.multiline ? ' input__field--textarea' : '') + '" id="' + id + '" data-key="' + f.key + '"' +
       ' aria-describedby="' + id + '-status ' + id + '-ref"';
     var control = f.multiline
-      ? '<textarea' + attrs + ' rows="3">' + value + '</textarea>'
+      ? '<textarea' + attrs + ' rows="' + (f.rows || 3) + '">' + value + '</textarea>'
       : '<input type="text"' + attrs + ' value="' + value + '">';
 
     // Default-language reference, always visible under the field (Lexicon
@@ -1682,7 +1755,7 @@
         '<div class="empty-state empty-state--sm" style="margin: auto;">' +
           '<div class="empty-state__media"><svg class="lexicon-icon" aria-hidden="true"><use href="#automatic-translate"></use></svg></div>' +
           '<h3 class="empty-state__title">en-US is the Default Language</h3>' +
-          '<p class="empty-state__text">Select another language in the preview to translate this page. To edit the default language, go to the edition of the page.</p>' +
+          '<p class="empty-state__text">Select another language in the preview to translate this ' + NOUN + '. To edit the default language, go to the edition of the ' + NOUN + '.</p>' +
         '</div>';
       return;
     }
@@ -1706,7 +1779,7 @@
       if (!inGroup.length) return '';
       var fields = inGroup.map(fieldHTML).join('');
       return '<div style="display: flex; flex-direction: column; gap: var(--spacing-5);">' +
-        '<header class="section section--sm"><h3 class="section__title">' + esc(g.name) + '</h3></header>' +
+        (g.name ? '<header class="section section--sm"><h3 class="section__title">' + esc(g.name) + '</h3></header>' : '') +
         fields +
       '</div>';
     }).join('');
@@ -1840,6 +1913,7 @@
     if (!f) return;
     T[state.locale][fid(f)] = e.target.value;
     renderPreview();
+    autosave();
   });
 
   // …while the field's state (Translated / AI), the counter and the language
@@ -1851,6 +1925,7 @@
     var wrap = e.target.closest('.input');
     // Editing an AI suggestion counts as reviewing it.
     if (AI[state.locale]) delete AI[state.locale][fid(f)];
+    autosave();
     wrap.classList.remove('input--ai');
     var caption = wrap.querySelector('.input__ai');
     if (caption) caption.remove();
@@ -1880,8 +1955,14 @@
     document.getElementById('preview-bar-exp').textContent = EXPERIENCES.filter(function (x) { return x.id === state.exp; })[0].name;
   }
 
+  // Discard Draft is only available while there are unpublished changes.
+  function syncDiscard() {
+    document.getElementById('discard-draft-item').disabled = isEmptyPage || !pendingChanges().length;
+  }
+
   function render() {
     state.active = null;
+    syncDiscard();
     renderPreviewBar();
     renderExpMenu();
     renderStatusMenu();
@@ -1900,9 +1981,12 @@
   var workspace = document.getElementById('workspace');
   var splitHandle = document.getElementById('split-handle');
   // Every time the translator opens, fields take 30% of the width — never
-  // less than 300px on small screens. The preview keeps at least 320px.
+  // less than 300px on small screens nor more than 500px on wide ones (the
+  // same cap as Liferay's page editor sidebar, MAX_SIDEBAR_WIDTH = 500).
+  // The preview keeps at least 320px.
   var DEFAULT_SPLIT = 30;       // fields (left pane) width, % of the workspace
   var MIN_FIELDS = 300;         // px
+  var MAX_FIELDS = 500;         // px
   var MIN_PREVIEW = 320;        // px
   var split = DEFAULT_SPLIT;
   var dragging = false;
@@ -1919,7 +2003,7 @@
   function clampSplit(pct) {
     var w = workspace.clientWidth;
     var min = (MIN_FIELDS / w) * 100;
-    var max = Math.max(min, 100 - (MIN_PREVIEW / w) * 100);
+    var max = Math.max(min, Math.min((MAX_FIELDS / w) * 100, 100 - (MIN_PREVIEW / w) * 100));
     return Math.max(min, Math.min(max, pct));
   }
 
@@ -1933,8 +2017,8 @@
     var solo = layoutMode() === 'solo';
     split = clampSplit(pct);
     splitHandle.setAttribute('aria-valuenow', Math.round(split));
-    // max() keeps the 300px floor even while the window is being resized.
-    workspace.style.gridTemplateColumns = solo ? 'minmax(0, 1fr)' : 'max(' + MIN_FIELDS + 'px, ' + split + '%) minmax(0, 1fr)';
+    // clamp() keeps the 300–500px range even while the window is being resized.
+    workspace.style.gridTemplateColumns = solo ? 'minmax(0, 1fr)' : 'clamp(' + MIN_FIELDS + 'px, ' + split + '%, ' + MAX_FIELDS + 'px) minmax(0, 1fr)';
     document.getElementById('preview-pane').hidden = solo;
     splitHandle.hidden = solo;
     // Set explicitly: clearing it ('') would also wipe the pane's own inline
@@ -1980,7 +2064,7 @@
   window.addEventListener('resize', function () { applySplit(split); });
   applySplit(split);
 
-  /* ── Save as Draft / Publish → success toast (Liferay default copy, 5s auto-close) ── */
+  /* ── Publish → success toast (Liferay default copy, 5s auto-close) ── */
   var region = document.getElementById('toast-region');
 
   function toast(tone, icon, title, text) {
@@ -2018,9 +2102,10 @@
     }).filter(function (r) { return r.count; });
 
     var page = esc(pageName || 'Orbit Summit 2026');
+    var intro = 'All the changes made in every experience of <strong>' + page + '</strong> will be published:';
     var html = !rows.length
       ? '<p>There are no unpublished changes in <strong>' + page + '</strong>.</p>'
-      : '<p style="margin-bottom: var(--spacing-5);">All the changes made in every experience of <strong>' + page + '</strong> will be published:</p>' +
+      : '<p style="margin-bottom: var(--spacing-5);">' + intro + '</p>' +
         '<ul style="list-style: none; margin: 0; padding: 0; border: 1px solid var(--color-secondary-l3); border-radius: var(--rounded-md);">' +
         rows.map(function (r, i) {
           return '<li style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-3) var(--spacing-4);' + (i ? ' border-top: 1px solid var(--color-secondary-l3);' : '') + '">' +
@@ -2048,15 +2133,46 @@
     saveDraft();
     closePublishModal();
     renderExpMenu();
+    syncDiscard();
     toast('success', 'check-circle-full', 'Success', 'Your request completed successfully.');
   });
 
-  // Save as Draft → keeps the progress without publishing, closes the
-  // translator and goes back to the Pages Miller columns, which shows the
-  // confirmation toast (?saved=draft).
-  document.getElementById('draft-btn').addEventListener('click', function () {
+  /* ── Discard Draft (⋮) ─────────────────────────────────── */
+  // Drops every unpublished change — all languages (and experiences) — and
+  // goes back to what is live (PUB). Confirmation first: it can't be undone.
+  var discardModal = document.getElementById('discard-modal');
+  var moreTrigger = document.getElementById('more-actions-trigger');
+
+  function closeDiscardModal() {
+    discardModal.hidden = true;
+    moreTrigger.focus();
+  }
+
+  document.addEventListener('translate:action', function (e) {
+    if (e.detail !== 'discard-draft') return;
+    var name = esc(pageName || 'Orbit Summit 2026');
+    document.getElementById('discard-body').innerHTML =
+      '<p>All the unpublished changes in the translations of <strong>' + name + '</strong>' +
+      ', in every experience,' +
+      ' will be discarded and the latest published version will be restored. This action cannot be undone.</p>';
+    discardModal.hidden = false;
+    document.getElementById('discard-confirm').focus();
+  });
+  discardModal.querySelectorAll('[data-close]').forEach(function (b) { b.addEventListener('click', closeDiscardModal); });
+  discardModal.addEventListener('click', function (e) { if (e.target === discardModal) closeDiscardModal(); });
+  discardModal.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { e.preventDefault(); closeDiscardModal(); }
+  });
+  document.getElementById('discard-confirm').addEventListener('click', function () {
+    clearTimeout(autosaveTimer);
+    autosaveTimer = null;
+    T = JSON.parse(JSON.stringify(PUB));
+    AI = {};
     saveDraft();
-    location.href = 'index.html?saved=draft' + (pageName ? '&selected=' + encodeURIComponent(pageName) : '');
+    setAutosave(false);
+    closeDiscardModal();
+    render();
+    toast('success', 'check-circle-full', 'Success', 'The draft has been discarded.');
   });
 })();
 </script>
