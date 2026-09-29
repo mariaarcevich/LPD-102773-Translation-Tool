@@ -194,6 +194,8 @@
           style="position: absolute; top: calc(100% + var(--spacing-2)); right: 0; z-index: 1000;">
         <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="download-xlf"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#download"></use></svg> Download XLF</button></li>
         <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="configuration"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#cog"></use></svg> Configuration</button></li>
+        <!-- Prototype comparison: which side the translations panel sits on -->
+        <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="panel-side" id="panel-side-item"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#columns"></use></svg> <span id="panel-side-text">Move Panel to the Left</span></button></li>
         <li class="dropdown__divider" role="separator"></li>
         <!-- Back to the last published version (disabled when there is no draft) -->
         <li role="none"><button type="button" class="dropdown__item" role="menuitem" tabindex="-1" data-value="discard-draft" id="discard-draft-item"><svg class="lexicon-icon dropdown__item-icon" aria-hidden="true"><use href="#times-circle"></use></svg> Discard Draft</button></li>
@@ -216,7 +218,7 @@
   </div>
 </div>
 
-<main id="workspace" style="position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: clamp(300px, 30%, 500px) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr);">
+<main id="workspace" style="position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) clamp(300px, 30%, 600px); grid-template-rows: minmax(0, 1fr);">
 
   <!-- ── Left: side panel ──────────────────────────────────── -->
   <section id="fields-pane" aria-label="Translations" style="position: relative; display: flex; flex-direction: column; min-height: 0; background: var(--color-white); border-right: 1px solid var(--color-secondary-l3);">
@@ -2456,15 +2458,23 @@
   var workspace = document.getElementById('workspace');
   var splitHandle = document.getElementById('split-handle');
   // Every time the translator opens, fields take 30% of the width — never
-  // less than 300px on small screens nor more than 500px on wide ones (the
-  // same cap as Liferay's page editor sidebar, MAX_SIDEBAR_WIDTH = 500).
+  // less than 300px on small screens nor more than 600px on wide ones (100px
+  // more than Liferay's page editor sidebar, MAX_SIDEBAR_WIDTH = 500, so long
+  // fields have more room when resizing).
   // The preview keeps at least 320px.
-  var DEFAULT_SPLIT = 30;       // fields (left pane) width, % of the workspace
+  var DEFAULT_SPLIT = 30;       // side panel width, % of the workspace
   var MIN_FIELDS = 300;         // px
-  var MAX_FIELDS = 500;         // px
+  var MAX_FIELDS = 600;         // px
   var MIN_PREVIEW = 320;        // px
   var split = DEFAULT_SPLIT;
   var dragging = false;
+
+  // Panel side: right by default (so leaving the tool — ‹ top left — and going
+  // back to the translations list — breadcrumb in the panel — are far apart).
+  // ⋮ › Move Panel to the Left / Right switches it; remembered per browser.
+  var PANEL_SIDE_KEY = 'translation-editor-panel-side';
+  var panelSide = 'right';
+  try { if (localStorage.getItem(PANEL_SIDE_KEY) === 'left') panelSide = 'left'; } catch (e) {}
 
   // Layout modes:
   //   · split  ≥ 768px  side panel | preview, resizable
@@ -2492,13 +2502,21 @@
     var solo = layoutMode() === 'solo';
     split = clampSplit(pct);
     splitHandle.setAttribute('aria-valuenow', Math.round(split));
-    // clamp() keeps the 300–500px range even while the window is being resized.
-    workspace.style.gridTemplateColumns = solo ? 'minmax(0, 1fr)' : 'clamp(' + MIN_FIELDS + 'px, ' + split + '%, ' + MAX_FIELDS + 'px) minmax(0, 1fr)';
+    // clamp() keeps the 300–600px range even while the window is being resized.
+    var right = panelSide === 'right';
+    var panelCol = 'clamp(' + MIN_FIELDS + 'px, ' + split + '%, ' + MAX_FIELDS + 'px)';
+    workspace.style.gridTemplateColumns = solo ? 'minmax(0, 1fr)' : right ? 'minmax(0, 1fr) ' + panelCol : panelCol + ' minmax(0, 1fr)';
+    pane.style.order = right ? '1' : '0';
     document.getElementById('preview-pane').hidden = solo;
     splitHandle.hidden = solo;
+    // The resize handle sits on the panel edge that faces the preview.
+    splitHandle.classList.toggle('resizer--start', right);
     // Set explicitly: clearing it ('') would also wipe the pane's own inline
     // border and hide the divider the resize handle sits on.
-    pane.style.borderRight = solo ? '0' : '1px solid var(--color-secondary-l3)';
+    var line = '1px solid var(--color-secondary-l3)';
+    pane.style.borderRight = !solo && !right ? line : '0';
+    pane.style.borderLeft = !solo && right ? line : '0';
+    document.getElementById('panel-side-text').textContent = right ? 'Move Panel to the Left' : 'Move Panel to the Right';
     document.querySelectorAll('[data-solo-only]').forEach(function (el) { el.hidden = !solo; });
   }
 
@@ -2514,7 +2532,7 @@
   splitHandle.addEventListener('pointermove', function (e) {
     if (!dragging) return;
     var r = workspace.getBoundingClientRect();
-    applySplit(((e.clientX - r.left) / r.width) * 100);
+    applySplit(((panelSide === 'right' ? r.right - e.clientX : e.clientX - r.left) / r.width) * 100);
   });
 
   function endDrag() {
@@ -2529,8 +2547,10 @@
 
   // Keyboard: ←/→ move 5%, Home/End jump to the limits, double-click resets to 30%.
   splitHandle.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); applySplit(split - 5); }
-    if (e.key === 'ArrowRight') { e.preventDefault(); applySplit(split + 5); }
+    // Arrows move the divider; on the right the panel grows to the left.
+    var grow = panelSide === 'right' ? -5 : 5;
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); applySplit(split - grow); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); applySplit(split + grow); }
     if (e.key === 'Home')       { e.preventDefault(); applySplit(0); }
     if (e.key === 'End')        { e.preventDefault(); applySplit(100); }
   });
@@ -2538,6 +2558,13 @@
 
   window.addEventListener('resize', function () { applySplit(split); });
   applySplit(split);
+
+  document.addEventListener('translate:action', function (e) {
+    if (e.detail !== 'panel-side') return;
+    panelSide = panelSide === 'right' ? 'left' : 'right';
+    try { localStorage.setItem(PANEL_SIDE_KEY, panelSide); } catch (err) {}
+    applySplit(split);
+  });
 
   /* ── Publish → success toast (Liferay default copy, 5s auto-close) ── */
   var region = document.getElementById('toast-region');
