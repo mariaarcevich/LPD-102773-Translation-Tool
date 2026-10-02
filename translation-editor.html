@@ -375,24 +375,25 @@
     <!-- Level 2 — translation of the chosen language -->
     <div id="panel-translate" hidden style="flex: 1; min-height: 0; display: flex; flex-direction: column;">
 
-      <!-- Panel header: translations icon · breadcrumb (Translations ›
-           flag + code; the language name is for screen readers only) ·
+      <!-- Panel header: back to Translations · flag + language + code ·
            status label · options (right) -->
       <div style="position: relative; z-index: 25; display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-4) var(--spacing-5); flex-shrink: 0;">
-        <!-- Breadcrumb + status. When space runs out this wraps onto two lines
+        <!-- Pulled left by its own inner space so the arrow lines up with the
+             16px panel gutter, like the icon of the Translations header. -->
+        <button class="btn btn--borderless btn--sm btn--icon" type="button" id="to-languages"
+                aria-label="Back to Translations" data-tooltip="Back to Translations" data-tooltip-align="start"
+                style="margin-left: calc(var(--spacing-3) * -1);">
+          <svg class="lexicon-icon" aria-hidden="true"><use href="#angle-left"></use></svg>
+        </button>
+
+        <!-- Language + status. When space runs out this wraps onto two lines
              (no ellipsis): the label drops below. -->
         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-2) var(--spacing-4); flex: 1; min-width: 0; min-height: var(--spacing-8);">
-          <nav aria-label="Breadcrumb" style="display: flex; align-items: center; gap: var(--spacing-3); min-width: 0;">
-            <svg class="lexicon-icon" aria-hidden="true" style="flex-shrink: 0; color: var(--color-secondary);"><use href="#automatic-translate"></use></svg>
-            <ol class="breadcrumb" id="lang-title">
-              <li><a href="#" id="to-languages">Translations</a><svg class="lexicon-icon breadcrumb__sep" aria-hidden="true"><use href="#angle-right"></use></svg></li>
-              <li aria-current="page" style="gap: var(--spacing-2);">
-                <span class="lang-picker__flag" id="lang-title-flag" aria-hidden="true"></span>
-                <span id="lang-title-code"></span>
-                <span class="sr-only" id="lang-title-text"></span>
-              </li>
-            </ol>
-          </nav>
+          <h2 id="lang-title" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-1) var(--spacing-3); min-width: 0; margin: 0; font-size: var(--font-size-base); font-weight: var(--font-weight-bold); color: var(--color-dark);">
+            <span class="lang-picker__flag" id="lang-title-flag" aria-hidden="true"></span>
+            <span id="lang-title-text"></span>
+            <span id="lang-title-code" style="font-weight: var(--font-weight-normal); color: var(--color-secondary);"></span>
+          </h2>
 
           <!-- Status — same label as in the translations table -->
           <span id="fields-counter" aria-live="polite" style="display: flex; align-items: center; flex-shrink: 0;"></span>
@@ -430,7 +431,7 @@
         <!-- Filter — Management Toolbar filter button (not a picker): fixed
              "Filter" label, the active filter shows in the results bar. -->
         <div id="status-picker" style="position: relative; display: flex; flex-shrink: 0;">
-          <button class="btn btn--borderless btn--sm" type="button" id="status-trigger" data-filter-btn aria-label="Filter" data-tooltip="Filter" data-tooltip-muted
+          <button class="btn btn--borderless btn--sm" type="button" id="status-trigger" data-filter-btn data-row-start aria-label="Filter" data-tooltip="Filter" data-tooltip-muted
                   aria-haspopup="menu" aria-expanded="false" aria-controls="status-menu"
                   style="font-size: var(--font-size-base);">
             <svg class="lexicon-icon" aria-hidden="true"><use href="#filter"></use></svg>
@@ -1448,7 +1449,7 @@
 
     var current = lang(state.locale);
     document.getElementById('lang-title-flag').className = 'lang-picker__flag ' + current.flag;
-    document.getElementById('lang-title-text').textContent = '(' + current.name + ')';   // screen readers only
+    document.getElementById('lang-title-text').textContent = current.name;
     document.getElementById('lang-title-code').textContent = current.code;
   }
 
@@ -1728,6 +1729,11 @@
       btn.classList.toggle('btn--icon', compact);
       btn.querySelectorAll('.filter-label').forEach(function (el) { el.toggleAttribute('hidden', compact); });
       if (compact) btn.removeAttribute('data-tooltip-muted'); else btn.setAttribute('data-tooltip-muted', '');
+      // First in its row (fields toolbar): pull it left by its inner space so
+      // the icon sits on the 16px gutter, like the checkbox in the list.
+      if (btn.hasAttribute('data-row-start')) {
+        btn.style.marginLeft = compact ? 'calc(var(--spacing-3) * -1)' : 'calc((var(--spacing-4) + 1px) * -1)';
+      }
     });
   }
   new ResizeObserver(compactFilters).observe(document.getElementById('fields-pane'));
@@ -1770,7 +1776,7 @@
     if (link) link.focus();
   }
 
-  document.getElementById('to-languages').addEventListener('click', function (e) { e.preventDefault(); backToLanguages(); });
+  document.getElementById('to-languages').addEventListener('click', backToLanguages);
 
   /* ── Translation options (⋮ in the list rows and next to the language title) ── */
   var langActionsTrigger = document.getElementById('lang-actions-trigger');

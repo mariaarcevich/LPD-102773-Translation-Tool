@@ -14,7 +14,7 @@ Figma (epic): [LPD-102773 — Translation Tool for Content Pages](https://www.fi
    - the default-language text is always shown under each field as reference;
    - a field turns green (**✓ Translated**) when you leave it; *Marked as Translated: Uses Default Value* when it holds the default text; purple **AI Translated** after Auto-translate;
    - click a preview element to jump to its field (and vice versa); filter / search fields;
-   - **Translations › es-ES** breadcrumb takes you back to the table;
+   - **‹ Back to Translations** (panel header) takes you back to the table;
    - the panel sits on the right of the preview (**⋮ › Move Panel to the Left** to compare); drag the divider to resize it (30% by default, 300–600px).
 4. **Experience** (top of the panel) scopes the translation; each experience shows **Draft** / **Published**.
 5. **Autosave** — every change is saved as a draft automatically (check icon in the header, spinner while saving), so leaving never loses work. **⋮ › Discard Draft** restores the last published version. **Publish** asks for confirmation, listing every experience with changes.

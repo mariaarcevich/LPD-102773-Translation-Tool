@@ -5068,3 +5068,228 @@
 .editor-viewport__btn + .editor-viewport__btn { border-left: 1px solid var(--color-secondary-l3); }
 .editor-viewport__btn:hover { opacity: 0.85; background: var(--color-light-l1); }
 .editor-viewport__btn.is-active { opacity: 1; background: var(--color-light); }
+
+
+/* ============================================================
+   COMMENTS + MENTION
+   Source: Figma — LPD-55596 sidebar, node 1:28407 ("Side Panel /
+   Comments"). Mention follows CKEditor 5's Mention plugin output.
+
+   Spec: 280px panel (pt 12, gap 24) · header px16, title 16/600 +
+   32px icon actions · composer px16 pb24, label 14/600, textarea
+   bg light / py8 px16, btn--sm Save + Cancel · comment px16, 24
+   top/bottom, gap 8, header gap 16 with 32px circle sticker, name
+   14/600, date 14/400 secondary, 24px kebab (12px icon) · body
+   14/400 · actions = btn--xs borderless (12/600, 12px icon, gap 8),
+   4px apart · replies: 1px secondary rail, content 16px from it,
+   each reply py8.
+
+   <aside class="comments-panel">
+     <header class="comments-panel__header">
+       <h2 class="comments-panel__title">Comments</h2>
+       <div class="comments-panel__actions">…btn--borderless btn--sm btn--icon…</div>
+     </header>
+     <form class="comment-composer">…</form>
+     <div class="comment-list">
+       <article class="comment">
+         <header class="comment__header">
+           <span class="sticker sticker--md sticker--circle">…</span>
+           <div class="comment__meta">
+             <span class="comment__author">Name</span>
+             <span class="comment__date">50 Seconds Ago</span>
+           </div>
+           <button class="btn btn--borderless btn--xs btn--icon comment__menu" aria-label="Comment Actions">…ellipsis-v (lexicon-icon-sm)…</button>
+         </header>
+         <p class="comment__body">Text with <span class="mention" data-mention="@jdoe">@jdoe</span></p>
+         <div class="comment__replies">…nested .comment…</div>
+         <div class="comment__actions">…btn--borderless btn--xs…</div>
+       </article>
+     </div>
+   </aside>
+
+   Composer: .comment-editor is a contenteditable that reuses
+   .input__field.input__field--textarea. The CKEditor mention balloon
+   is a .dropdown.mention-menu positioned by the page's JS; each
+   option is a .dropdown__item with sticker + name + @screen-name.
+   ============================================================ */
+
+.comments-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-7);
+  width: 280px;
+  height: 100%;
+  padding-top: var(--spacing-4);
+  overflow-y: auto;
+  background: var(--color-white);
+  border-left: 1px solid var(--color-light);
+  font-family: var(--font-family-base);
+  box-sizing: border-box;
+}
+.comments-panel__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-5);
+  padding: 0 var(--spacing-5);
+}
+.comments-panel__title {
+  flex: 1 1 auto;
+  margin: 0;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-base);
+  color: var(--color-dark);
+}
+.comments-panel__actions { display: flex; align-items: center; gap: var(--spacing-3); }
+
+.comment-composer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  padding: 0 var(--spacing-5) var(--spacing-7);
+  border-bottom: 1px solid var(--color-secondary-l3);
+}
+.comment-composer__actions { display: flex; gap: var(--spacing-3); }
+
+.comment-editor {
+  min-height: 64px;
+  padding: var(--spacing-3) var(--spacing-5);
+  white-space: pre-wrap;
+  word-break: break-word;
+  cursor: text;
+  overflow-y: auto;
+}
+.comment-editor:empty::before {
+  content: attr(data-placeholder);
+  color: var(--color-dark);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Inserted mention — CKEditor outputs <span class="mention" data-mention="@id">. */
+.mention {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+}
+/* Mention of the viewer — same treatment for now (hook kept for later). */
+.mention--self { color: var(--color-primary); }
+
+/* Mention balloon */
+.mention-menu {
+  position: absolute;
+  z-index: 20;
+  min-width: 0;
+  width: calc(100% - var(--spacing-5) * 2);
+  max-height: 240px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+.mention-menu[hidden] { display: none; }
+.mention-menu .dropdown__item { gap: var(--spacing-3); padding-top: var(--spacing-2); padding-bottom: var(--spacing-2); }
+.mention-menu__text { display: flex; flex-direction: column; min-width: 0; line-height: var(--line-height-base); }
+.mention-menu__name { color: var(--color-dark); font-weight: var(--font-weight-bold); }
+.mention-menu__id { font-size: var(--font-size-sm); color: var(--color-secondary); }
+.mention-menu__name mark { background: transparent; color: var(--color-primary); }
+
+/* Comment */
+.comment-list { display: flex; flex-direction: column; }
+.comment-list > .comment {
+  padding: var(--spacing-7) var(--spacing-5);
+  border-bottom: 1px solid var(--color-secondary-l3);
+}
+.comment-list > .comment > .comment__replies,
+.comment-list > .comment > .comment__actions { margin-top: var(--spacing-3); }
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-dark);
+}
+.comment__header { display: flex; align-items: center; gap: var(--spacing-5); }
+.comment__meta { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; }
+.comment__author { font-weight: var(--font-weight-bold); color: var(--color-dark); }
+.comment__date { color: var(--color-secondary); }
+.comment__menu { align-self: flex-start; flex-shrink: 0; }
+.comment__body { margin: 0; overflow-wrap: anywhere; }
+.comment__actions { display: flex; align-items: center; gap: var(--spacing-2); }
+.comment__actions .btn { gap: var(--spacing-3); }
+
+.comment__replies {
+  display: flex;
+  flex-direction: column;
+  padding-left: var(--spacing-5);
+  border-left: 1px solid var(--color-secondary);
+}
+.comment__replies > .comment { padding: var(--spacing-3) 0; }
+
+.comment.is-new { animation: comment-in 0.6s ease; }
+@keyframes comment-in { from { background: var(--color-primary-l3); } to { background: transparent; } }
+
+/* Rich-text output inside a comment (e.g. CKEditor getData() wraps text in <p>). */
+.comment__body p { margin: 0; }
+.comment__body p + p { margin-top: var(--spacing-3); }
+
+
+/* ============================================================
+   CKEDITOR 5 ADAPTER  (comments composer)
+   Reskins a real CKEditor 5 ClassicEditor (+ Mention plugin) to
+   match .input__field + .dropdown. Load ckeditor5.css BEFORE the
+   kit CSS. Wrap the editor's source element in .ck-lexicon; the
+   mention balloon is rendered by CKEditor inside .ck-body-wrapper
+   (a direct child of <body>), so it is themed there.
+   Toolbar is hidden ("basic" comment editor).
+   ============================================================ */
+
+.ck-lexicon,
+.ck-body-wrapper {
+  --ck-font-face: var(--font-family-base);
+  --ck-font-size-base: var(--font-size-base);
+  --ck-color-text: var(--color-dark);
+  --ck-color-base-text: var(--color-dark);
+  --ck-color-base-background: var(--color-light);
+  --ck-color-base-border: var(--color-secondary-l3);
+  --ck-color-focus-border: var(--color-primary-l1);
+  --ck-focus-ring: 1px solid var(--color-primary-l1);
+  --ck-inner-shadow: var(--focus-ring);
+  --ck-border-radius: var(--rounded-md);
+  --ck-rounded-corners-radius: var(--rounded-md);
+  --ck-color-panel-background: var(--color-white);
+  --ck-color-panel-border: var(--color-secondary-l3);
+  --ck-drop-shadow: var(--shadow-md);
+  --ck-color-list-button-hover-background: var(--color-primary-l3);
+  --ck-color-list-button-on-background: var(--color-primary-l3);
+  --ck-color-list-button-on-background-focus: var(--color-primary-l3);
+  --ck-color-list-button-on-text: var(--color-dark);
+  --ck-content-color-mention-background: transparent;
+  --ck-content-color-mention-text: var(--color-primary);
+}
+
+.ck-lexicon .ck-editor__top { display: none; }
+.ck-lexicon .ck.ck-editor__main > .ck-editor__editable {
+  min-height: 64px;
+  padding: var(--spacing-3) var(--spacing-5);
+  border-radius: var(--rounded-md);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-dark);
+}
+.ck-lexicon .ck.ck-editor__main > .ck-editor__editable.ck-focused { background: var(--color-primary-l3); }
+.ck-lexicon .ck-content p { margin: 0; }
+.ck-lexicon .ck.ck-editor__editable > .ck-placeholder::before { color: var(--color-dark); opacity: 0.55; }
+
+/* Mention balloon list */
+.ck-body-wrapper .ck.ck-mentions { min-width: calc(var(--spacing-10) * 5); padding: var(--spacing-3) 0; }
+.ck-body-wrapper .ck.ck-mentions > .ck-list__item > .ck-button {
+  padding: var(--spacing-2) var(--spacing-5);
+  border-radius: 0;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+}
+.mention-option { display: flex; align-items: center; gap: var(--spacing-3); min-width: 0; }
